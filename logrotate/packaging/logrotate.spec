@@ -1,7 +1,7 @@
-Name:          g3_logrotate
-Version:       %{version}
+Name:          logrotate
+Version:       1.0
 Release:       1%{?dist}
-Summary:       An implemnetation of Queue patterns for C++
+Summary:       An rotating file sink for G3log
 Group:         Development/Tools
 License:       UNLICENSE
 BuildRequires: probecmake >= 2.8, probezlib
@@ -24,12 +24,14 @@ fi
 
 %build
 # SKIP_BUILD_RPATH, CMAKE_SKIP_BUILD_RPATH, 
-cd %{name}
 PATH=/usr/local/probe/bin:$PATH
+cd %{name}-%{version}
+ls > /tmp/out
 cd 3rdparty
 unzip -u gtest-1.7.0.zip
-cd ../logrotate
+cd ..
 mkdir -p build
+cd build
 if [ -z "$BOOST_DIR" ] ; then
    BOOST_BASE_DIR=/usr/local/boost
 else

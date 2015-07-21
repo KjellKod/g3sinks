@@ -22,7 +22,7 @@ struct LogRotateHelper;
 class LogRotate {
   public:
     LogRotate(const LogRotate&) = delete;
-    LogRotate& operator=(const g2LogWorker&) = delete;
+    LogRotate& operator=(const LogRotate&) = delete;
 
     LogRotate(const std::string& log_prefix, const std::string& log_directory);
     virtual ~LogRotate();
@@ -35,7 +35,6 @@ class LogRotate {
     void setMaxLogSize(int max_file_size);
 
   private:
-    const std::string log_file_with_path_;
     std::unique_ptr<LogRotateHelper> pimpl_;
 
 };

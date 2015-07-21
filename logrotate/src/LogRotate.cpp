@@ -9,21 +9,17 @@
 * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
 * ********************************************* */
 
-#include "logrotate.h"
-#include "logrotatehelper.ipp"
+#include "LogRotate.h"
+#include "LogRotateHelper.ipp"
 
 
 /// @param log_prefix to use for the file
-LogRotate::LogRotate(const std::string& log_prefix, const std::string& log_directory,
-                     std::unique_ptr<g2LogConfig> config)
-    : pimpl_(new LogRotateHelper(log_prefix, log_directory))
-    , log_file_with_path_(pimpl_->log_file_with_path_)
+LogRotate::LogRotate(const std::string& log_prefix, const std::string& log_directory)    : pimpl_(new LogRotateHelper(log_prefix, log_directory))
 {}
 
 
 LogRotate::~LogRotate() {
-    pimpl_.reset();
-    std::cerr << "\nExiting, log location: " << log_file_with_path_ << std::endl;
+    std::cerr << "\nExiting, log location: " << pimpl_->log_file_with_path_ << std::endl;
 }
 
 
@@ -40,16 +36,15 @@ std::string LogRotate::changeLogFile(const std::string& log_directory) {
 
 /// @return the current file name to write to
 std::string LogRotate::logFileName() {
-    return log_file_with_path_;
+    return pimpl_->logFileName();
 }
-
 
 /**
  * Set the max number of archived logs.
  * @param max_size
  */
 void LogRotate::setMaxArchiveLogCount(int max_size) {
-  pimpl_->setMaxArchiveLogCount(max_size);
+    pimpl_->setMaxArchiveLogCount(max_size);
 }
 
 /**
@@ -57,5 +52,5 @@ void LogRotate::setMaxArchiveLogCount(int max_size) {
  * @param max_file_size
  */
 void LogRotate::setMaxLogSize(int max_file_size) {
-   pimpl_->setMaxLogSize(max_file_size);
+    pimpl_->setMaxLogSize(max_file_size);
 }

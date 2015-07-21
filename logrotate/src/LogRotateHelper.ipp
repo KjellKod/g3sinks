@@ -26,9 +26,11 @@
 #include <map>
 #include <vector>
 #include <ctime>
+#include <iostream>
 
 
 namespace {
+    using  steady_time_point = std::chrono::time_point<std::chrono::steady_clock>;
 
     static const std::string file_name_time_formatted = "%Y%m%d-%H%M%S";
 
@@ -174,7 +176,7 @@ namespace {
 } // anonymous
 
 
-/** The Real McCoy Background worker, while g2LogWorker gives the
+/** The Real McCoy Background worker, while g3::LogWorker gives the
  * asynchronous API to put job in the background the LogRotateHelper
  * does the actual background thread work */
 struct LogRotateHelper {
@@ -185,7 +187,7 @@ struct LogRotateHelper {
 
     void setMaxArchiveLogCount(int size);
     void setMaxLogSize(int size);
-    void fileWrite(internal::LogEntry message);
+    void fileWrite(std::string message);
     std::string changeLogFile(const std::string& directory);
     std::string logFileName();
     bool archiveLog();
@@ -202,7 +204,7 @@ struct LogRotateHelper {
     std::string log_directory_;
     std::string log_prefix_backup_;
     std::unique_ptr<std::ofstream> outptr_;
-    g2::steady_time_point steady_start_time_;
+    steady_time_point steady_start_time_;
     int max_log_size_;
     int max_archive_log_count_;
 
@@ -215,7 +217,6 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
     : log_file_with_path_(log_directory)
     , log_directory_(log_directory)
     , log_prefix_backup_(log_prefix)
-    , bg_(kjellkod::Active::createActive())
     , outptr_(new std::ofstream)
     , steady_start_time_(std::chrono::steady_clock::now()) { // TODO: ha en timer function steadyTimer som har koll pÃ¥ start
     log_prefix_backup_ = prefixSanityFix(log_prefix);
@@ -252,17 +253,16 @@ void LogRotateHelper::setMaxLogSize(int max_size) {
 LogRotateHelper::~LogRotateHelper() {
 
     std::ostringstream ss_exit;
-    bg_.reset(); // flush the log queue
-    ss_exit << "\n\t\tg2log file shutdown at: " << localtime_formatted(systemtime_now(), internal::time_formatted);
+    ss_exit << "\n\t\tg2log file shutdown at: " << g3::localtime_formatted(g3::systemtime_now(), g3::internal::time_formatted);
     filestream() << ss_exit.str() << std::flush;
 }
 
-void LogRotateHelper::fileWrite(internal::LogEntry message) {
+void LogRotateHelper::fileWrite(std::string message) {
     rotateLog();
     std::ofstream& out(filestream());
-    auto system_time = systemtime_now();
-    out << "\n" << localtime_formatted(system_time, date_formatted);
-    out << " " << localtime_formatted(system_time, time_formatted); // TODO: time kommer frÃ¥n LogEntry
+    auto system_time = g3::systemtime_now();
+    out << "\n" << g3::localtime_formatted(system_time, g3::internal::date_formatted);
+    out << " " << g3::localtime_formatted(system_time, g3::internal::time_formatted);
     out << " " << message << std::flush;
 }
 
@@ -271,7 +271,7 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory) {
     std::string prospect_log = directory + file_name;
     std::unique_ptr<std::ofstream> log_stream = createLogFile(prospect_log);
     if (nullptr == log_stream) {
-        backgroundFileWrite("Unable to change log file. Illegal filename or busy? Unsuccessful log name was:" + prospect_log);
+        fileWrite("Unable to change log file. Illegal filename or busy? Unsuccessful log name was:" + prospect_log);
         return ""; // no success
     }
     addLogFileHeader();
@@ -298,7 +298,7 @@ bool LogRotateHelper::rotateLog() {
         if (length > max_log_size_) {
             std::ostringstream gz_file_name;
             gz_file_name << log_file_with_path_ << ".";
-            gz_file_name << g2::localtime_formatted(g2::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
+            gz_file_name << g3::localtime_formatted(g3::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
             gz_file_name << ".gz";
             if (!createCompressedFile(log_file_with_path_, gz_file_name.str())) {
                 fileWrite("Failed to compress log!");
@@ -351,7 +351,7 @@ bool LogRotateHelper::createCompressedFile(std::string file_name, std::string gz
     return true;
 }
 
-std::string LogRotateHelper::fileName() {
+std::string LogRotateHelper::logFileName() {
     return log_file_with_path_;
 }
 

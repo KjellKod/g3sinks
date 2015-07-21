@@ -8,6 +8,8 @@
 #include <iostream>
 #include <g3log/logworker.hpp>
 #include <g3log/g3log.hpp>
+#include <g3log/std2_make_unique.hpp>
+#include <LogRotate.h>
 
 int main(int argc, char *argv[])
 {
@@ -16,10 +18,13 @@ int main(int argc, char *argv[])
   srand(time(NULL));
   std::stringstream fileName;
   fileName << "UnitTest" << geteuid();
-  auto logger_n_handle = g3::LogWorker::createWithDefaultLogger(fileName.str(), "/tmp");
-  g3::initializeLogging(logger_n_handle.worker.get());
+  auto uniqueLoggerPtr = g3::LogWorker::createWithNoSink();
+  auto handle = uniqueLoggerPtr->addSink(std2::make_unique<LogRotate>(fileName.str(), "/tmp/"), &LogRotate::save);
+
+  g3::initializeLogging(uniqueLoggerPtr.get());
+  std::cout << "Logging to: " << handle->call(&LogRotate::logFileName).get() << std::endl;
+
   int return_value = RUN_ALL_TESTS();
-  g3::internal::shutDownLogging();
   std::this_thread::sleep_for(std::chrono::seconds(5));
   std::cout << "FINISHED WITH THE TESTING" << std::endl;
   return return_value;
