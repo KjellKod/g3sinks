@@ -9,7 +9,7 @@
 * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
 * ********************************************* */
 
-#include "LogRotate.h"
+#include "g3sinks/LogRotate.h"
 #include "LogRotateHelper.ipp"
 
 

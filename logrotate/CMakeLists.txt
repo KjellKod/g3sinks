@@ -35,7 +35,7 @@ FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp $
 
 
 # Setup Library name
-SET(LIBRARY_TO_BUILD g3_logrotate)
+SET(LIBRARY_TO_BUILD g3logrotate)
 
 # Build the library
 INCLUDE_DIRECTORIES(${PROJECT_SRC})

@@ -9,7 +9,7 @@
 #include <g3log/logworker.hpp>
 #include <g3log/g3log.hpp>
 #include <g3log/std2_make_unique.hpp>
-#include <LogRotate.h>
+#include <g3sinks/LogRotate.h>
 
 int main(int argc, char *argv[])
 {

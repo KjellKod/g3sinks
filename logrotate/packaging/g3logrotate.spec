@@ -1,4 +1,4 @@
-Name:          logrotate
+Name:          g3logrotate
 Version:       1.0
 Release:       1%{?dist}
 Summary:       An rotating file sink for G3log
@@ -40,20 +40,18 @@ fi
 
 rm -f  CMakeCache.txt
 cmake -DCMAKE_CXX_COMPILER_ARG1:STRING=' -fPIC -Ofast -m64 -Wl,-rpath -Wl,/usr/local/probe/lib -Wl,-rpath -Wl,/usr/local/probe/lib64 ' \
-      -DUSE_G2LOG_UNIT_TEST:BOOL=OFF \
-      -DUSE_DYNAMIC_LOGGING_LEVELS:BOOL=ON \
       -DCMAKE_BUILD_TYPE:STRING=Release \
       -DBUILD_SHARED_LIBS:BOOL=ON \
       -DDYN_INCLUDE=$BOOST_BASE_DIR/include \
       -DDYN_LIB=$BOOST_BASE_DIR/lib ..
 
-make
+make -j6
 ./UnitTestRunner
 mkdir -p $RPM_BUILD_ROOT/usr/local/probe/lib
 cp *.so $RPM_BUILD_ROOT/usr/local/probe/lib
 rm $RPM_BUILD_ROOT/usr/local/probe/lib/libgtest_170_lib.so
 mkdir -p $RPM_BUILD_ROOT/usr/local/probe/include
-cp src/*.h $RPM_BUILD_ROOT/usr/local/probe/include
+cp -r ../src/g3sinks $RPM_BUILD_ROOT/usr/local/probe/include
 
 %post
 

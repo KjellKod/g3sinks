@@ -15,7 +15,7 @@ enable_testing(true)
 
 
 include_directories(test)
-file(GLOB TEST_SRC_FILES "test/*.cpp")
+file(GLOB TEST_SRC_FILES "test/*.cpp" "test/*.h" "test/*.hpp")
 
 
  
@@ -27,4 +27,4 @@ add_executable(${TestRunner} 3rdparty/test_main.cpp ${TEST_SRC_FILES} )
 set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_TR1_TUPLE=0")
 set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_RTTI=0")
 set_target_properties(${TestRunner} PROPERTIES COMPILE_FLAGS "-isystem -pthread ")
-target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} gtest_170_lib ${FILEIO} -lstdc++ ${TCMALLOC}  ${PLATFORM_LINK_LIBRIES} -Wl,-rpath,. -Wl,-rpath,/usr/local/probe/lib  -Wl,-rpath,/usr/local/probe/lib64 )
+target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} gtest_170_lib -lstdc++ ${TCMALLOC}  ${PLATFORM_LINK_LIBRIES} -Wl,-rpath,. -Wl,-rpath,/usr/local/probe/lib  -Wl,-rpath,/usr/local/probe/lib64 )

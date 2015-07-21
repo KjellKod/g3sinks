@@ -65,7 +65,7 @@ namespace {
     std::string header() {
         std::ostringstream ss_entry;
         //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y" and formatted output as : Wed Sep 19 08:28:16 2012
-        ss_entry << "created log file at: " << g3::localtime_formatted(g3::systemtime_now(), "%a %b %d %H:%M:%S %Y") << "\n";
+        ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(g3::systemtime_now(), "%a %b %d %H:%M:%S %Y") << "\n";
         return ss_entry.str();
     }
 
@@ -223,7 +223,7 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
     max_log_size_ = 524288000;
     max_archive_log_count_ = 10;
     if (!isValidFilename(log_prefix_backup_)) {
-        std::cerr << "g2log: forced abort due to illegal log prefix [" << log_prefix << "]" << std::endl;
+        std::cerr << "g3log: forced abort due to illegal log prefix [" << log_prefix << "]" << std::endl;
         abort();
     }
 
@@ -253,7 +253,7 @@ void LogRotateHelper::setMaxLogSize(int max_size) {
 LogRotateHelper::~LogRotateHelper() {
 
     std::ostringstream ss_exit;
-    ss_exit << "\n\t\tg2log file shutdown at: " << g3::localtime_formatted(g3::systemtime_now(), g3::internal::time_formatted);
+    ss_exit << "\ng2log file shutdown at: " << g3::localtime_formatted(g3::systemtime_now(), g3::internal::time_formatted) << "\n\n";
     filestream() << ss_exit.str() << std::flush;
 }
 
