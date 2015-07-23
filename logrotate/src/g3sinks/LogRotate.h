@@ -9,6 +9,7 @@
 * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
 * ********************************************* */
 
+#pragma once
 
 #include <string>
 #include <memory>

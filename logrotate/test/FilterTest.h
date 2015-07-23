@@ -1,5 +1,5 @@
 /* 
- * File:   RotateFileTest.h
+ * File:   FilterTest.h
  * Author: kjell
  *
  */
@@ -8,15 +8,15 @@
 #include <gtest/gtest.h>
 #include <unistd.h>
 
-class RotateFileTest : public ::testing::Test {
+class FilterTest : public ::testing::Test {
 public:
 
-   RotateFileTest() {
+   FilterTest() {
    };
 protected:
 
    virtual void SetUp() {
-      filename_ = "g3sink_rotatefile_test";
+      filename_ = "g3sink_filter_rotatefile_test";
       directory_ = "/tmp/";
    };
 

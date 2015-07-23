@@ -1,5 +1,6 @@
 #include "RotateFileTest.h"
 #include "g3sinks/LogRotate.h"
+#include "g3sinks/LogRotateWithFilter.h"
 #include <iostream>
 #include <cerrno>
 #include <cstring>

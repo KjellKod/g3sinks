@@ -45,8 +45,10 @@ SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD} ${TCMALLOC} boost_filesystem boost_system boost_regex z ${G3LOG})
 
 
+
 # Setup unit tests
 INCLUDE (${LogRotate_SOURCE_DIR}/test/Test.cmake)
+
 
 
 
