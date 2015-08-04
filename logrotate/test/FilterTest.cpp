@@ -82,14 +82,63 @@ TEST_F(FilterTest, CreateObjectUsingHelper) {
 TEST_F(FilterTest, NothingFiltered) {
     {
         auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
-        
+        auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
+        filterSinkPtr->save(message0);
+
+        auto message1 = std::move(CREATE_LOG_ENTRY(DEBUG, "Hello D World"));
+        filterSinkPtr->save(message1);
+
+        auto message2 = std::move(CREATE_LOG_ENTRY(WARNING, "Hello W World"));
+        filterSinkPtr->save(message2);
+
+        auto message3 = std::move(CREATE_LOG_ENTRY(FATAL, "Hello F World"));
+        filterSinkPtr->save(message3);
+
     } // raii
 
     auto name = std::string{_directory + _filename + ".log"};
     auto content = ReadContent(name);
-    std::cout << "CONTENT [\n" << content << "\n ]" << std::endl;
+    EXPECT_TRUE(Exists(content, "Hello World")) << content;
+    EXPECT_TRUE(Exists(content, "Hello D World")) << content;
+    EXPECT_TRUE(Exists(content, "Hello W World")) << content;
+    EXPECT_TRUE(Exists(content, "Hello F World")) << content;
 }
 
+TEST_F(FilterTest, FilteredAndNotFiltered) {
+    {
+        auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {DEBUG, INFO, WARNING, FATAL});
+        auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
+        filterSinkPtr->save(message0);
+        
+        auto message1 = std::move(CREATE_LOG_ENTRY(DEBUG, "Hello D World"));
+        filterSinkPtr->save(message1);
+
+        auto message2 = std::move(CREATE_LOG_ENTRY(WARNING, "Hello W World"));
+        filterSinkPtr->save(message2);
+
+        auto message3 = std::move(CREATE_LOG_ENTRY(FATAL, "Hello F World"));
+        filterSinkPtr->save(message3);
+
+        auto newLevel = LEVELS{123, "MadeUpLevel"};
+        auto message4 = std::move(CREATE_LOG_ENTRY(newLevel, "Hello New World"));
+        filterSinkPtr->save(message4);
+
+    } // raii
+
+    auto name = std::string{_directory + _filename + ".log"};
+    auto content = ReadContent(name);
+    EXPECT_FALSE(Exists(content, "Hello World")) << content;
+    EXPECT_FALSE(Exists(content, "Hello D World")) << content;
+    EXPECT_FALSE(Exists(content, "Hello W World")) << content;
+    EXPECT_FALSE(Exists(content, "Hello F World")) << content;
+
+    // Not filtered will exist
+    EXPECT_TRUE(Exists(content, "Hello New World")) << content;
+
+    const auto level1 = INFO;
+    const auto level2 = INFO;
+    EXPECT_TRUE(level1 == level2);
+}
 
 
 

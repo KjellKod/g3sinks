@@ -42,7 +42,7 @@ class LogRotateWithFilter {
 
 
   private:
-    IgnoreLogLevelsFilter _filter;
     LogRotateUniquePtr _logger;
+    IgnoreLogLevelsFilter _filter;
 
 };

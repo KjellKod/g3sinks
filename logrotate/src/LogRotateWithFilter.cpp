@@ -10,6 +10,8 @@
 
 #include "g3sinks/LogRotateWithFilter.h"
 #include <g3log/std2_make_unique.hpp>
+#include <algorithm>
+#include <iostream> // to remove
 
 // helper function to create an logging sink with filter
 std::unique_ptr<LogRotateWithFilter> LogRotateWithFilter::CreateLogRotateWithFilter(std::string filename, std::string directory, std::vector<LEVELS> filter) {
@@ -31,7 +33,12 @@ LogRotateWithFilter::~LogRotateWithFilter() {}
 
 /// @param logEntry saves log entry that are not in the filter
 void LogRotateWithFilter::save(g3::LogMessageMover logEntry) {
-    _logger->save(logEntry.get().toString());
+    auto level = logEntry.get()._level;
+    bool isNotInFilter_ = (_filter.end() == std::find(_filter.begin(), _filter.end(), level));
+
+    if(isNotInFilter_) {
+      _logger->save(logEntry.get().toString());
+   }
 }
 
 std::string LogRotateWithFilter::changeLogFile(const std::string& log_directory) {
