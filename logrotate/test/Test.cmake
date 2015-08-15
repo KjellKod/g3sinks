@@ -25,7 +25,7 @@ set(TestRunner UnitTestRunner)
 MESSAGE("0400000000000000000 ${LogRotate_SOURCE_DIR}/test/Test.cmake")
 
 # build the unit tests   
-add_executable(${TestRunner} 3rdparty/test_main.cpp ${TEST_SRC_FILES} )
+add_executable(${TestRunner} ${DIR_3RDPARTY}/test_main.cpp ${TEST_SRC_FILES} )
 set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_TR1_TUPLE=0")
 set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_RTTI=0")
 set_target_properties(${TestRunner} PROPERTIES COMPILE_FLAGS "-isystem -pthread ")
