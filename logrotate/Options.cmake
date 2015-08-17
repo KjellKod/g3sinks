@@ -1,3 +1,7 @@
+# =====================================================
+#  Public Domain: Inspired by github.com/KjellKod/g3log/Options.cmake
+#  2015, August 17, @author Kjell.Hedstrom
+# =====================================================
 
 
 # Override the default path for g3log library

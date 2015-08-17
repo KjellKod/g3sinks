@@ -30,8 +30,8 @@ void LogRotate::save(std::string logEntry) {
 
 /// Attempt to change the current log file to another name/location.
 /// @return filename with full path if successful, else empty string
-std::string LogRotate::changeLogFile(const std::string& log_directory) {
-    return pimpl_->changeLogFile(log_directory);
+std::string LogRotate::changeLogFile(const std::string& log_directory, const std::string& new_name) {
+    return pimpl_->changeLogFile(log_directory, new_name);
 }
 
 /// @return the current file name to write to

@@ -30,7 +30,7 @@ class LogRotate {
 
 
     void save(std::string logEnty);
-    std::string changeLogFile(const std::string& log_directory);
+    std::string changeLogFile(const std::string& log_directory, const std::string& new_name="");
     std::string logFileName();
     void setMaxArchiveLogCount(int max_size);
     void setMaxLogSize(int max_file_size);

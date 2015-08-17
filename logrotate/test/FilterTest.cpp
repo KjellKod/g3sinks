@@ -1,42 +1,25 @@
+/** ==========================================================================
+* 2015 by KjellKod.cc
+*
+* This code is PUBLIC DOMAIN to use at your own risk and comes
+* with no warranties. This code is yours to share, use and modify with no
+* strings attached and no restrictions or obligations.
+* ============================================================================*
+* PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
+* ********************************************* */
+
 #include "FilterTest.h"
 #include "g3sinks/LogRotateWithFilter.h"
 #include <iostream>
 #include <cerrno>
-#include <cstring>
+
 #include <g3log/std2_make_unique.hpp>
+#include "RotateTestHelper.h"
 
-// ReadContent
-#include <sstream>
-#include <string>
-#include <vector>
-#include <cerrno>
-#include <fstream>
 
+using namespace RotateTestHelper;
 
 namespace { // anonymous
-/// Ref: StackOverflow + http://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html
-    std::string ReadContent(const std::string filename) {
-        std::ifstream readIn(filename.c_str(), std::ios::in | std::ios::binary);
-        if (readIn) {
-            std::shared_ptr<void> raii(nullptr, [&](void*) {readIn.close(); std::cout << "closed file: " << filename << std::endl;});
-
-            std::string contents;
-            readIn.seekg(0, std::ios::end);
-            contents.resize(readIn.tellg());
-            readIn.seekg(0, std::ios::beg);
-            readIn.read(&contents[0], contents.size());
-            return contents;
-        }
-        throw errno;
-    }
-
-
-
-    bool Exists(const std::string content, const std::string expected) {
-        auto found = content.find(expected);
-        return found != std::string::npos;
-    }
-
     g3::LogMessageMover CreateLogEntry(const LEVELS level, std::string content, std::string file, int line, std::string function) {
         auto message = g3::LogMessage(file, line, function, level);
         message.write().append(content);
