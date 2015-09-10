@@ -13,18 +13,22 @@ add_library(gtest_170_lib ${GTEST_DIR}/src/gtest-all.cc)
 set_target_properties(gtest_170_lib PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_RTTI=0")
 enable_testing(true)
 
+MESSAGE("2000000000000000000 ${LogRotate_SOURCE_DIR}/test/Test.cmake")
 
 include_directories(test)
 file(GLOB TEST_SRC_FILES "test/*.cpp" "test/*.h" "test/*.hpp")
 
-
+MESSAGE("3000000000000000000 ${LogRotate_SOURCE_DIR}/test/Test.cmake")
  
 set(TestRunner UnitTestRunner)
 
+MESSAGE("0400000000000000000 ${LogRotate_SOURCE_DIR}/test/Test.cmake")
 
 # build the unit tests   
-add_executable(${TestRunner} 3rdparty/test_main.cpp ${TEST_SRC_FILES} )
+add_executable(${TestRunner} ${DIR_3RDPARTY}/test_main.cpp ${TEST_SRC_FILES} )
 set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_TR1_TUPLE=0")
 set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_RTTI=0")
 set_target_properties(${TestRunner} PROPERTIES COMPILE_FLAGS "-isystem -pthread ")
-target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} gtest_170_lib -lstdc++ ${TCMALLOC}  ${PLATFORM_LINK_LIBRIES} -Wl,-rpath,. -Wl,-rpath,/usr/local/probe/lib  -Wl,-rpath,/usr/local/probe/lib64 )
+target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} ${G3LOG} gtest_170_lib -lstdc++ ${TCMALLOC}  ${PLATFORM_LINK_LIBRIES} -Wl,-rpath,. -Wl,-rpath,/usr/local/probe/lib  -Wl,-rpath,/usr/local/probe/lib64 )
+
+MESSAGE("library to build ${LIBRARY_TO_BUILD}")

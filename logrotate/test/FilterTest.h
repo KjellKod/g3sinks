@@ -14,16 +14,15 @@
 #include <cstring>
 #include <cerrno>
 
-class RotateFileTest : public ::testing::Test {
+class FilterTest : public ::testing::Test {
  public:
 
-   RotateFileTest() {
+   FilterTest() {
    };
  protected:
 
-
    virtual void SetUp() {
-      _filename = "g3sink_rotatefile_test";
+      _filename = "g3sink_filter_rotatefile_test";
       _directory = "/tmp/";
       _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
    }
@@ -40,4 +39,5 @@ class RotateFileTest : public ::testing::Test {
    std::string _filename;
    std::string _directory;
    std::vector<std::string> _filesToRemove;
+
 };

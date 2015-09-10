@@ -39,11 +39,8 @@ else
 fi
 
 rm -f  CMakeCache.txt
-cmake -DCMAKE_CXX_COMPILER_ARG1:STRING=' -fPIC -Ofast -m64 -Wl,-rpath -Wl,/usr/local/probe/lib -Wl,-rpath -Wl,/usr/local/probe/lib64 ' \
-      -DCMAKE_BUILD_TYPE:STRING=Release \
-      -DBUILD_SHARED_LIBS:BOOL=ON \
-      -DDYN_INCLUDE=$BOOST_BASE_DIR/include \
-      -DDYN_LIB=$BOOST_BASE_DIR/lib ..
+
+/usr/local/probe/bin/cmake -DCMAKE_CXX_COMPILER_ARG1:STRING=' -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,/usr/local/probe/lib -Wl,-rpath -Wl,/usr/local/probe/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_CXX_COMPILER=/usr/local/probe/bin/g++ ..
 
 make -j6
 ./UnitTestRunner

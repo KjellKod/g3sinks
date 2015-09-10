@@ -188,7 +188,7 @@ struct LogRotateHelper {
     void setMaxArchiveLogCount(int size);
     void setMaxLogSize(int size);
     void fileWrite(std::string message);
-    std::string changeLogFile(const std::string& directory);
+    std::string changeLogFile(const std::string& directory, const std::string& new_name = "");
     std::string logFileName();
     bool archiveLog();
 
@@ -266,8 +266,14 @@ void LogRotateHelper::fileWrite(std::string message) {
     out << " " << message << std::flush;
 }
 
-std::string LogRotateHelper::changeLogFile(const std::string& directory) {
-    std::string file_name = createLogFileName(log_prefix_backup_);
+std::string LogRotateHelper::changeLogFile(const std::string& directory, const std::string& new_name) {
+    std::string file_name = new_name;
+    if (file_name.empty()) {
+        std::cout << "no filename" << std::endl;
+       file_name = createLogFileName(log_prefix_backup_);
+    }
+
+
     std::string prospect_log = directory + file_name;
     std::unique_ptr<std::ofstream> log_stream = createLogFile(prospect_log);
     if (nullptr == log_stream) {

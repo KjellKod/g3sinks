@@ -10,16 +10,20 @@ SET(CMAKE_BUILD_TYPE Release)
 PROJECT (LogRotate)
 SET(PROJECT_SRC ${LogRotate_SOURCE_DIR}/src)
 SET(DIR_UNIT_TEST ${LogRotate_SOURCE_DIR}/test)
-SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/3rdparty)
+SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/../3rdparty)
 
 
 MESSAGE(" PROJECT_SRC = : ${PROJECT_SRC}")
 INCLUDE_DIRECTORIES(${PROJECT_SRC})
 SET(ACTIVE_CPP0xx_DIR "Release")
 
+# Load PATHS
+INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
+INCLUDE_DIRECTORIES(${G3_HEADER_PATH})
+
 #Find all libraries 
 find_library(z boost_filesystem boost_system boost_regex)
-find_library(G3LOG g3logger PATHS /usr/local/probe/lib)
+find_library(G3LOG g3logger_shared PATHS ${G3_LIBRARY_PATH})
 
 
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -45,8 +49,10 @@ SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD} ${TCMALLOC} boost_filesystem boost_system boost_regex z ${G3LOG})
 
 
+
 # Setup unit tests
 INCLUDE (${LogRotate_SOURCE_DIR}/test/Test.cmake)
+
 
 
 
