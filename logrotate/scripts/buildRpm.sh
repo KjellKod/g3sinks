@@ -3,6 +3,8 @@ set -e
 
 if [[ $# -ne 2 ]] ; then
     echo 'Usage:  sh buildRpm <$VERSION> <PATH_TO_LIBRARY_ROOT>'
+    # example: cd g3sinks; cd logrotate; sh scripts/buildRpm.sh 3 /usr/local/xyz/  
+    #          (lib, bin must exist under xyz)
     exit 0
 fi
  
