@@ -1,5 +1,5 @@
 Name:          g3logrotate
-Version:       1.0
+Version:       %{version}
 Release:       1%{?dist}
 Summary:       An rotating file sink for G3log
 Group:         Development/Tools
@@ -24,12 +24,11 @@ fi
 
 %build
 # SKIP_BUILD_RPATH, CMAKE_SKIP_BUILD_RPATH, 
-PATH=/usr/local/probe/bin:$PATH
+PATH=çƒ/bin:$PATH
 cd %{name}-%{version}
-ls > /tmp/out
 cd 3rdparty
 unzip -u gtest-1.7.0.zip
-cd ..
+cd ../logrotate
 mkdir -p build
 cd build
 if [ -z "$BOOST_DIR" ] ; then
@@ -40,15 +39,15 @@ fi
 
 rm -f  CMakeCache.txt
 
-/usr/local/probe/bin/cmake -DCMAKE_CXX_COMPILER_ARG1:STRING=' -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,/usr/local/probe/lib -Wl,-rpath -Wl,/usr/local/probe/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_CXX_COMPILER=/usr/local/probe/bin/g++ ..
+%{install_root}/bin/cmake -DCMAKE_CXX_COMPILER_ARG1:STRING=' -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,%{install_root}/lib -Wl,-rpath -Wl,%{install_root}/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=%{install_root}/lib -DG3_HEADER_PATH=%{install_root}/include -DCMAKE_CXX_COMPILER=%{install_root}/bin/g++ ..
 
 make -j6
 ./UnitTestRunner
-mkdir -p $RPM_BUILD_ROOT/usr/local/probe/lib
-cp *.so $RPM_BUILD_ROOT/usr/local/probe/lib
-rm $RPM_BUILD_ROOT/usr/local/probe/lib/libgtest_170_lib.so
-mkdir -p $RPM_BUILD_ROOT/usr/local/probe/include
-cp -r ../src/g3sinks $RPM_BUILD_ROOT/usr/local/probe/include
+mkdir -p $RPM_BUILD_ROOT/%{install_root}/lib
+cp *.so $RPM_BUILD_ROOT/%{install_root}/lib
+rm $RPM_BUILD_ROOT/%{install_root}/lib/libgtest_170_lib.so
+mkdir -p $RPM_BUILD_ROOT/%{install_root}/include
+cp -r ../src/g3sinks $RPM_BUILD_ROOT/%{install_root}/include
 
 %post
 
@@ -58,5 +57,5 @@ cp -r ../src/g3sinks $RPM_BUILD_ROOT/usr/local/probe/include
 
 %files
 %defattr(-,dpi,dpi,-)
-/usr/local/probe/lib
-/usr/local/probe/include
+%{install_root}/lib
+%{install_root}/include

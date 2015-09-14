@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
   srand(time(NULL));
   std::stringstream fileName;
   fileName << "UnitTest" << geteuid();
-  auto uniqueLoggerPtr = g3::LogWorker::createWithNoSink();
+  auto uniqueLoggerPtr = g3::LogWorker::createLogWorker();
   auto handle = uniqueLoggerPtr->addSink(std2::make_unique<LogRotate>(fileName.str(), "/tmp/"), &LogRotate::save);
 
   g3::initializeLogging(uniqueLoggerPtr.get());
