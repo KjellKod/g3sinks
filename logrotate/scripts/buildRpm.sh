@@ -20,11 +20,10 @@ rm -rf ~/rpmbuild
 rpmdev-setuptree
 cp packaging/$PACKAGE.spec ~/rpmbuild/SPECS
 rm -f $PACKAGE-$VERSION.tar.gz
-cp -r ../3rdparty .
-tar czf $PACKAGE-$VERSION.tar.gz ./* ../3rdparty
-rm -rf 3rdparty
+cd ..
+tar czf $PACKAGE-$VERSION.tar.gz logrotate 3rdparty
 cp $PACKAGE-$VERSION.tar.gz ~/rpmbuild/SOURCES
-cd ~/rpmbuild
+cd ~/rpmbuild/
 rpmbuild --define="version ${VERSION}"  --define="install_root ${g3LIBRARY_PATH}"  -v -bb --target=x86_64 ~/rpmbuild/SPECS/$PACKAGE.spec
 
 # Copy the artifacts to the local distribution directory

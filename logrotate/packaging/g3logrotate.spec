@@ -28,7 +28,7 @@ PATH=çƒ/bin:$PATH
 cd %{name}-%{version}
 cd 3rdparty
 unzip -u gtest-1.7.0.zip
-cd ..
+cd ../logrotate
 mkdir -p build
 cd build
 if [ -z "$BOOST_DIR" ] ; then
@@ -47,7 +47,7 @@ mkdir -p $RPM_BUILD_ROOT/%{install_root}/lib
 cp *.so $RPM_BUILD_ROOT/%{install_root}/lib
 rm $RPM_BUILD_ROOT/%{install_root}/lib/libgtest_170_lib.so
 mkdir -p $RPM_BUILD_ROOT/%{install_root}/include
-cp -r ../src/g3sinks $RPM_BUILD_ROOT/{install_root}/include
+cp -r ../src/g3sinks $RPM_BUILD_ROOT/%{install_root}/include
 
 %post
 
