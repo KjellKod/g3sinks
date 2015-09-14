@@ -24,7 +24,7 @@ fi
 
 %build
 # SKIP_BUILD_RPATH, CMAKE_SKIP_BUILD_RPATH, 
-PATH=çƒ/bin:$PATH
+PATH=%{install_root}/bin:$PATH
 cd %{name}-%{version}
 cd 3rdparty
 unzip -u gtest-1.7.0.zip
