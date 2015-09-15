@@ -253,7 +253,7 @@ void LogRotateHelper::setMaxLogSize(int max_size) {
 LogRotateHelper::~LogRotateHelper() {
 
     std::ostringstream ss_exit;
-    ss_exit << "\ng2log file shutdown at: " << g3::localtime_formatted(g3::systemtime_now(), g3::internal::time_formatted) << "\n\n";
+    ss_exit << "\ng3log file shutdown at: " << g3::localtime_formatted(g3::systemtime_now(), g3::internal::time_formatted) << "\n\n";
     filestream() << ss_exit.str() << std::flush;
 }
 
