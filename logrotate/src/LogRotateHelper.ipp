@@ -260,10 +260,7 @@ LogRotateHelper::~LogRotateHelper() {
 void LogRotateHelper::fileWrite(std::string message) {
     rotateLog();
     std::ofstream& out(filestream());
-    auto system_time = g3::systemtime_now();
-    out << "\n" << g3::localtime_formatted(system_time, g3::internal::date_formatted);
-    out << " " << g3::localtime_formatted(system_time, g3::internal::time_formatted);
-    out << " " << message << std::flush;
+    out << message << std::flush;
 }
 
 std::string LogRotateHelper::changeLogFile(const std::string& directory, const std::string& new_name) {
