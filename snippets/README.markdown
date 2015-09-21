@@ -7,6 +7,6 @@ creating your own custom sinks.
 ## Colored Cout
 A simple example where the log is colored differently depending on what
 logging level it comes with. The color example is for Linux xterm
-[colored cout](ColorCoutSink.hpp)
+.Code snippet: [colored cout](ColorCoutSink.hpp)
 
 
