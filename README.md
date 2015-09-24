@@ -8,8 +8,8 @@ before you use it.
 ## Log Rotate
 Adapted from vrecan/g2log-dev https://bitbucket.org/vrecan/g2log-dev
 Rotation of logs. 
-The license is public domain, a.k.a the  UNLICENSE
-[Location](https://github.com/KjellKod/g3sinks/tree/master/logrotate)
+The license is public domain, a.k.a the  UNLICENSE.
+See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/master/logrotate).
 
 # Snippets
 [Code snippet examples and a short description](snippets/README.markdown). These are not installed but can 
