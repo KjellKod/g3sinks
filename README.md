@@ -5,7 +5,7 @@ sinks to g3logger
 Each sink will have its own LICENSE file. Make sure to understand what the sink provides
 before you use it. 
 
-## Log Rotate
+## Log Rotate + Log Rotate with Filter
 Adapted from vrecan/g2log-dev https://bitbucket.org/vrecan/g2log-dev
 Rotation of logs. 
 The license is public domain, a.k.a the  UNLICENSE.
