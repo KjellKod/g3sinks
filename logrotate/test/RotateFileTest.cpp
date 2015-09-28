@@ -79,11 +79,14 @@ TEST_F(RotateFileTest, setMaxLogSize) {
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 }
 
-TEST_F(RotateFileTest, setMaxLogSizeAndRotate) {
+TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
+  
+   std::string newFileName = "new_sink_name";
    LogRotate logrotate(_filename, _directory);
    
-   logrotate.changeLogFile(_directory, "new_sink_name");
+   logrotate.changeLogFile(_directory, newFileName);
    auto logfilename = logrotate.logFileName();
+   EXPECT_EQ(_directory + newFileName + ".log", logfilename);
 
    std::string gone{"Soon to be missing words"};
    logrotate.save(gone);
@@ -100,7 +103,27 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate) {
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 }
 
+TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
+   LogRotate logrotate(_filename, _directory);
+   
+   logrotate.changeLogFile(_directory, "");
+   auto logfilename = logrotate.logFileName();
+   EXPECT_EQ(_directory + _filename + ".log", logfilename);
 
+   std::string gone{"Soon to be missing words"};
+   logrotate.save(gone);
+   logrotate.setMaxLogSize(static_cast<int>(gone.size()));
+
+   std::string first_message_in_new_log = "first message";
+   logrotate.save(first_message_in_new_log);
+   
+   auto content = ReadContent(logfilename);
+   auto exists = Exists(content, gone);
+   EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+
+   exists = Exists(content, first_message_in_new_log);
+   EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+}
 
 TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) {
    EXPECT_FALSE(true);
