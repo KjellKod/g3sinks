@@ -264,15 +264,12 @@ void LogRotateHelper::fileWrite(std::string message) {
 }
 
 std::string LogRotateHelper::changeLogFile(const std::string& directory, const std::string& new_name) {
-    std::cout << "(1) log_prefix_backup_ = **" << log_prefix_backup_ << "**" << std::endl;
     std::string file_name = new_name;
     if (file_name.empty()) {
         std::cout << "no filename" << std::endl;
         file_name = log_prefix_backup_;
-        std::cout << "Creating new log file with name: " << file_name << std::endl;
     } else {
         log_prefix_backup_ = file_name;
-        std::cout << "Saving new log_prefix_backup_ to = **" << log_prefix_backup_ << "**" << std::endl;
     }
 
 
