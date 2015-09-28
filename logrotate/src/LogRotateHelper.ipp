@@ -267,16 +267,16 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
     std::string file_name = new_name;
     if (file_name.empty()) {
         std::cout << "no filename" << std::endl;
-       file_name = createLogFileName(log_prefix_backup_);
+        file_name = log_prefix_backup_;
     }
 
-
-    std::string prospect_log = directory + file_name;
+    std::string prospect_log = createLogFileName(directory + file_name);
     std::unique_ptr<std::ofstream> log_stream = createLogFile(prospect_log);
     if (nullptr == log_stream) {
         fileWrite("Unable to change log file. Illegal filename or busy? Unsuccessful log name was:" + prospect_log);
         return ""; // no success
     }
+    log_prefix_backup_ = file_name;
     addLogFileHeader();
     std::ostringstream ss_change;
 
