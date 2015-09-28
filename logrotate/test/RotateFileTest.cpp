@@ -54,7 +54,7 @@ TEST_F(RotateFileTest, ChangeLogFile) {
       EXPECT_EQ(logfilename, newname);
 
 
-      newname = logrotate.changeLogFile(_directory, "some_new_file.log");
+      newname = logrotate.changeLogFile(_directory, "some_new_file");
       EXPECT_EQ(expected_newname, newname);
 
    } // RAII flush of log
@@ -77,8 +77,27 @@ TEST_F(RotateFileTest, setMaxLogSize) {
 
    exists = Exists(content, first_message_in_new_log);
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+}
 
+TEST_F(RotateFileTest, setMaxLogSizeAndRotate) {
+   LogRotate logrotate(_filename, _directory);
+   
+   logrotate.changeLogFile(_directory, "new_sink_name");
+   auto logfilename = logrotate.logFileName();
 
+   std::string gone{"Soon to be missing words"};
+   logrotate.save(gone);
+   logrotate.setMaxLogSize(static_cast<int>(gone.size()));
+
+   std::string first_message_in_new_log = "first message";
+   logrotate.save(first_message_in_new_log);
+   
+   auto content = ReadContent(logfilename);
+   auto exists = Exists(content, gone);
+   EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+
+   exists = Exists(content, first_message_in_new_log);
+   EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 }
 
 
