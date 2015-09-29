@@ -298,7 +298,7 @@ bool LogRotateHelper::rotateLog() {
         is.seekp(0, std::ios::end);
         int length = is.tellp();
         is.seekp(0, std::ios::beg);
-        if (length > max_log_size_) {
+        if (length >= max_log_size_) {
             std::ostringstream gz_file_name;
             gz_file_name << log_file_with_path_ << ".";
             gz_file_name << g3::localtime_formatted(g3::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
