@@ -87,6 +87,7 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
    logrotate.changeLogFile(_directory, newFileName);
    auto logfilename = logrotate.logFileName();
    EXPECT_EQ(_directory + newFileName + ".log", logfilename);
+   _filesToRemove.push_back(logfilename);
 
    std::string gone{"Soon to be missing words"};
    logrotate.save(gone);
