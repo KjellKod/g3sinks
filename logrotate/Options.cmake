@@ -20,10 +20,10 @@
 
 
 SET(G3_LIBRARY_PATH "" CACHE FILEPATH "Path to g3log libraries")
-IF(EXISTS "${G3_LIBRARY_PATH}/libg3logger_shared.so" )
+IF(EXISTS "${G3_LIBRARY_PATH}/libg3logger.a")
    MESSAGE("SUCCESS lib")
 ELSE()
-  MESSAGE(SEND_ERROR "Can't find g3logger library file in G3_LIBRARY_PATH/libg3logger_shared.so:'${G3_LIBRARY_PATH}/libg3logger_shared.so'. Please set it with '-DG3_LIBRARY_PATH'")
+  MESSAGE(SEND_ERROR "Can't find g3logger library file in G3_LIBRARY_PATH/libg3logger.a:' ${G3_LIBRARY_PATH}'. Please set it with '-DG3_LIBRARY_PATH'")
 ENDIF()
 
 
@@ -32,7 +32,7 @@ SET(G3_HEADER_PATHa "" CACHE FILEPATH "Path to g3log headers")
 IF(EXISTS ${G3_HEADER_PATH}/g3log/g3log.hpp)
    MESSAGE("SUCCESS path")
 ELSE()
-  MESSAGE(FATAL_ERROR "Can't find g3log.hpp at  G3_HEADER_PATH/g3log/g3log.hpp, i.e. '${G3_HEADER_PATH}/g3log/g3log.hpp'. Please set it with '-DG3_HEADER_PATH'")
+  MESSAGE(FATAL_ERROR "Can't find g3log.hpp at G3_HEADER_PATH/g3log/g3log.hpp, i.e. '${G3_HEADER_PATH}/g3log/g3log.hpp'. Please set it with '-DG3_HEADER_PATH'")
 ENDIF()
 
 
@@ -66,4 +66,3 @@ ENDIF()
 
 #MESSAGE("G3_HEADER_PATH = " ${G3_HEADER_PATH})
 #MESSAGE("You can change it with  cmake -DUSE_G3_HEADER_PATH=path_to_headers (i.e. something like /usr/local/include)")
-
