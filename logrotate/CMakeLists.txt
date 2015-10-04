@@ -21,12 +21,29 @@ SET(ACTIVE_CPP0xx_DIR "Release")
 INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
 INCLUDE_DIRECTORIES(${G3_HEADER_PATH})
 
-#Find all libraries 
-find_library(z boost_filesystem boost_system boost_regex)
-find_library(G3LOG g3logger_shared PATHS ${G3_LIBRARY_PATH})
+#Find all libraries
 
+find_package(Boost COMPONENTS filesystem system regex REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
 
-IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+find_library(G3LOG g3logger PATHS ${G3_LIBRARY_PATH})
+
+IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
+   MESSAGE("")
+   MESSAGE("cmake for Clang ")
+   SET(CMAKE_CXX_FLAGS "-Wall -std=c++11 -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
+   IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
+       IF (${CMAKE_MATCH_1} GREATER 9)
+           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+           set(PLATFORM_LINK_LIBRIES execinfo)
+       ENDIF()
+   ELSEIF (APPLE)
+       set(PLATFORM_LINK_LIBRIES c++abi)
+   ELSE()
+       set(PLATFORM_LINK_LIBRIES rt c++abi)
+   ENDIF()
+
+ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
    MESSAGE("")
    MESSAGE("cmake for GCC ")
    SET(PLATFORM_LINK_LIBRIES rt)
@@ -43,20 +60,12 @@ SET(LIBRARY_TO_BUILD g3logrotate)
 
 # Build the library
 INCLUDE_DIRECTORIES(${PROJECT_SRC})
-ADD_LIBRARY(${LIBRARY_TO_BUILD} SHARED ${SRC_FILES})
+ADD_LIBRARY(${LIBRARY_TO_BUILD} ${SRC_FILES})
 SET(${LIBRARY_TO_BUILD}_VERSION_STRING)
 SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD} ${TCMALLOC} boost_filesystem boost_system boost_regex z ${G3LOG})
+TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD} ${TCMALLOC} ${Boost_LIBRARIES} z ${G3LOG})
 
 
 
 # Setup unit tests
 INCLUDE (${LogRotate_SOURCE_DIR}/test/Test.cmake)
-
-
-
-
-
-
-
-
