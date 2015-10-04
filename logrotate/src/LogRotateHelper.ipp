@@ -207,6 +207,7 @@ struct LogRotateHelper {
     steady_time_point steady_start_time_;
     int max_log_size_;
     int max_archive_log_count_;
+    int cur_log_size_;
 
 
 
@@ -221,7 +222,7 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
     , steady_start_time_(std::chrono::steady_clock::now()) { // TODO: ha en timer function steadyTimer som har koll pÃ¥ start
     log_prefix_backup_ = prefixSanityFix(log_prefix);
     max_log_size_ = 524288000;
-    max_archive_log_count_ = 10;
+    max_archive_log_count_ = 10;    
     if (!isValidFilename(log_prefix_backup_)) {
         std::cerr << "g3log: forced abort due to illegal log prefix [" << log_prefix << "]" << std::endl;
         abort();
@@ -232,6 +233,11 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
     outptr_ = createLogFile(log_file_with_path_);
     assert((nullptr != outptr_) && "cannot open log file at startup");
     addLogFileHeader();
+
+    std::ofstream& is(filestream());
+    is.seekp(0, std::ios::end);
+    cur_log_size_ = is.tellp();
+    is.seekp(0, std::ios::beg);
 }
 
 /**
@@ -260,13 +266,14 @@ LogRotateHelper::~LogRotateHelper() {
 void LogRotateHelper::fileWrite(std::string message) {
     rotateLog();
     std::ofstream& out(filestream());
-    out << message << std::flush;
+    out << message;// << std::flush;
+    cur_log_size_ += message.size();
 }
 
 std::string LogRotateHelper::changeLogFile(const std::string& directory, const std::string& new_name) {
     std::string file_name = new_name;
     if (file_name.empty()) {
-        std::cout << "no filename" << std::endl;
+        //std::cout << "no filename" << std::endl;
         file_name = log_prefix_backup_;
     }
 
@@ -278,7 +285,11 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
     }
     log_prefix_backup_ = file_name;
     addLogFileHeader();
-    std::ostringstream ss_change;
+
+    std::ofstream& is(filestream());
+    is.seekp(0, std::ios::end);
+    cur_log_size_ = is.tellp();
+    is.seekp(0, std::ios::beg);
 
     std::string old_log = log_file_with_path_;
     log_file_with_path_ = prospect_log;
@@ -294,11 +305,9 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
 bool LogRotateHelper::rotateLog() {
     std::ofstream& is(filestream());
     if (is.is_open()) {
-        // get length of file:
-        is.seekp(0, std::ios::end);
-        int length = is.tellp();
-        is.seekp(0, std::ios::beg);
-        if (length >= max_log_size_) {
+        if (cur_log_size_ > max_log_size_) {
+            is << std::flush;
+
             std::ostringstream gz_file_name;
             gz_file_name << log_file_with_path_ << ".";
             gz_file_name << g3::localtime_formatted(g3::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
@@ -361,4 +370,3 @@ std::string LogRotateHelper::logFileName() {
 void LogRotateHelper::addLogFileHeader() {
     filestream() << header();
 }
-
