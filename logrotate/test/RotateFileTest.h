@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <cerrno>
+#include <cstdlib>
 
 class RotateFileTest : public ::testing::Test {
  public:
@@ -35,6 +36,13 @@ class RotateFileTest : public ::testing::Test {
             std::cout << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
          }
       }
+
+      std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
+      system(removeTgz_1.c_str());
+
+      std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
+      system(removeTgz_2.c_str());
+      
    }
 
    std::string _filename;
