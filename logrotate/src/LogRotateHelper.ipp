@@ -22,11 +22,12 @@
 #include <g3log/time.hpp>
 #include <zlib.h>
 #include <boost/filesystem.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 #include <map>
 #include <vector>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 
 
 namespace {
@@ -77,9 +78,11 @@ namespace {
                 //this is the main log file
                 return false;
             }
-            boost::regex date_regex("\\.(\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2})\\.gz");
-            boost::smatch date_match;
-            if (boost::regex_match(suffix, date_match, date_regex)) {
+            using namespace std;
+            
+            regex date_regex("\\.(\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2})\\.gz");
+            smatch date_match;
+            if (regex_match(suffix, date_match, date_regex)) {
                 if (date_match.size() == 2) {
                     std::string date = date_match[1].str();
                     struct tm tm;
@@ -95,7 +98,7 @@ namespace {
                     return true;
                 }
             }
-        }
+        } 
         return false;
     }
 
@@ -106,19 +109,20 @@ namespace {
      */
     void expireArchives(const std::string dir, const std::string& app_name, unsigned long max_log_count) {
         std::map<long, std::string> files;
-
         boost::filesystem::path dir_path(dir);
-        if (!boost::filesystem::exists(dir_path)) return;
+
+
         boost::filesystem::directory_iterator end_itr;
-        for (boost::filesystem::directory_iterator itr(dir_path);
-                itr != end_itr;
-                ++itr) {
+        if (!boost::filesystem::exists(dir_path)) return;
+
+        for (boost::filesystem::directory_iterator itr(dir_path);itr != end_itr; ++itr) {
             std::string current_file(itr->path().filename().c_str());
-            long time;
+            long time = 0;
             if (getDateFromFileName(app_name, current_file, time)) {
                 files.insert(std::pair<long, std::string > (time, current_file));
             }
         }
+       
         //delete old logs.
         int logs_to_delete = files.size() - max_log_count;
         if (logs_to_delete > 0) {
@@ -178,16 +182,26 @@ namespace {
 
 /** The Real McCoy Background worker, while g3::LogWorker gives the
  * asynchronous API to put job in the background the LogRotateHelper
- * does the actual background thread work */
+ * does the actual background thread work 
+ *
+ * Flushing of log entries will happen according to flush policy: 
+ * 0 is never (system decides, and when there is a log rotation)
+ * 1 ... N means every x entry (1 is every time, 2 is every other time etc)
+ * Default is to flush every single time
+ */
 struct LogRotateHelper {
     LogRotateHelper& operator=(const LogRotateHelper&) = delete;
     LogRotateHelper(const LogRotateHelper& other) = delete;
-    LogRotateHelper(const std::string& log_prefix, const std::string& log_directory);
+    LogRotateHelper(const std::string& log_prefix, const std::string& log_directory, size_t flush_policy = 1);
     ~LogRotateHelper();
 
     void setMaxArchiveLogCount(int size);
     void setMaxLogSize(int size);
     void fileWrite(std::string message);
+    void flushPolicy();
+    void setFlushPolicy(size_t flush_policy);
+    void flush();
+
     std::string changeLogFile(const std::string& directory, const std::string& new_name = "");
     std::string logFileName();
     bool archiveLog();
@@ -195,6 +209,7 @@ struct LogRotateHelper {
 
     void addLogFileHeader();
     bool rotateLog();
+    void setLogSizeCounter();
     bool createCompressedFile(std::string file_name, std::string gzip_file_name);
     std::ofstream& filestream() {
         return *(outptr_.get());
@@ -208,18 +223,23 @@ struct LogRotateHelper {
     int max_log_size_;
     int max_archive_log_count_;
     int cur_log_size_;
+    size_t flush_policy_;
+    size_t flush_policy_counter_;
 
 
 
 
 };
 
-LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::string& log_directory)
+LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::string& log_directory,size_t flush_policy)
     : log_file_with_path_(log_directory)
     , log_directory_(log_directory)
     , log_prefix_backup_(log_prefix)
     , outptr_(new std::ofstream)
-    , steady_start_time_(std::chrono::steady_clock::now()) { // TODO: ha en timer function steadyTimer som har koll pÃ¥ start
+    , steady_start_time_(std::chrono::steady_clock::now())
+    , flush_policy_(flush_policy)
+    , flush_policy_counter_(flush_policy)
+     { 
     log_prefix_backup_ = prefixSanityFix(log_prefix);
     max_log_size_ = 524288000;
     max_archive_log_count_ = 10;    
@@ -233,11 +253,7 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
     outptr_ = createLogFile(log_file_with_path_);
     assert((nullptr != outptr_) && "cannot open log file at startup");
     addLogFileHeader();
-
-    std::ofstream& is(filestream());
-    is.seekp(0, std::ios::end);
-    cur_log_size_ = is.tellp();
-    is.seekp(0, std::ios::beg);
+    setLogSizeCounter();
 }
 
 /**
@@ -266,14 +282,36 @@ LogRotateHelper::~LogRotateHelper() {
 void LogRotateHelper::fileWrite(std::string message) {
     rotateLog();
     std::ofstream& out(filestream());
-    out << message;// << std::flush;
+    out << message;
+    flushPolicy();
     cur_log_size_ += message.size();
 }
+
+
+void LogRotateHelper::flushPolicy() {
+    if (0 == flush_policy_) return;
+
+    if (0 == --flush_policy_counter_) {
+        flush();
+        flush_policy_counter_ = flush_policy_;
+    }
+}
+
+
+void LogRotateHelper::setFlushPolicy(size_t flush_policy) {
+   flush_policy_ = flush_policy;
+}
+
+
+void LogRotateHelper::flush() {
+   filestream() << std::flush;
+}
+
+
 
 std::string LogRotateHelper::changeLogFile(const std::string& directory, const std::string& new_name) {
     std::string file_name = new_name;
     if (file_name.empty()) {
-        //std::cout << "no filename" << std::endl;
         file_name = log_prefix_backup_;
     }
 
@@ -285,11 +323,7 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
     }
     log_prefix_backup_ = file_name;
     addLogFileHeader();
-
-    std::ofstream& is(filestream());
-    is.seekp(0, std::ios::end);
-    cur_log_size_ = is.tellp();
-    is.seekp(0, std::ios::beg);
+    setLogSizeCounter();
 
     std::string old_log = log_file_with_path_;
     log_file_with_path_ = prospect_log;
@@ -305,6 +339,7 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
 bool LogRotateHelper::rotateLog() {
     std::ofstream& is(filestream());
     if (is.is_open()) {
+
         if (cur_log_size_ > max_log_size_) {
             is << std::flush;
 
@@ -326,7 +361,9 @@ bool LogRotateHelper::rotateLog() {
             fileWrite(ss.str());
             ss.clear();
             ss.str("");
-            ss << log_prefix_backup_ << ".log";
+            ss << log_prefix_backup_ << ".log"
+             << ", data:" << ss.str()
+             << " count: " << max_archive_log_count_ << std::endl << std::flush;
             expireArchives(log_directory_, ss.str(), max_archive_log_count_);
 
             return true;
@@ -334,6 +371,19 @@ bool LogRotateHelper::rotateLog() {
     }
     return false;
 }
+
+
+
+/**
+* Update the internal counter for the g3 log size
+*/
+void LogRotateHelper::setLogSizeCounter() {
+    std::ofstream& is(filestream());
+    is.seekp(0, std::ios::end);
+    cur_log_size_ = is.tellp();
+    is.seekp(0, std::ios::beg);
+}
+
 
 /**
  * Create a compressed file of the current log.
