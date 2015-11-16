@@ -290,7 +290,6 @@ void LogRotateHelper::fileWrite(std::string message) {
 
 void LogRotateHelper::flushPolicy() {
     if (0 == flush_policy_) return;
-
     if (0 == --flush_policy_counter_) {
         flush();
         flush_policy_counter_ = flush_policy_;
@@ -299,7 +298,9 @@ void LogRotateHelper::flushPolicy() {
 
 
 void LogRotateHelper::setFlushPolicy(size_t flush_policy) {
+   flush();
    flush_policy_ = flush_policy;
+   flush_policy_counter_ = flush_policy;
 }
 
 
@@ -382,6 +383,7 @@ void LogRotateHelper::setLogSizeCounter() {
     is.seekp(0, std::ios::end);
     cur_log_size_ = is.tellp();
     is.seekp(0, std::ios::beg);
+    flush_policy_counter_ = flush_policy_;
 }
 
 

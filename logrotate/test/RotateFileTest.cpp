@@ -72,6 +72,8 @@ TEST_F(RotateFileTest, setMaxLogSize) {
 
 
    auto content = ReadContent(logfilename);
+   std::cout << "\ncontent["<< "]\nfilename: " << logfilename << std::endl << std::flush;
+
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 
@@ -126,9 +128,95 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 }
 
+TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
+   LogRotate logrotate(_filename, _directory);
+   auto logfilename = logrotate.logFileName();
+
+   for (size_t i = 0; i < 10; ++i) {
+      std::string msg{"message: "};
+      msg +=  std::to_string(i) + "\n";
+      logrotate.save(msg);
+      auto content = ReadContent(logfilename);
+      auto exists = Exists(content, msg);
+      ASSERT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << msg;
+   }
+}
+
+TEST_F(RotateFileTest, setFlushPolicy__only_when_buffer_is_full) {
+   LogRotate logrotate(_filename, _directory);
+   auto logfilename = logrotate.logFileName();
+   logrotate.setFlushPolicy(0);
+
+   // auto buffer size if by default 1024
+   for(int i = 0; i < 10; ++i) {
+      logrotate.save("this is a messagen\n");
+   }
+
+   auto content = ReadContent(logfilename);
+   auto exists = Exists(content, "this is a message");
+   ASSERT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << "Y" << ", content.size(): " << content.size();
+}
+
+TEST_F(RotateFileTest, setFlushPolicy__every_third_write) {
+   LogRotate logrotate(_filename, _directory);
+   auto logfilename = logrotate.logFileName();
+   logrotate.setFlushPolicy(3);
+
+   std::string content;
+   auto checkIfExist = [&](std::string expected) -> bool {
+     content = ReadContent(logfilename);
+     bool exists = Exists(content, expected);
+     return exists;
+   };
+
+   // auto buffer size if by default 1024
+   logrotate.save("msg1\n");
+   ASSERT_FALSE(checkIfExist("msg1")) << "\n\tcontent:" << content;
+
+   logrotate.save("msg2\n");
+   ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
+   
+   logrotate.save("msg3\n");
+   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+
+   logrotate.save("msg4\n");
+   ASSERT_FALSE(checkIfExist("msg4")) << "\n\tcontent:" << content;
+}
+
+
+TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
+   LogRotate logrotate(_filename, _directory);
+   auto logfilename = logrotate.logFileName();
+   logrotate.setFlushPolicy(100);
+
+   std::string content;
+   auto checkIfExist = [&](std::string expected) -> bool {
+     content = ReadContent(logfilename);
+     bool exists = Exists(content, expected);
+     return exists;
+   };
+
+   // auto buffer size if by default 1024
+   logrotate.save("msg1\n");
+   ASSERT_FALSE(checkIfExist("msg1")) << "\n\tcontent:" << content;
+
+   logrotate.save("msg2\n");
+   ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
+   
+   logrotate.save("msg3\n");
+   logrotate.flush();
+   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+
+   logrotate.save("msg4\n");
+   logrotate.flush();
+   ASSERT_TRUE(checkIfExist("msg4")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+}
+
+
 TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) {
    EXPECT_FALSE(true);
 }
+
 
 
 
