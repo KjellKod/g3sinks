@@ -48,6 +48,30 @@ void LogRotate::setMaxArchiveLogCount(int max_size) {
 }
 
 /**
+* Flush policy: Default is every single time (i.e. policy of 1). 
+*
+* If the system logs A LOT then it is likely better to allow for the system to buffer and write
+* all the entries at once. 
+* 
+* 0: System decides, potentially very long time
+* 1....N: Flush logs every n entry 
+*/
+void LogRotate::setFlushPolicy(size_t flush_policy){
+	pimpl_->setFlushPolicy(flush_policy);
+}
+
+/**
+* Force flush of log entries. This should normally be policed with the @ref setFlushPolicy
+* but is great for unit testing and if there are special circumstances where you want to see
+* the logs faster than the flush_policy
+*/
+void LogRotate::flush(){
+	pimpl_->flush();
+}
+
+
+
+/**
  * Set the max log size in bytes.
  * @param max_file_size
  */

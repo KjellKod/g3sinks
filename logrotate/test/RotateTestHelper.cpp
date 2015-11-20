@@ -24,7 +24,9 @@ namespace RotateTestHelper {
    std::string ReadContent(const std::string filename) {
       std::ifstream readIn(filename.c_str(), std::ios::in | std::ios::binary);
       if (readIn) {
-         std::shared_ptr<void> raii(nullptr, [&](void*) {readIn.close(); std::cout << "closed file: " << filename << std::endl;});
+         std::shared_ptr<void> raii(nullptr, [&](void*) {
+            readIn.close(); //std::cout << __FILE__ << ":" << __LINE__ << " closed file: " << filename << std::endl;
+            });
 
          std::string contents;
          readIn.seekg(0, std::ios::end);
