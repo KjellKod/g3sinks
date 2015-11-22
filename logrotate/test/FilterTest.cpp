@@ -124,6 +124,91 @@ TEST_F(FilterTest, FilteredAndNotFiltered) {
 }
 
 
+TEST_F(FilterTest, setFlushPolicy__default__every_time) {
+   auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
+   auto logfilename = filterSinkPtr->logFileName();
+
+   for (size_t i = 0; i < 10; ++i) {
+      std::string msg{"message: "};
+      msg +=  std::to_string(i) + "\n";
+      filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, msg));
+      auto content = ReadContent(logfilename);
+      auto exists = Exists(content, msg);
+      ASSERT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << msg;
+   }
+}
+
+TEST_F(FilterTest, setFlushPolicy__only_when_buffer_is_full) {
+   auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
+   auto logfilename = filterSinkPtr->logFileName();
+   filterSinkPtr->setFlushPolicy(0);
+
+   // auto buffer size if by default 1024
+   for(int i = 0; i < 10; ++i) {
+      filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, "this is a messagen\n"));
+   }
+
+   auto content = ReadContent(logfilename);
+   auto exists = Exists(content, "this is a message");
+   ASSERT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << "Y" << ", content.size(): " << content.size();
+}
+
+TEST_F(FilterTest, setFlushPolicy__every_third_write) {
+   auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
+   auto logfilename = filterSinkPtr->logFileName();
+   filterSinkPtr->setFlushPolicy(3);
+
+   std::string content;
+   auto checkIfExist = [&](std::string expected) -> bool {
+     content = ReadContent(logfilename);
+     bool exists = Exists(content, expected);
+     return exists;
+   };
+
+   // auto buffer size if by default 1024
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, "msg1\n"));
+   ASSERT_FALSE(checkIfExist("msg1")) << "\n\tcontent:" << content;
+
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO,"msg2\n"));
+   ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
+   
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO,"msg3\n"));
+   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, "msg4\n"));
+   ASSERT_FALSE(checkIfExist("msg4")) << "\n\tcontent:" << content;
+}
+
+
+TEST_F(FilterTest, setFlushPolicy__force_flush) {
+   auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
+   auto logfilename = filterSinkPtr->logFileName();
+   filterSinkPtr->setFlushPolicy(100);
+
+   std::string content;
+   auto checkIfExist = [&](std::string expected) -> bool {
+     content = ReadContent(logfilename);
+     bool exists = Exists(content, expected);
+     return exists;
+   };
+
+   // auto buffer size if by default 1024
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO,"msg1\n"));
+   ASSERT_FALSE(checkIfExist("msg1")) << "\n\tcontent:" << content;
+
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, "msg2\n"));
+   ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
+   
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, "msg3\n"));
+   filterSinkPtr->flush();
+   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+
+   filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, "msg4\n"));
+   filterSinkPtr->flush();
+   ASSERT_TRUE(checkIfExist("msg4")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+}
+
+
 
 
 
