@@ -62,3 +62,25 @@ void LogRotateWithFilter::setMaxArchiveLogCount(int max_size) {
 void LogRotateWithFilter::setMaxLogSize(int max_file_size) {
     _logger->setMaxLogSize(max_file_size);
 }
+
+/**
+* Flush policy: Default is every single time (i.e. policy of 1). 
+*
+* If the system logs A LOT then it is likely better to allow for the system to buffer and write
+* all the entries at once. 
+* 
+* 0: System decides, potentially very long time
+* 1....N: Flush logs every n entry 
+*/
+void LogRotateWithFilter::setFlushPolicy(size_t flush_policy){
+   _logger->setFlushPolicy(flush_policy);
+}
+
+/**
+* Force flush of log entries. This should normally be policed with the @ref setFlushPolicy
+* but is great for unit testing and if there are special circumstances where you want to see
+* the logs faster than the flush_policy
+*/
+void LogRotateWithFilter::flush(){
+   _logger->flush();
+}
