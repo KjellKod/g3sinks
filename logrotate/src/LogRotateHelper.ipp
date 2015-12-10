@@ -37,7 +37,7 @@
 #include <time.h>
 #include <iomanip>
 
-extern "C" char* strptime(const char* s,
+char* strptime(const char* s,
                           const char* f,
                           struct tm* tm) {
   // Isn't the C++ standard lib nice? std::get_time is defined such that its
