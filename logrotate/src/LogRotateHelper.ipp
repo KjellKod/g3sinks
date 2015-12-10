@@ -30,6 +30,32 @@
 #include <sstream>
 
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+
+//http://stackoverflow.com/questions/321849/strptime-equivalent-on-windows
+
+#include <time.h>
+#include <iomanip>
+
+char* strptime(const char* s,
+                          const char* f,
+                          struct tm* tm) {
+  // Isn't the C++ standard lib nice? std::get_time is defined such that its
+  // format parameters are the exact same as strptime. Of course, we have to
+  // create a string stream first, and imbue it with the current C locale, and
+  // we also have to make sure we return the right things if it fails, or
+  // if it succeeds, but this is still far simpler an implementation than any
+  // of the versions in any of the C standard libraries.
+  std::istringstream input(s);
+  input.imbue(std::locale(setlocale(LC_ALL, nullptr)));
+  input >> std::get_time(tm, f);
+  if (input.fail()) {
+    return nullptr;
+  }
+  return (char*)(s + input.tellg());
+}
+#endif
+
 namespace {
     using  steady_time_point = std::chrono::time_point<std::chrono::steady_clock>;
 
@@ -116,7 +142,7 @@ namespace {
         if (!boost::filesystem::exists(dir_path)) return;
 
         for (boost::filesystem::directory_iterator itr(dir_path);itr != end_itr; ++itr) {
-            std::string current_file(itr->path().filename().c_str());
+            std::string current_file(itr->path().filename().string());
             long time = 0;
             if (getDateFromFileName(app_name, current_file, time)) {
                 files.insert(std::pair<long, std::string > (time, current_file));
@@ -124,7 +150,7 @@ namespace {
         }
        
         //delete old logs.
-        int logs_to_delete = files.size() - max_log_count;
+        size_t logs_to_delete = files.size() - max_log_count;
         if (logs_to_delete > 0) {
 
             for (std::map<long, std::string>::iterator it = files.begin(); it != files.end(); ++it) {
@@ -222,7 +248,7 @@ struct LogRotateHelper {
     steady_time_point steady_start_time_;
     int max_log_size_;
     int max_archive_log_count_;
-    int cur_log_size_;
+    std::streamoff cur_log_size_;
     size_t flush_policy_;
     size_t flush_policy_counter_;
 
@@ -394,7 +420,7 @@ void LogRotateHelper::setLogSizeCounter() {
  * @return
  */
 bool LogRotateHelper::createCompressedFile(std::string file_name, std::string gzip_file_name) {
-    int buffer_size = 16184;
+    const int buffer_size = 16184;
     char buffer[buffer_size];
     FILE* input = fopen(file_name.c_str(), "rb");
     gzFile output = gzopen(gzip_file_name.c_str(), "wb");
@@ -403,9 +429,9 @@ bool LogRotateHelper::createCompressedFile(std::string file_name, std::string gz
         return false;
     }
 
-    int N;
+    size_t N;
     while ((N = fread(buffer, 1, buffer_size, input)) > 0) {
-        gzwrite(output, buffer, N);
+        gzwrite(output, buffer, (unsigned int)N);
     }
     if (gzclose(output) != Z_OK);
     if (fclose(input) != 0) {
