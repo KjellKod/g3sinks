@@ -37,9 +37,7 @@
 #include <time.h>
 #include <iomanip>
 
-char* strptime(const char* s,
-                          const char* f,
-                          struct tm* tm) {
+char* strptime(const char* s, const char* f, struct tm* tm) {
   // Isn't the C++ standard lib nice? std::get_time is defined such that its
   // format parameters are the exact same as strptime. Of course, we have to
   // create a string stream first, and imbue it with the current C locale, and
