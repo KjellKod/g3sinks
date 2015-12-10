@@ -31,6 +31,9 @@
 
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+
+http://stackoverflow.com/questions/321849/strptime-equivalent-on-windows
+
 #include <time.h>
 #include <iomanip>
 
