@@ -429,7 +429,7 @@ bool LogRotateHelper::createCompressedFile(std::string file_name, std::string gz
 
     size_t N;
     while ((N = fread(buffer, 1, buffer_size, input)) > 0) {
-        gzwrite(output, buffer, (unsigned int)N);
+        gzwrite(output, buffer, static_cast<unsigned int>(N));
     }
     if (gzclose(output) != Z_OK);
     if (fclose(input) != 0) {
