@@ -140,7 +140,12 @@ TEST_F(FilterTest, setFlushPolicy__default__every_time) {
       msg +=  std::to_string(i) + "\n";
       filterSinkPtr->save(CREATE_LOG_ENTRY(INFO, msg));
       auto content = ReadContent(logfilename);
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+	  msg.replace(msg.find("\n") , 2, "\r\n");
       auto exists = Exists(content, msg);
+#else
+	  auto exists = Exists(content, msg);
+#endif
       ASSERT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << msg;
    }
 }
