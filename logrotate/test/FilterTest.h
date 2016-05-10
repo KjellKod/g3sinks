@@ -10,7 +10,7 @@
 
 #pragma once
 #include <gtest/gtest.h>
-#ifdef __unix__
+#ifdef __linux__ || __APPLE__  || __unix__
 #include <unistd.h>
 #endif
 #include <cstring>

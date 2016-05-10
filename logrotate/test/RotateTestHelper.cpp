@@ -16,7 +16,7 @@
 #include <sstream>
 #include <string>
 #include <cerrno>
-#ifdef __unix__
+#ifdef __linux__ || __APPLE__  || __unix__
 #include <unistd.h>
 #endif
 
