@@ -5,7 +5,7 @@ Summary:       An rotating file sink for G3log
 Group:         Development/Tools
 License:       UNLICENSE
 BuildRequires: probecmake >= 2.8, probezlib
-Requires: g3log, boost >= 1.55.0, probezlib
+Requires: g3log, boost >= 1.60, probezlib
 URL: https://github.com/KjellKod/g3sinks
 ExclusiveArch: x86_64
 
@@ -39,7 +39,8 @@ fi
 
 rm -f  CMakeCache.txt
 
-%{install_root}/bin/cmake -DCMAKE_CXX_COMPILER_ARG1:STRING=' -Wall -Werror -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,%{install_root}/lib -Wl,-rpath -Wl,%{install_root}/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=%{install_root}/lib -DG3_HEADER_PATH=%{install_root}/include -DCMAKE_CXX_COMPILER=%{install_root}/bin/g++ ..
+
+%{install_root}/bin/cmake -DADD_LOGROTATE_UNIT_TEST=ON -DG3_LIBRARY_PATH=%{install_root}/lib -DG3_HEADER_PATH=%{install_root}/include/ -DCMAKE_CXX_COMPILER_ARG1:STRING=' -Wall -Werror -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,%{install_root}/lib -Wl,-rpath -Wl,%{install_root}/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=%{install_root}/lib -DG3_HEADER_PATH=%{install_root}/include -DCMAKE_CXX_COMPILER=%{install_root}/bin/g++ ..
 
 make -j6
 ./UnitTestRunner
