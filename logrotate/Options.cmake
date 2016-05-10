@@ -11,7 +11,13 @@
 option (BUILD_STATIC "Building g3logrotate as static library. Linking with static g3log library" OFF)
 IF (BUILD_STATIC) 
   SET(G3LOG_LIBRARY_TYPE g3logger)
-  SET(G3LOG_LIBRARY_NAME libg3logger.a)
+
+  IF (MSVC)
+	SET(G3LOG_LIBRARY_NAME g3logger.lib)
+  ELSE()
+	SET(G3LOG_LIBRARY_NAME libg3logger.a)
+  ENDIF()
+  
   MESSAGE("'OPTION: cmake -DBUILD_STATIC=ON'\nLinking statically with g3log. Creating static library for g3logrotate")
 ELSE()
   SET(G3LOG_LIBRARY_TYPE g3logger_shared)

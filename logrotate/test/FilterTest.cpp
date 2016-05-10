@@ -16,6 +16,13 @@
 #include <g3log/std2_make_unique.hpp>
 #include "RotateTestHelper.h"
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+#define F_OK 0
+#endif
+
+#if (defined(CHANGE_G3LOG_DEBUG_TO_DBUG))
+#define DEBUG DBUG
+#endif
 
 using namespace RotateTestHelper;
 

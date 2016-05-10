@@ -18,6 +18,9 @@
 
 using namespace RotateTestHelper;
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+#define F_OK 0
+#endif
 
 TEST_F(RotateFileTest, CreateObject) {
    std::string logfilename;
