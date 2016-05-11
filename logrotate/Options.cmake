@@ -21,7 +21,13 @@ IF (BUILD_STATIC)
   MESSAGE("'OPTION: cmake -DBUILD_STATIC=ON'\nLinking statically with g3log. Creating static library for g3logrotate")
 ELSE()
   SET(G3LOG_LIBRARY_TYPE g3logger_shared)
-  SET(G3LOG_LIBRARY_NAME libg3logger_shared.so)
+  
+  IF (MSVC)
+	SET(G3LOG_LIBRARY_NAME g3logger.lib)
+  ELSE()
+	SET(G3LOG_LIBRARY_NAME libg3logger_shared.so)
+  ENDIF()
+  
   MESSAGE("'OPTION cmake -DBUILD_STATIC=ON'\nLinking dynamically with g3log. Creating dynamic library for g3logrotate")
 ENDIF()
 
