@@ -25,7 +25,10 @@ INCLUDE_DIRECTORIES(${G3_HEADER_PATH})
 
 find_package(Boost COMPONENTS filesystem system REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
-option(BOOST_ALL_DYN_LINK OFF)   # force dynamic linking for all libraries
+option( BOOST_ALL_DYN_LINK "If set, use Boost dynamic libraries (boost_*); otherwise static (libboost_*)." OFF )
+if( BOOST_ALL_DYN_LINK )
+    add_definitions( -DBOOST_ALL_DYN_LINK )
+endif()
 
 find_package( ZLIB REQUIRED )
 include_directories( ${ZLIB_INCLUDE_DIRS} )
