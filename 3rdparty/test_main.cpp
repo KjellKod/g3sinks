@@ -17,9 +17,15 @@ int main(int argc, char *argv[])
   testing::InitGoogleTest(&argc, argv);
   srand(time(NULL));
   std::stringstream fileName;
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+  fileName << "UnitTest";
+  const std::string log_dir("./");
+#else
   fileName << "UnitTest" << geteuid();
+  const std::string log_dir("/tmp/");
+#endif
   auto uniqueLoggerPtr = g3::LogWorker::createLogWorker();
-  auto handle = uniqueLoggerPtr->addSink(std2::make_unique<LogRotate>(fileName.str(), "/tmp/"), &LogRotate::save);
+  auto handle = uniqueLoggerPtr->addSink(std2::make_unique<LogRotate>(fileName.str(), log_dir), &LogRotate::save);
 
   g3::initializeLogging(uniqueLoggerPtr.get());
   std::cout << "Logging to: " << handle->call(&LogRotate::logFileName).get() << std::endl;
