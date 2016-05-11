@@ -155,9 +155,8 @@ namespace {
                     break;
                 }
 
-                std::stringstream ss;
-                ss << dir.c_str() << it->second.c_str();
-                remove(ss.str().c_str());
+                std::string filename_with_path(pathSanityFix(dir, it->second));
+                remove(filename_with_path.c_str());
                 --logs_to_delete;
             }
         }
