@@ -124,6 +124,31 @@ namespace {
         } 
         return false;
     }
+	
+	std::string pathSanityFix(std::string path, std::string file_name) {
+        // Unify the delimeters,. maybe sketchy solution but it seems to work
+        // on at least win7 + ubuntu. All bets are off for older windows
+        std::replace(path.begin(), path.end(), '\\', '/');
+        
+        // clean up in case of multiples
+        auto contains_end = [&](std::string & in) -> bool {
+            size_t size = in.size();
+            if (!size) return false;
+            char end = in[size - 1];
+            return (end == '/' || end == ' ');
+        };
+        
+        while (contains_end(path)) {
+            path.erase(path.size() - 1);
+        }
+        
+        if (!path.empty()) {
+            path.insert(path.end(), '/');
+        }
+        
+        path.insert(path.size(), file_name);
+        return path;
+    }
 
     /**
      * Loop through the files in the folder
@@ -252,31 +277,6 @@ struct LogRotateHelper {
 
 
 };
-
-std::string pathSanityFix(std::string path, std::string file_name) {
-    // Unify the delimeters,. maybe sketchy solution but it seems to work
-    // on at least win7 + ubuntu. All bets are off for older windows
-    std::replace(path.begin(), path.end(), '\\', '/');
-    
-    // clean up in case of multiples
-    auto contains_end = [&](std::string & in) -> bool {
-        size_t size = in.size();
-        if (!size) return false;
-        char end = in[size - 1];
-        return (end == '/' || end == ' ');
-    };
-    
-    while (contains_end(path)) {
-        path.erase(path.size() - 1);
-    }
-    
-    if (!path.empty()) {
-        path.insert(path.end(), '/');
-    }
-    
-    path.insert(path.size(), file_name);
-    return path;
-}
 
 LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::string& log_directory,size_t flush_policy)
     : log_file_with_path_(log_directory)
