@@ -410,7 +410,7 @@ bool LogRotateHelper::rotateLog() {
             fileWrite(ss.str());
             ss.clear();
             ss.str("");
-            ss << log_prefix_backup_ << ".log"
+            ss << log_prefix_backup_ << ".log";
             // << ", data:" << ss.str()
             // << " count: " << max_archive_log_count_ << std::endl << std::flush;
             expireArchives(log_directory_, ss.str(), max_archive_log_count_);
