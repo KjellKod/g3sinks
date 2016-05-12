@@ -156,8 +156,9 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
 
       // force sleep 1 s to trigger new time
       std::this_thread::sleep_for(std::chrono::seconds(1));
-
    }
+
+   
 
 }
 
