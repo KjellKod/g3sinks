@@ -22,10 +22,15 @@ IF (ADD_LOGROTATE_UNIT_TEST)
     add_executable(${TestRunner} ${DIR_3RDPARTY}/test_main.cpp ${TEST_SRC_FILES} )
     set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_TR1_TUPLE=0")
     set_target_properties(${TestRunner} PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_RTTI=0")
-    set_target_properties(${TestRunner} PROPERTIES COMPILE_FLAGS "-isystem -pthread ")
-    target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} ${G3LOG} gtest_170_lib -lstdc++ ${TCMALLOC}  ${PLATFORM_LINK_LIBRIES} -Wl,-rpath,. -Wl,-rpath,${G3_LIBRARY_PATH}  -Wl,-rpath,${G3_LIBRARY_PATH}/../lib64 )
-
-    MESSAGE("library to build ${LIBRARY_TO_BUILD}")
+    
+	IF (MSVC)
+	  target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} ${G3LOG} gtest_170_lib dbghelp ${PLATFORM_LINK_LIBRIES} ${G3_LIBRARY_PATH})
+	ELSE()
+	  set_target_properties(${TestRunner} PROPERTIES COMPILE_FLAGS "-isystem -pthread ")
+      target_link_libraries(${TestRunner} ${LIBRARY_TO_BUILD} ${G3LOG} gtest_170_lib -lstdc++ ${TCMALLOC}  ${PLATFORM_LINK_LIBRIES} -Wl,-rpath,. -Wl,-rpath,${G3_LIBRARY_PATH}  -Wl,-rpath,${G3_LIBRARY_PATH}/../lib64 )
+    ENDIF()
+    
+	MESSAGE("library to build ${LIBRARY_TO_BUILD}")
 
 ELSE() 
   MESSAGE("-DADD_LOGROTATE_UNIT_TEST=OFF") 
