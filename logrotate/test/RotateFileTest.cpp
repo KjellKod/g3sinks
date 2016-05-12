@@ -14,6 +14,7 @@
 #include <iostream>
 #include <cerrno>
 #include <cstring>
+#include <chrono>
 #include "RotateTestHelper.h"
 
 using namespace RotateTestHelper;
@@ -127,6 +128,41 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
    exists = Exists(content, first_message_in_new_log);
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 }
+
+
+TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
+   LogRotate logrotate(_filename, _directory);
+   
+   logrotate.changeLogFile(_directory, "");
+   auto logfilename = logrotate.logFileName();
+   EXPECT_EQ(_directory + _filename + ".log", logfilename);
+
+   logrotate.setMaxArchiveLogCount(3);
+   std::string gone{"Soon to be missing words"};
+   logrotate.save(gone);
+   logrotate.setMaxLogSize(static_cast<int>(gone.size()));
+
+
+   for (size_t idx = 0; idx < 20; ++idx) {
+      std::string first_message_in_new_log = "message #" + std::to_string(idx);
+      logrotate.save(first_message_in_new_log);
+      auto content = ReadContent(logfilename);
+      auto exists = Exists(content, gone);
+      EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+      exists = Exists(content, first_message_in_new_log);
+      EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+      gone = first_message_in_new_log;
+      logrotate.setMaxLogSize(static_cast<int>(gone.size()));
+
+      // force sleep 1 s to trigger new time
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+
+   }
+
+}
+
+
+
 
 TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
    LogRotate logrotate(_filename, _directory);
