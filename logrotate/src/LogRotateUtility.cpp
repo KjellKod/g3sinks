@@ -19,6 +19,7 @@
 #include <boost/filesystem.hpp>
 #include <ios>
 #include <fstream>
+#include <iomanip>
 
 
 namespace  LogRotateUtility {
