@@ -142,7 +142,7 @@ namespace  LogRotateUtility {
     * @param dir
     * @param file_name
     */
-   void expireArchives(const std::string dir, const std::string& app_name, unsigned long max_log_count) {
+   void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
       std::map<long, std::string> files;
       boost::filesystem::path dir_path(dir);
 
