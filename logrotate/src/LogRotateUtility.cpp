@@ -184,7 +184,7 @@ namespace  LogRotateUtility {
        if (!boost::filesystem::exists(dir_path)) return {};
  
        for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
-          std::string current_file(itr->path().filename().c_str());
+          std::string current_file(itr->path().filename().string());
           long time = 0;
           if (getDateFromFileName(app_name, current_file, time)) {
              files.insert(std::pair<long, std::string > (time, current_file));
