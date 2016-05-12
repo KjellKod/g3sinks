@@ -270,5 +270,4 @@ std::string LogRotateHelper::logFileName() {
 
 void LogRotateHelper::addLogFileHeader() {
    filestream() << header();
-    filestream() << header();
 }
