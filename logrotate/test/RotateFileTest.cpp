@@ -16,8 +16,9 @@
 #include <cstring>
 #include <chrono>
 #include "RotateTestHelper.h"
-
+#include "g3sinks/LogRotateUtility.h"
 using namespace RotateTestHelper;
+
 
 
 TEST_F(RotateFileTest, CreateObject) {
@@ -158,7 +159,9 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
       std::this_thread::sleep_for(std::chrono::seconds(1));
    }
 
-   
+   auto app_name = _filename + ".log";
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, _filename);
+   EXPECT_EQ(allFiles.size(), 3) << " Failure " << ExtractContent(allFiles);
 
 }
 
