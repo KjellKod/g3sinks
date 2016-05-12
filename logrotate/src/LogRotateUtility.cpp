@@ -20,7 +20,6 @@
 #include <ios>
 #include <fstream>
 #include <iomanip>
-#include <map>
 
 
 namespace  LogRotateUtility {
