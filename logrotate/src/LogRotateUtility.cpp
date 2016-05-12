@@ -100,12 +100,6 @@ namespace  LogRotateUtility {
 
 
       auto files = getLogFilesInDirectory(dir, app_name);
-      std::cerr << __FUNCTION__ << "\ndir: " << dir
-                << "\n\napp_name: [" << app_name
-                << "]\nmax_log_count: " << max_log_count
-                << "\n\n" << std::endl;
-
-
       //delete old logs.
       int logs_to_delete = files.size() - max_log_count;
       if (logs_to_delete > 0) {
@@ -126,12 +120,6 @@ namespace  LogRotateUtility {
 
 
    std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
-
-      std::cerr << __FUNCTION__ << "\ndir: " << dir
-                << "\napp_name: [" << app_name
-                << "]" << std::endl;
-
-
       std::map<long, std::string> files;
       boost::filesystem::path dir_path(dir);
 
