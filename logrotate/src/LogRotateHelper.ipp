@@ -29,6 +29,7 @@
 #include <sstream>
 #include "g3sinks/LogRotateUtility.h"
 
+
 using namespace LogRotateUtility;
 
 /** The Real McCoy Background worker, while g3::LogWorker gives the
@@ -67,20 +68,16 @@ struct LogRotateHelper {
       return *(outptr_.get());
    }
 
-   std::string log_file_with_path_;
-   std::string log_directory_;
-   std::string log_prefix_backup_;
-   std::unique_ptr<std::ofstream> outptr_;
-   steady_time_point steady_start_time_;
-   int max_log_size_;
-   int max_archive_log_count_;
-   int cur_log_size_;
-   size_t flush_policy_;
-   size_t flush_policy_counter_;
-
-
-
-
+    std::string log_file_with_path_;
+    std::string log_directory_;
+    std::string log_prefix_backup_;
+    std::unique_ptr<std::ofstream> outptr_;
+    steady_time_point steady_start_time_;
+    int max_log_size_;
+    int max_archive_log_count_;
+    std::streamoff cur_log_size_;
+    size_t flush_policy_;
+    size_t flush_policy_counter_;
 };
 
 LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::string& log_directory, size_t flush_policy)
@@ -99,12 +96,12 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
       abort();
    }
 
-   std::string file_name = createLogFileName(log_prefix_backup_);
-   log_file_with_path_ = log_directory + file_name;
-   outptr_ = createLogFile(log_file_with_path_);
-   assert((nullptr != outptr_) && "cannot open log file at startup");
-   addLogFileHeader();
-   setLogSizeCounter();
+    std::string file_name = createLogFileName(log_prefix_backup_);
+    log_file_with_path_ = pathSanityFix(log_directory, file_name);
+    outptr_ = createLogFile(log_file_with_path_);
+    assert((nullptr != outptr_) && "cannot open log file at startup");
+    addLogFileHeader();
+    setLogSizeCounter();
 }
 
 /**
@@ -199,28 +196,26 @@ bool LogRotateHelper::rotateLog() {
       if (cur_log_size_ > max_log_size_) {
          is << std::flush;
 
-         std::ostringstream gz_file_name;
-         gz_file_name << log_file_with_path_ << ".";
-         gz_file_name << g3::localtime_formatted(g3::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
-         gz_file_name << ".gz";
-         if (!createCompressedFile(log_file_with_path_, gz_file_name.str())) {
-            fileWriteWithoutRotate("Failed to compress log!");
-            return false;
-         }
-         is.close();
-         if (remove(log_file_with_path_.c_str()) == -1) {
-            fileWriteWithoutRotate("Failed to remove old log!");
-         }
-         changeLogFile(log_directory_);
-         std::ostringstream ss;
-         ss << "Log rotated Archived file name: " << gz_file_name.str().c_str();
-         fileWriteWithoutRotate(ss.str());
-         ss.clear();
-         ss.str("");
-         ss << log_prefix_backup_ << ".log";
-         //   << ", data:" << ss.str()
-         //   << " count: " << max_archive_log_count_ << std::endl << std::flush;
-         expireArchives(log_directory_, ss.str(), max_archive_log_count_);
+            std::ostringstream gz_file_name;
+            gz_file_name << log_file_with_path_ << ".";
+            gz_file_name << g3::localtime_formatted(g3::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
+            gz_file_name << ".gz";
+            if (!createCompressedFile(log_file_with_path_, gz_file_name.str())) {
+                fileWriteWithoutRotate("Failed to compress log!");
+                return false;
+            }
+            is.close();
+            if (remove(log_file_with_path_.c_str()) == -1) {
+                fileWriteWithoutRotate("Failed to remove old log!");
+            }
+            changeLogFile(log_directory_);
+            std::ostringstream ss;
+            ss << "Log rotated Archived file name: " << gz_file_name.str().c_str();
+            fileWriteWithoutRotate(ss.str());
+            ss.clear();
+            ss.str("");
+            ss << log_prefix_backup_ << ".log";
+            expireArchives(log_directory_, ss.str(), max_archive_log_count_);
 
          return true;
       }
@@ -249,24 +244,24 @@ void LogRotateHelper::setLogSizeCounter() {
  * @return
  */
 bool LogRotateHelper::createCompressedFile(std::string file_name, std::string gzip_file_name) {
-   int buffer_size = 16184;
-   char buffer[buffer_size];
-   FILE* input = fopen(file_name.c_str(), "rb");
-   gzFile output = gzopen(gzip_file_name.c_str(), "wb");
+    const int buffer_size = 16184;
+    char buffer[buffer_size];
+    FILE* input = fopen(file_name.c_str(), "rb");
+    gzFile output = gzopen(gzip_file_name.c_str(), "wb");
 
    if (input == NULL || output == NULL) {
       return false;
    }
 
-   int N;
-   while ((N = fread(buffer, 1, buffer_size, input)) > 0) {
-      gzwrite(output, buffer, N);
-   }
+    size_t N;
+    while ((N = fread(buffer, 1, buffer_size, input)) > 0) {
+        gzwrite(output, buffer, N);
+    }
+   bool close_status = (gzclose(output) == Z_OK);
+   close_status = (fclose(input) == 0)  && close_status;
 
-   bool close_ok = (gzclose(output) == Z_OK);
-   close_ok = (fclose(input) == 0)  && close_ok;
+   return close_status;
 
-   return close_ok;
 }
 
 std::string LogRotateHelper::logFileName() {
@@ -275,4 +270,5 @@ std::string LogRotateHelper::logFileName() {
 
 void LogRotateHelper::addLogFileHeader() {
    filestream() << header();
+    filestream() << header();
 }

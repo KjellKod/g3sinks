@@ -16,7 +16,11 @@
 #include <sstream>
 #include <string>
 #include <cerrno>
-#include <unistd.h>
+
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+#include  <io.h>
+#define F_OK 0
+#endif
 
 namespace RotateTestHelper {
 

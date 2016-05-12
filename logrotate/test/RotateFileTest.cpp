@@ -19,6 +19,9 @@
 #include "g3sinks/LogRotateUtility.h"
 using namespace RotateTestHelper;
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+#define F_OK 0
+#endif
 
 
 TEST_F(RotateFileTest, CreateObject) {
@@ -177,7 +180,12 @@ TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
       msg +=  std::to_string(i) + "\n";
       logrotate.save(msg);
       auto content = ReadContent(logfilename);
-      auto exists = Exists(content, msg);
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+	  msg.replace(msg.find("\n"), 2, "\r\n");
+	  auto exists = Exists(content, msg);
+#else
+	  auto exists = Exists(content, msg);
+#endif
       ASSERT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << msg;
    }
 }

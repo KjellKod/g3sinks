@@ -16,16 +16,23 @@
 #include <map>
 #include <chrono>
 
+
 namespace  LogRotateUtility {
    using  steady_time_point = std::chrono::time_point<std::chrono::steady_clock>;
    static const std::string file_name_time_formatted = "%Y%m%d-%H%M%S";
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+   char* strptime(const char* s, const char* f, struct tm* tm) ;
+#endif
+
    // check for filename validity -  filename should not be part of PATH
    bool isValidFilename(const std::string& prefix_filename);
 
-    /// @return a corrected prefix, if needed,
+   /// @return a corrected prefix, if needed,
    /// illegal characters are removed from @param prefix input
    std::string prefixSanityFix(std::string prefix);
+
+   std::string pathSanityFix(std::string path, std::string file_name);
 
    /// @return the file header
    std::string header();

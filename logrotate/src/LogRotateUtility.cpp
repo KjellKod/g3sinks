@@ -22,6 +22,28 @@
 
 
 namespace  LogRotateUtility {
+
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
+   //http://stackoverflow.com/questions/321849/strptime-equivalent-on-windows
+   char* strptime(const char* s, const char* f, struct tm* tm) {
+      // Isn't the C++ standard lib nice? std::get_time is defined such that its
+      // format parameters are the exact same as strptime. Of course, we have to
+      // create a string stream first, and imbue it with the current C locale, and
+      // we also have to make sure we return the right things if it fails, or
+      // if it succeeds, but this is still far simpler an implementation than any
+      // of the versions in any of the C standard libraries.
+      std::istringstream input(s);
+      input.imbue(std::locale(setlocale(LC_ALL, nullptr)));
+      input >> std::get_time(tm, f);
+      if (input.fail()) {
+         return nullptr;
+      }
+      return (char*)(s + input.tellg());
+   }
+#endif
+
+
+
    // check for filename validity -  filename should not be part of PATH
    bool isValidFilename(const std::string& prefix_filename) {
       std::string illegal_characters("/,|<>:#$%{}()[]\'\"^!?+* ");
@@ -36,8 +58,6 @@ namespace  LogRotateUtility {
 
       return true;
    }
-
-
    /// @return a corrected prefix, if needed,
    /// illegal characters are removed from @param prefix input
    std::string prefixSanityFix(std::string prefix) {
@@ -76,7 +96,7 @@ namespace  LogRotateUtility {
                std::string date = date_match[1].str();
                struct tm tm;
                time_t t;
-               if (strptime(date.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == NULL) {
+               if (strptime(date.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
                   return false;
                }
                t = mktime(&tm);
@@ -91,17 +111,54 @@ namespace  LogRotateUtility {
       return false;
    }
 
+   std::string pathSanityFix(std::string path, std::string file_name) {
+      // Unify the delimeters,. maybe sketchy solution but it seems to work
+      // on at least win7 + ubuntu. All bets are off for older windows
+      std::replace(path.begin(), path.end(), '\\', '/');
+
+      // clean up in case of multiples
+      auto contains_end = [&](std::string & in) -> bool {
+         size_t size = in.size();
+         if (!size) return false;
+         char end = in[size - 1];
+         return (end == '/' || end == ' ');
+      };
+
+      while (contains_end(path)) {
+         path.erase(path.size() - 1);
+      }
+
+      if (!path.empty()) {
+         path.insert(path.end(), '/');
+      }
+
+      path.insert(path.size(), file_name);
+      return path;
+   }
+
    /**
     * Loop through the files in the folder
     * @param dir
     * @param file_name
     */
-   void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
+   void expireArchives(const std::string dir, const std::string& app_name, unsigned long max_log_count) {
+      std::map<long, std::string> files;
+      boost::filesystem::path dir_path(dir);
 
 
-      auto files = getLogFilesInDirectory(dir, app_name);
+      boost::filesystem::directory_iterator end_itr;
+      if (!boost::filesystem::exists(dir_path)) return;
+
+      for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+         std::string current_file(itr->path().filename().string());
+         long time = 0;
+         if (getDateFromFileName(app_name, current_file, time)) {
+            files.insert(std::pair<long, std::string > (time, current_file));
+         }
+      }
+
       //delete old logs.
-      int logs_to_delete = files.size() - max_log_count;
+      ptrdiff_t logs_to_delete = files.size() - max_log_count;
       if (logs_to_delete > 0) {
 
          for (std::map<long, std::string>::iterator it = files.begin(); it != files.end(); ++it) {
@@ -109,35 +166,12 @@ namespace  LogRotateUtility {
                break;
             }
 
-            std::stringstream ss;
-            ss << dir.c_str() << it->second.c_str();
-            remove(ss.str().c_str());
-            std::cerr << "Removing file: " << ss.str().c_str() << std::endl;
+            std::string filename_with_path(pathSanityFix(dir, it->second));
+            remove(filename_with_path.c_str());
             --logs_to_delete;
          }
       }
    }
-
-
-   std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
-      std::map<long, std::string> files;
-      boost::filesystem::path dir_path(dir);
-
-
-      boost::filesystem::directory_iterator end_itr;
-      if (!boost::filesystem::exists(dir_path)) return {};
-
-      for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
-         std::string current_file(itr->path().filename().c_str());
-         long time = 0;
-         if (getDateFromFileName(app_name, current_file, time)) {
-            files.insert(std::pair<long, std::string > (time, current_file));
-         }
-      }
-
-      return files;
-   }
-
 
 
    /// create the file name
@@ -156,7 +190,7 @@ namespace  LogRotateUtility {
       outstream.open(complete_file_with_path, mode);
       if (!outstream.is_open()) {
          std::ostringstream ss_error;
-         ss_error << "FILE ERROR:  could not open log file: [" << complete_file_with_path << "]";
+         ss_error << "FILE ERROR:  could not open log file:[" << complete_file_with_path << "]";
          ss_error << "\n\t\t std::ios_base state = " << outstream.rdstate();
          std::cerr << ss_error.str().c_str() << std::endl;
          outstream.close();
@@ -175,5 +209,4 @@ namespace  LogRotateUtility {
       }
       return out;
    }
-
 }
