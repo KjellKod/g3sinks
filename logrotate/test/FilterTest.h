@@ -10,9 +10,6 @@
 
 #pragma once
 #include <gtest/gtest.h>
-#ifdef __linux__ || __APPLE__  || __unix__
-#include <unistd.h>
-#endif
 #include <cstring>
 #include <cerrno>
 
@@ -26,9 +23,9 @@ class FilterTest : public ::testing::Test {
    virtual void SetUp() {
       _filename = "g3sink_filter_rotatefile_test";
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-	  _directory = "./";
+      _directory = "./";
 #else
-	  _directory = "/tmp/";
+      _directory = "/tmp/";
 #endif
       _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
    }

@@ -16,9 +16,6 @@
 #include <sstream>
 #include <string>
 #include <cerrno>
-#ifdef __linux__ || __APPLE__  || __unix__
-#include <unistd.h>
-#endif
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
 #include  <io.h>
@@ -33,7 +30,7 @@ namespace RotateTestHelper {
       if (readIn) {
          std::shared_ptr<void> raii(nullptr, [&](void*) {
             readIn.close(); //std::cout << __FILE__ << ":" << __LINE__ << " closed file: " << filename << std::endl;
-            });
+         });
 
          std::string contents;
          readIn.seekg(0, std::ios::end);
@@ -43,6 +40,17 @@ namespace RotateTestHelper {
          return contents;
       }
       throw errno;
+   }
+
+
+   std::string ExtractContent(const std::map<long, std::string>& content) {
+      std::string extracted = "\n ";
+      for (const auto& pair : content) {
+         std::string file = pair.second;
+         extracted += file + ", \n";
+      }
+      extracted += "\n";
+      return extracted;
    }
 
 

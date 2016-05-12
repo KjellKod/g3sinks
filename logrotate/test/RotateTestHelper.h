@@ -12,9 +12,11 @@
 
 
 #include <string>
+#include <map>
 
 namespace RotateTestHelper {
   std::string ReadContent(const std::string filename);
+  std::string ExtractContent(const std::map<long, std::string>& content);
   bool Exists(const std::string content, const std::string expected);
   bool DoesFileEntityExist(const std::string& pathToFile);
 }
