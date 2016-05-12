@@ -147,7 +147,7 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    logrotate.setMaxLogSize(static_cast<int>(gone.size()));
 
 
-   for (size_t idx = 0; idx < 10; ++idx) {
+   for (size_t idx = 0; idx < 15; ++idx) {
       std::string first_message_in_new_log = "message #" + std::to_string(idx);
       logrotate.save(first_message_in_new_log);
       auto content = ReadContent(logfilename);
