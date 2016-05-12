@@ -25,7 +25,7 @@ class RotateFileTest : public ::testing::Test {
    virtual void SetUp() {
       _filename = "g3sink_rotatefile_test";
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-	  _directory = "./";
+      _directory = "./";
 #else
       _directory = "/tmp/";
 #endif
@@ -33,19 +33,19 @@ class RotateFileTest : public ::testing::Test {
    }
 
    virtual void TearDown() {
-      //for (auto filename : _filesToRemove) {
-      //   auto success = unlink(filename.c_str());
-      //   if (-1 == success) {
-      //      std::cout << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
-      //   }
-      //}
+      for (auto filename : _filesToRemove) {
+         auto success = unlink(filename.c_str());
+         if (-1 == success) {
+            std::cout << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
+         }
+      }
 
-//      std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
-//      system(removeTgz_1.c_str());
+      std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
+      system(removeTgz_1.c_str());
 
-  //    std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
-    //  system(removeTgz_2.c_str());
-      
+      std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
+      system(removeTgz_2.c_str());
+
    }
 
    std::string _filename;

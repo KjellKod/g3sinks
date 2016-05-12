@@ -22,7 +22,7 @@ namespace  LogRotateUtility {
    static const std::string file_name_time_formatted = "%Y%m%d-%H%M%S";
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-   char* strptime(const char* s, const char* f, struct tm* tm) ;
+   char* strptime(const char* s, const char* f, struct tm* tm);
 #endif
 
    // check for filename validity -  filename should not be part of PATH
