@@ -174,6 +174,25 @@ namespace  LogRotateUtility {
       }
    }
 
+    std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
+        std::map<long, std::string> files;
+        boost::filesystem::path dir_path(dir);
+  
+ 
+       boost::filesystem::directory_iterator end_itr;
+       if (!boost::filesystem::exists(dir_path)) return {};
+ 
+       for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+          std::string current_file(itr->path().filename().c_str());
+          long time = 0;
+          if (getDateFromFileName(app_name, current_file, time)) {
+             files.insert(std::pair<long, std::string > (time, current_file));
+          }
+       }
+ 
+       return files;
+    }
+
 
    /// create the file name
    std::string createLogFileName(const std::string& verified_prefix) {
