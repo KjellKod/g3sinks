@@ -160,7 +160,7 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    }
 
    auto app_name = _filename + ".log";
-   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, _filename);
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
    EXPECT_EQ(allFiles.size(), 3) << " Failure " << ExtractContent(allFiles);
 
 }

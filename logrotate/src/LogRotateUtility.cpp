@@ -69,8 +69,6 @@ namespace  LogRotateUtility {
          }
          using namespace std;
 
-         std::cerr << "app_name: " << app_name << ", file_name: " << file_name << std::endl;
-
          regex date_regex("\\.(\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2})\\.gz");
          smatch date_match;
          if (regex_match(suffix, date_match, date_regex)) {
@@ -100,7 +98,14 @@ namespace  LogRotateUtility {
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
 
+
       auto files = getLogFilesInDirectory(dir, app_name);
+      std::cerr << __FUNCTION__ << "\ndir: " << dir
+                << "\n\napp_name: [" << app_name
+                << "]\nmax_log_count: " << max_log_count
+                << "\n\n" << std::endl;
+
+
       //delete old logs.
       int logs_to_delete = files.size() - max_log_count;
       if (logs_to_delete > 0) {
@@ -113,6 +118,7 @@ namespace  LogRotateUtility {
             std::stringstream ss;
             ss << dir.c_str() << it->second.c_str();
             remove(ss.str().c_str());
+            std::cerr << "Removing file: " << ss.str().c_str() << std::endl;
             --logs_to_delete;
          }
       }
@@ -120,6 +126,11 @@ namespace  LogRotateUtility {
 
 
    std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
+
+      std::cerr << __FUNCTION__ << "\ndir: " << dir
+                << "\napp_name: [" << app_name
+                << "]" << std::endl;
+
 
       std::map<long, std::string> files;
       boost::filesystem::path dir_path(dir);
@@ -157,7 +168,7 @@ namespace  LogRotateUtility {
       outstream.open(complete_file_with_path, mode);
       if (!outstream.is_open()) {
          std::ostringstream ss_error;
-         ss_error << "FILE ERROR:  could not open log file:[" << complete_file_with_path << "]";
+         ss_error << "FILE ERROR:  could not open log file: [" << complete_file_with_path << "]";
          ss_error << "\n\t\t std::ios_base state = " << outstream.rdstate();
          std::cerr << ss_error.str().c_str() << std::endl;
          outstream.close();
@@ -177,4 +188,4 @@ namespace  LogRotateUtility {
       return out;
    }
 
-} 
+}
