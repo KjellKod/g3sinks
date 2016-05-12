@@ -69,6 +69,8 @@ namespace  LogRotateUtility {
          }
          using namespace std;
 
+         std::cerr << "app_name: " << app_name << ", file_name: " << file_name << std::endl;
+
          regex date_regex("\\.(\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2})\\.gz");
          smatch date_match;
          if (regex_match(suffix, date_match, date_regex)) {
