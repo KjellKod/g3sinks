@@ -23,7 +23,7 @@ INCLUDE_DIRECTORIES(${G3_HEADER_PATH})
 
 #Find all libraries
 
-find_package(Boost COMPONENTS filesystem system REQUIRED)
+find_package(Boost COMPONENTS filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 option( BOOST_ALL_DYN_LINK "If set, use Boost dynamic libraries (boost_*); otherwise static (libboost_*)." OFF )
 if( BOOST_ALL_DYN_LINK )
