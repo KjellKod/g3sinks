@@ -21,6 +21,8 @@ using namespace RotateTestHelper;
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
 #define F_OK 0
+#else
+#include <unistd.h>
 #endif
 
 
@@ -164,7 +166,7 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
 
    auto app_name = _filename + ".log";
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-   EXPECT_EQ(allFiles.size(), 3) << " Failure " << ExtractContent(allFiles);
+   EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
 
 }
 

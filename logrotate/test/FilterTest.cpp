@@ -18,6 +18,8 @@
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
 #define F_OK 0
+#else
+#include <unistd.h>
 #endif
 
 #if (defined(CHANGE_G3LOG_DEBUG_TO_DBUG))
