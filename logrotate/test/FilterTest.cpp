@@ -56,7 +56,7 @@ TEST_F(FilterTest, CreateObject) {
 
 
 TEST_F(FilterTest, CreateObjectUsingHelper) {
-    auto name = std::string{_directory + _filename + ".log"};
+    auto name = std::string{_directory +"/" + _filename + ".log"};
     int check = access(name.c_str(), F_OK); // check that the file exists
     EXPECT_NE(check, 0) << std::strerror(errno) << " : " << name;
 
@@ -66,8 +66,8 @@ TEST_F(FilterTest, CreateObjectUsingHelper) {
     check = access(name.c_str(), F_OK); // check that the file exists
     EXPECT_EQ(check, 0) << std::strerror(errno) << " : " << name;
     auto content = ReadContent(name);
-    EXPECT_TRUE(Exists(content, "g3log: created log file at:"));
-    EXPECT_TRUE(Exists(content, "file shutdown at:"));
+    EXPECT_TRUE(Exists(content, "g3log: created log file at:")) << ", content: [" << "]" << ", name: " << name;
+    EXPECT_TRUE(Exists(content, "file shutdown at:")) << ", ontent: [" << "]"<< ", name: " << name;
 }
 
 

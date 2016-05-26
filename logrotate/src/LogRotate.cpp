@@ -11,6 +11,7 @@
 
 #include "g3sinks/LogRotate.h"
 #include "LogRotateHelper.ipp"
+#include <iostream>
 
 
 /// @param log_prefix to use for the file

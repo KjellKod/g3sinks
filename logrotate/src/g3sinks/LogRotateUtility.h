@@ -52,8 +52,8 @@ namespace  LogRotateUtility {
    /// std::map<long: timestamp, std::string : name>
    std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name);
 
-   /// create the file name
-   std::string createLogFileName(const std::string& verified_prefix);
+   /// just adds the suffix to the log name
+   std::string addLogSuffix(const std::string& raw_file_name);
 
 
    /// @return true if @param complete_file_with_path could be opened

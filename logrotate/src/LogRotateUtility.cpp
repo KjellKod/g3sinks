@@ -195,9 +195,9 @@ namespace  LogRotateUtility {
 
 
    /// create the file name
-   std::string createLogFileName(const std::string& verified_prefix) {
+   std::string addLogSuffix(const std::string& raw_name) {
       std::stringstream oss_name;
-      oss_name << verified_prefix << ".log";
+      oss_name << raw_name << ".log";
       return oss_name.str();
    }
 
