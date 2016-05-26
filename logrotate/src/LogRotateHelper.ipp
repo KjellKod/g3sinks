@@ -97,7 +97,6 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
    }
 
     auto logfile = changeLogFile(log_directory, log_prefix_backup_);
-       std::cout << __FUNCTION__ << "-->" << __LINE__ << ", prospect_log: " << log_file_with_path_ << std::endl;
     assert((nullptr != outptr_) && "cannot open log file at startup");
 }
 

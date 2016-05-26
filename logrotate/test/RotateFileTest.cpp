@@ -79,8 +79,6 @@ TEST_F(RotateFileTest, setMaxLogSize) {
 
 
    auto content = ReadContent(logfilename);
-   std::cout << "\ncontent[" << "]\nfilename: " << logfilename << std::endl << std::flush;
-
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 
