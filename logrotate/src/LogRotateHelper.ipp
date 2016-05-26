@@ -165,7 +165,7 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
       file_name = log_prefix_backup_;
    }
 
-   auto prospect_log = pathSanityFix(directory, file_name);
+   auto prospect_log = createPath(directory, file_name);
    prospect_log = addLogSuffix(prospect_log);
 
    std::unique_ptr<std::ofstream> log_stream = createLogFile(prospect_log);
