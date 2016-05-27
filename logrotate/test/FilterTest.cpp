@@ -67,7 +67,7 @@ TEST_F(FilterTest, CreateObjectUsingHelper) {
     EXPECT_EQ(check, 0) << std::strerror(errno) << " : " << name;
     auto content = ReadContent(name);
     EXPECT_TRUE(Exists(content, "g3log: created log file at:")) << ", content: [" << "]" << ", name: " << name;
-    EXPECT_TRUE(Exists(content, "file shutdown at:")) << ", ontent: [" << "]"<< ", name: " << name;
+    EXPECT_TRUE(Exists(content, "file shutdown at:")) << ", content: [" << "]"<< ", name: " << name;
 }
 
 
