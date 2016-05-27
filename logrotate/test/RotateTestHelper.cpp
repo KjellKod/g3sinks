@@ -20,6 +20,8 @@
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
 #include  <io.h>
 #define F_OK 0
+#else
+#include <unistd.h>
 #endif
 
 namespace RotateTestHelper {
@@ -29,7 +31,7 @@ namespace RotateTestHelper {
       std::ifstream readIn(filename.c_str(), std::ios::in | std::ios::binary);
       if (readIn) {
          std::shared_ptr<void> raii(nullptr, [&](void*) {
-            readIn.close(); //std::cout << __FILE__ << ":" << __LINE__ << " closed file: " << filename << std::endl;
+            readIn.close(); 
          });
 
          std::string contents;

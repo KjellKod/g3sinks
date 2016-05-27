@@ -21,6 +21,8 @@ using namespace RotateTestHelper;
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
 #define F_OK 0
+#else
+#include <unistd.h>
 #endif
 
 
@@ -77,8 +79,6 @@ TEST_F(RotateFileTest, setMaxLogSize) {
 
 
    auto content = ReadContent(logfilename);
-   std::cout << "\ncontent["<< "]\nfilename: " << logfilename << std::endl << std::flush;
-
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 
@@ -87,10 +87,10 @@ TEST_F(RotateFileTest, setMaxLogSize) {
 }
 
 TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
-  
+
    std::string newFileName = "new_sink_name";
    LogRotate logrotate(_filename, _directory);
-   
+
    logrotate.changeLogFile(_directory, newFileName);
    auto logfilename = logrotate.logFileName();
    EXPECT_EQ(_directory + newFileName + ".log", logfilename);
@@ -102,7 +102,7 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
 
    std::string first_message_in_new_log = "first message";
    logrotate.save(first_message_in_new_log);
-   
+
    auto content = ReadContent(logfilename);
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
@@ -113,7 +113,7 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
 
 TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
    LogRotate logrotate(_filename, _directory);
-   
+
    logrotate.changeLogFile(_directory, "");
    auto logfilename = logrotate.logFileName();
    EXPECT_EQ(_directory + _filename + ".log", logfilename);
@@ -124,7 +124,7 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
 
    std::string first_message_in_new_log = "first message";
    logrotate.save(first_message_in_new_log);
-   
+
    auto content = ReadContent(logfilename);
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
@@ -134,40 +134,54 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
 }
 
 
-TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
-   LogRotate logrotate(_filename, _directory);
-   
-   logrotate.changeLogFile(_directory, "");
-   auto logfilename = logrotate.logFileName();
-   EXPECT_EQ(_directory + _filename + ".log", logfilename);
+namespace {
+   void RotateAndExpireOldLogs(std::string filename, std::string directory, bool changeLogFile = false) {
+      LogRotate logrotate(filename, directory);
 
-   logrotate.setMaxArchiveLogCount(3);
-   std::string gone{"Soon to be missing words"};
-   logrotate.save(gone);
-   logrotate.setMaxLogSize(static_cast<int>(gone.size()));
+      if(changeLogFile) {
+         logrotate.changeLogFile(directory, "");
+      }
+      auto logfilename = logrotate.logFileName();
+      EXPECT_EQ(directory + filename + ".log", logfilename);
 
-
-   for (size_t idx = 0; idx < 15; ++idx) {
-      std::string first_message_in_new_log = "message #" + std::to_string(idx);
-      logrotate.save(first_message_in_new_log);
-      auto content = ReadContent(logfilename);
-      auto exists = Exists(content, gone);
-      EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
-      exists = Exists(content, first_message_in_new_log);
-      EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
-      gone = first_message_in_new_log;
+      logrotate.setMaxArchiveLogCount(3);
+      std::string gone{"Soon to be missing words"};
+      logrotate.save(gone);
       logrotate.setMaxLogSize(static_cast<int>(gone.size()));
 
-      // force sleep 1 s to trigger new time
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-   }
 
+      for (size_t idx = 0; idx < 15; ++idx) {
+         std::string first_message_in_new_log = "message #" + std::to_string(idx);
+         logrotate.save(first_message_in_new_log);
+         auto content = ReadContent(logfilename);
+         auto exists = Exists(content, gone);
+         EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+         exists = Exists(content, first_message_in_new_log);
+         EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+         gone = first_message_in_new_log;
+         logrotate.setMaxLogSize(static_cast<int>(gone.size()));
+
+         // force sleep 1 s to trigger new time
+         std::this_thread::sleep_for(std::chrono::seconds(1));
+      }
+   }
+} // anonymous namespace
+
+TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
+   RotateAndExpireOldLogs(_filename, _directory);
    auto app_name = _filename + ".log";
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-   EXPECT_EQ(allFiles.size(), 3) << " Failure " << ExtractContent(allFiles);
+   EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
 
 }
 
+TEST_F(RotateFileTest, rotateAndExpireOldLogsWithoutTrailingSlashForDirectory) {
+   auto filename = _filename.substr(0, _filename.size()-1); // remove the trailing '/'
+   RotateAndExpireOldLogs(_filename, _directory);
+   auto app_name = _filename + ".log";
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
+   EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
+}
 
 
 
@@ -181,10 +195,10 @@ TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
       logrotate.save(msg);
       auto content = ReadContent(logfilename);
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-	  msg.replace(msg.find("\n"), 2, "\r\n");
-	  auto exists = Exists(content, msg);
+      msg.replace(msg.find("\n"), 2, "\r\n");
+      auto exists = Exists(content, msg);
 #else
-	  auto exists = Exists(content, msg);
+      auto exists = Exists(content, msg);
 #endif
       ASSERT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << msg;
    }
@@ -196,7 +210,7 @@ TEST_F(RotateFileTest, setFlushPolicy__only_when_buffer_is_full) {
    logrotate.setFlushPolicy(0);
 
    // auto buffer size if by default 1024
-   for(int i = 0; i < 10; ++i) {
+   for (int i = 0; i < 10; ++i) {
       logrotate.save("this is a messagen\n");
    }
 
@@ -212,9 +226,9 @@ TEST_F(RotateFileTest, setFlushPolicy__every_third_write) {
 
    std::string content;
    auto checkIfExist = [&](std::string expected) -> bool {
-     content = ReadContent(logfilename);
-     bool exists = Exists(content, expected);
-     return exists;
+      content = ReadContent(logfilename);
+      bool exists = Exists(content, expected);
+      return exists;
    };
 
    // auto buffer size if by default 1024
@@ -223,7 +237,7 @@ TEST_F(RotateFileTest, setFlushPolicy__every_third_write) {
 
    logrotate.save("msg2\n");
    ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
-   
+
    logrotate.save("msg3\n");
    ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
 
@@ -239,9 +253,9 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
 
    std::string content;
    auto checkIfExist = [&](std::string expected) -> bool {
-     content = ReadContent(logfilename);
-     bool exists = Exists(content, expected);
-     return exists;
+      content = ReadContent(logfilename);
+      bool exists = Exists(content, expected);
+      return exists;
    };
 
    // auto buffer size if by default 1024
@@ -250,7 +264,7 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
 
    logrotate.save("msg2\n");
    ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
-   
+
    logrotate.save("msg3\n");
    logrotate.flush();
    ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous

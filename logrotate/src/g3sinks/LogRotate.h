@@ -37,7 +37,7 @@ class LogRotate {
     void flush();
 
 
-    void setMaxLogSize(int max_file_size);
+    void setMaxLogSize(int max_file_size_in_bytes);
 
   private:
     std::unique_ptr<LogRotateHelper> pimpl_;
