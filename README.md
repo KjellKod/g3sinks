@@ -31,3 +31,6 @@ These sinks for the g3logger are available for free and all of its source code i
 * $100 for a date night with my wife (which buys family credit for evening coding)
 * $$$ for upgrading my development environment
 * $$$$ :)
+
+Cheers
+Kjell
