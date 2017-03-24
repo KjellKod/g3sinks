@@ -16,9 +16,38 @@ See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/mast
 be used as helpful examples on how to create your custom sinks
 
 # More ...
-For more information please look at the Readme and API documentation ag https://github.com/KjellKod/g3log
+For more information please look at the Readme and API documentation i.e. https://github.com/KjellKod/g3log
 For detailed sink usage please see the header files and tests  in his repository. They are written so that
 The sink usage should be clear.
+
+# Building g3sinks
+##Requirements
+*g3log*
+G3sinks requires [g3log](https://github.com/KjellKod/g3log)  to be installed. 
+The g3log install location has to be specified during the cmake build step. In the example below the g3log installation 
+location is `/usr/local`
+
+*boost*
+G3sinks requires [boost](http://www.boost.org/doc/libs/1_63_0/index.html)  to be installed. 
+For installing boost please follow their [instructions](http://www.boost.org/doc/libs/1_63_0/more/getting_started/unix-variants.html). 
+
+The boost install location `BOOST_ROOT` or `Boost_INCLUDE_DIR` has to be specified during the cmake build step.
+In the example below the boost  installation 
+location is `/usr/local`
+
+```
+cd g3sinks
+cd 3rdparty
+unzip gtest-1.7.0.zip
+cd ..
+cd logrotate
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=/usr/local/lib -DG3_HEADER_PATH=/usr/local/include -DBOOST_ROOT=/usr/local ..
+make 
+sudo make install
+```
+
 
 # Say Thanks
 These sinks for the g3logger are available for free and all of its source code is public domain.  A great way of saying thanks is to send a donation. It would go a long way not only to show your support but also to boost continued development.
