@@ -35,6 +35,11 @@ The boost install location `BOOST_ROOT` or `Boost_INCLUDE_DIR` has to be specifi
 In the example below the boost  installation 
 location is `/usr/local`
 
+**ZLIB**
+The ZLIB library must be installed for the logrotate to be able to compress the old log files
+in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see your specific platform for details or go to the [zlib page](http://www.zlib.net/)
+
+
 ```
 cd g3sinks
 cd 3rdparty
