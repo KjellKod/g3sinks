@@ -41,10 +41,10 @@ class RotateFileTest : public ::testing::Test {
       }
 
       std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
-      system(removeTgz_1.c_str());
+      EXPECT_EQ(0, system(removeTgz_1.c_str()));
 
       std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
-      system(removeTgz_2.c_str());
+      EXPECT_EQ(0, system(removeTgz_2.c_str()));
 
    }
 

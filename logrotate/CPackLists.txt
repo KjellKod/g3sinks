@@ -1,0 +1,91 @@
+#  INSTALL( TARGETS g3LogRotate
+#           ARCHIVE
+#           LIBRARY DESTINATION lib/g3sinks
+#           COMPONENT libraries)
+
+#  INSTALL( FILES ${HEADER_FILES}
+#           DESTINATION include
+#           COMPONENT headers)
+
+
+SET(MAJOR_VERSION 1)
+IF (NOT DEFINED ${VERSION})
+   MESSAGE("Extracting git software version")
+   execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION)
+   SET(MINOR_VERSION ${GIT_VERSION})
+   SET(BUILD_NUMBER 0)
+   SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}) 
+ENDIF()
+MESSAGE("Software Version: ${VERSION}")
+
+IF (NOT DEFINED ${CPACK_INSTALL_PREFIX})
+   SET(CPACK_INSTALL_PREFIX "/usr/local")
+ENDIF()
+
+SET(CPACK_PACKAGE_NAME g3LogRotate)
+SET(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
+SET(CPACK_PACKAGE_VERSION_MINOR ${MINOR_VERSION})
+SET(CPACK_PACKAGE_VERSION_PATCH ${BUILD_NUMBER})
+SET(CPACK_PACKAGE_DESCRIPTION "Logging sinks compatible with the g3log library.
+                              g3LogRotate. Rotate logs accoording to size limits. Old logs are compressed and 
+                              eventually deleted. 
+                              The g3LogRotate is a public domain dedication.  License: http://unlicense.org
+                              Repository: https://github.com/KjellKod/g3sinks")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${CPACK_PACKAGE_DESCRIPTION})
+SET(CPACK_PACKAGE_CONTACT "Kjell Hedstrom hedstrom@kjellkoc.cc")
+SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SRC}/../LICENSE)
+SET(CPACK_PACKAGE_VENDOR "KjellKod")
+SET(CMAKE_INSTALL_HEADERDIR ${CMAKE_INSTALL_HEADERDIR}/g3sinks)
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+   MESSAGE("\nTo create installation package: ")
+   MESSAGE("make package")
+ENDIF()
+MESSAGE("\nOption to install using 'sudo make install")
+MESSAGE("Installation locations: ")
+MESSAGE("====================")
+MESSAGE("Headers: ${CPACK_INSTALL_PREFIX}/${CMAKE_INSTALL_HEADERDIR}/g3sinks")
+MESSAGE("Library : ${CPACK_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+MESSAGE("Headers to be installed: ${HEADER_FILES}")
+MESSAGE("header locaton: ${CMAKE_INSTALL_HEADERDIR}")
+
+MESSAGE("For more information please see https://github.com/KjellKod/g3sinks/logrotate/CPackLists.txt")
+MESSAGE("To install: sudo dpkg -i g3logrotate-***Linux.deb")
+MESSAGE("To list files in install package: sudo dpkg --contents g3logrotate-***Linux.deb")
+MESSAGE("To list installed files: sudo dpkg -L g3logrotate")
+MESSAGE("To remove: sudo dpkg -r g3logrotate")
+MESSAGE("To remove: sudo dpkg -r g3logrotate")
+
+#  NOTE: to change installation locations you can use the settings below
+#  examples:
+#  CPACK_INSTALL_PREFIX
+#  CMAKE_INSTALL_HEADERDIR
+#  CMAKE_INSTALL_LIBDIR
+
+SET(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output dir for libraries")
+SET(CMAKE_INSTALL_HEADERDIR include CACHE PATH "Output dir for headers")
+
+
+INSTALL( TARGETS g3logrotate 
+        ARCHIVE DESTINATION ${CPACK_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CPACK_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+        COMPONENT libraries)
+
+INSTALL( FILES ${HEADER_FILES}
+          DESTINATION ${CPACK_INSTALL_PREFIX}/${CMAKE_INSTALL_HEADERDIR}
+          COMPONENT headers)
+
+INSTALL( FILES ${PROJECT_SOURCE_DIR}/cmake/g3logrotateConfig.cmake
+          DESTINATION ${CPACK_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/g3logrotate)
+
+SET(CPACK_COMPONENTS_ALL libraries headers)
+SET(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "g3logrotate libraries")
+SET(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "g3logrotate C++ headers")
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+   SET(CPACK_GENERATOR "DEB")
+   SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "KjellKod")
+ENDIF()
+
+
+INCLUDE(CPack)
