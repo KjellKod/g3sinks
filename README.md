@@ -22,7 +22,7 @@ The sink usage should be clear.
 
 # Building g3sinks
 ## Requirements
-**g3log**
+**g3log**<br>
 G3sinks requires [g3log](https://github.com/KjellKod/g3log)  to be installed. 
 The g3log install location has to be specified during the cmake build step. In the example below the g3log installation 
 location is `/usr/local`
