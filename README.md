@@ -21,13 +21,13 @@ For detailed sink usage please see the header files and tests  in his repository
 The sink usage should be clear.
 
 # Building g3sinks
-##Requirements
-*g3log*
+## Requirements
+**g3log**
 G3sinks requires [g3log](https://github.com/KjellKod/g3log)  to be installed. 
 The g3log install location has to be specified during the cmake build step. In the example below the g3log installation 
 location is `/usr/local`
 
-*boost*
+**boost**<br>
 G3sinks requires [boost](http://www.boost.org/doc/libs/1_63_0/index.html)  to be installed. 
 For installing boost please follow their [instructions](http://www.boost.org/doc/libs/1_63_0/more/getting_started/unix-variants.html). 
 
@@ -35,7 +35,7 @@ The boost install location `BOOST_ROOT` or `Boost_INCLUDE_DIR` has to be specifi
 In the example below the boost  installation 
 location is `/usr/local`
 
-**ZLIB**
+**ZLIB**<br>
 The ZLIB library must be installed for the logrotate to be able to compress the old log files
 in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see your specific platform for details or go to the [zlib page](http://www.zlib.net/)
 
