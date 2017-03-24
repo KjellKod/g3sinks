@@ -40,6 +40,7 @@ The ZLIB library must be installed for the logrotate to be able to compress the 
 in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see your specific platform for details or go to the [zlib page](http://www.zlib.net/)
 
 
+### Building with unit tests added
 ```
 cd g3sinks
 cd 3rdparty
@@ -48,10 +49,26 @@ cd ..
 cd logrotate
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=/usr/local/lib -DG3_HEADER_PATH=/usr/local/include -DBOOST_ROOT=/usr/local ..
-make 
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=/usr/local/lib -DG3_HEADER_PATH=/usr/local/include -DBOOST_ROOT=/usr/local -DADD_LOGROTATE_UNIT_TEST=ON ..
+make -j
+```
+
+### Executing the unit tests
+```
+./UnitTestRunneer
+```
+
+### Installing
+```
 sudo make install
 ```
+
+Alternative on Debian systems
+```
+make package
+sudo dpkg -i g3LogRotate-<package_version>Linux.deb
+```
+
 
 
 # Say Thanks

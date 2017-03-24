@@ -86,6 +86,16 @@ MESSAGE("Libraries, g3log: ${G3LOG}")
 MESSAGE("Libraries, boost: ${Boost_LIBRARIES}")
 MESSAGE("Libraries, zlib: ${ZLIB_LIBRARIES}")
 
-
 # Setup unit tests
 INCLUDE (${LogRotate_SOURCE_DIR}/test/Test.cmake)
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   FILE(GLOB HEADER_FILES ${PROJECT_SRC}/g3sinks/*.h)
+   # ==========================================================================
+   #   Package handling is done AFTER all other CMake setup
+   #   usage:   make package
+   #   Check the output result and install accordingly.
+   # ==========================================================================
+   INCLUDE (${LogRotate_SOURCE_DIR}/CPackLists.txt)
+ENDIF()
+
