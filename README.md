@@ -71,7 +71,7 @@ sudo dpkg -i g3LogRotate-<package_version>Linux.deb
 
 
 # G3log and Sink Usage Code Example
-Example usage where a logrotate sink is added. The default logrotate limit is changed to be 10MB. The limit is changed by calling the sink handler which passes the function call through to the actual logrotate sink object.
+Example usage where a logrotate sink is added. The logrotate limit is changed from the default to instead be 10MB. The limit is changed by calling the sink handler which passes the function call through to the actual logrotate sink object.
 ```
 
 // main.cpp
