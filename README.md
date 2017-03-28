@@ -78,10 +78,7 @@ Example usage where a logrotate sink is added. The logrotate limit is changed fr
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.h>
 #include <g3sinks/logrotate.hpp>
-
 #include <g3log/std2_make_unique.hpp>
-
-#include "CustomSink.h"
 
 int main(int argc, char**argv) {
    using namespace g3;
