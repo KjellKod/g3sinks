@@ -94,7 +94,8 @@ int main(int argc, char**argv) {
    const int k10MBInBytes = 10 * 1024 * 1024;
    std::future<void> received = sinkHandle->call(&LogRotate::setMaxLogSize, k10MBInBytes);
    
-   // Run the main part of the application. Once this call exits we are in shutdown mode
+   // Run the main part of the application. This can be anything of course, in this example
+   // we'll call it "RunApplication". Once this call exits we are in shutdown mode
    RunApplication();
 
    // If the LogWorker is initialized then at scope exit the g3::shutDownLogging() will be 
