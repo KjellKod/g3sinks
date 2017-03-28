@@ -104,7 +104,7 @@ int main(int argc, char**argv) {
    // This is important since it protects from LOG calls from static or other entities that will go out of
    // scope at a later time. 
    //
-   // It can also be called manually if for some reason your setup is differnt then the one highlighted in
+   // It can also be called manually if for some reason your setup is different then the one highlighted in
    // this example
    g3::shutDownLogging();
 }
