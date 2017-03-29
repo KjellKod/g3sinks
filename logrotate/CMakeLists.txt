@@ -3,7 +3,7 @@
 #  2015, April 30, @author Kjell.Hedstrom
 # =====================================================
 
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.1)
 ENABLE_LANGUAGE(CXX)
 SET(CMAKE_BUILD_TYPE Release)
 
