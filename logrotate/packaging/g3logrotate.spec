@@ -40,7 +40,7 @@ fi
 rm -f  CMakeCache.txt
 
 
-%{install_root}/bin/cmake -DADD_LOGROTATE_UNIT_TEST=ON -DG3_LIBRARY_PATH=%{install_root}/lib -DG3_HEADER_PATH=%{install_root}/include/ -DCMAKE_CXX_COMPILER_ARG1:STRING=' -Wall -Werror -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,%{install_root}/lib -Wl,-rpath -Wl,%{install_root}/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=%{install_root}/lib -DG3_HEADER_PATH=%{install_root}/include -DCMAKE_CXX_COMPILER=%{install_root}/bin/g++ ..
+%{install_root}/bin/cmake -DADD_LOGROTATE_UNIT_TEST=ON -DCMAKE_PREFIX_PATH=%{install_root} -DCMAKE_CXX_COMPILER_ARG1:STRING=' -fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free -Wall -Werror -fPIC -Ofast -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,%{install_root}/lib -Wl,-rpath -Wl,%{install_root}/lib64 ' -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON -DCMAKE_CXX_COMPILER=%{install_root}/bin/g++ ..
 
 make -j6
 ./UnitTestRunner
