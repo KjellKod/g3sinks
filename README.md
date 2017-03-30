@@ -24,8 +24,8 @@ The sink usage should be clear.
 ## Requirements
 **g3log**<br>
 G3sinks requires [g3log](https://github.com/KjellKod/g3log)  to be installed. 
-The g3log install location has to be specified during the cmake build step. In the example below the g3log installation 
-location is `/usr/local`
+The g3log install location has to be specified during the cmake build step. In the example below the g3log installation location is `/usr/local` with libraries in '/usr/local/lib' and 'headers in '/usr/local/include'
+The given argument for the location would then be : 'cmake -DCMAKE_PREFIX_PATH=/usr/local/'
 
 **boost**<br>
 G3sinks requires [boost](http://www.boost.org/doc/libs/1_63_0/index.html)  to be installed. 
@@ -49,7 +49,7 @@ cd ..
 cd logrotate
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:BOOL=ON -DG3_LIBRARY_PATH=/usr/local/lib -DG3_HEADER_PATH=/usr/local/include -DBOOST_ROOT=/usr/local -DADD_LOGROTATE_UNIT_TEST=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBOOST_ROOT=/usr/local -DADD_LOGROTATE_UNIT_TEST=ON ..
 make -j
 ```
 

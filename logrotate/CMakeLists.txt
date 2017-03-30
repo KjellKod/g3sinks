@@ -11,28 +11,76 @@ PROJECT (LogRotate)
 SET(PROJECT_SRC ${LogRotate_SOURCE_DIR}/src)
 SET(DIR_UNIT_TEST ${LogRotate_SOURCE_DIR}/test)
 SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/../3rdparty)
+SET(G3LOG_LIBRARY g3logger)
 
 
 MESSAGE(" PROJECT_SRC = : ${PROJECT_SRC}")
 INCLUDE_DIRECTORIES(${PROJECT_SRC})
 SET(ACTIVE_CPP0xx_DIR "Release")
 
+
+SET(MAJOR_VERSION 1)
+IF (NOT DEFINED ${VERSION})
+   MESSAGE("Extracting git software version")
+   execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION)
+   SET(MINOR_VERSION 0)
+   SET(BUILD_NUMBER ${GIT_VERSION})
+   SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}) 
+ENDIF()
+MESSAGE("Software Version: ${VERSION}")
+
+SET(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output dir for libraries")
+SET(CMAKE_INSTALL_HEADERDIR include CACHE PATH "Output dir for headers")
+
+IF (NOT DEFINED ${CPACK_INSTALL_PREFIX})
+   SET(CPACK_INSTALL_PREFIX "/usr/local")
+ENDIF()
+
+
+
+
+
 # Load PATHS
 INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
-INCLUDE_DIRECTORIES(${G3_HEADER_PATH})
 
-#Find all libraries
+#
+# Find all libraries
+#
 
-find_package(Boost COMPONENTS filesystem system REQUIRED)
+ IF (NOT DEFINED ${CMAKE_PREFIX_PATH})
+    SET(CMAKE_PREFIX_PATH /usr/local)
+ ENDIF()
+
+
+find_library(g3logger g3logger PATHS /usr/local/probe/lib )
+include_directories(${CMAKE_PREFIX_PATH}/include)
+
+
+find_library(BOOST_FILESYSTEM boost_filesystem PATHS /usr/local/probe/lib ${BOOST_ROOT})
+set(Boost_LIBRARIES ${BOOST_FILESYSTEM})
+
+find_library(BOOST_SYSTEM boost_system PATHS /usr/local/probe/lib ${BOOST_ROOT} )
+list(APPEND Boost_LIBRARIES ${BOOST_SYSTEM})
 include_directories(${Boost_INCLUDE_DIRS})
-option( BOOST_ALL_DYN_LINK "If set, use Boost dynamic libraries (boost_*); otherwise static (libboost_*)." OFF )
-if( BOOST_ALL_DYN_LINK )
-    add_definitions( -DBOOST_ALL_DYN_LINK )
-endif()
+
+MESSAGE(" boost root: " ${BOOST_ROOT})
+MESSAGE(" boost include : " ${Boost_INCLUDE_DIRS})
+MESSAGE("BOOST LIBRARIES: ${Boost_LIBRARIES}")
+
 
 find_package( ZLIB REQUIRED )
 include_directories( ${ZLIB_INCLUDE_DIRS} )
-find_library(G3LOG ${G3LOG_LIBRARY_TYPE} PATHS ${G3_LIBRARY_PATH})
+
+
+
+
+
+#
+# Build
+#
+# GENERIC STEPS
+FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp ${PROJECT_SRC}/*.cpp) 
+
 
 IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
    MESSAGE("")
@@ -48,7 +96,6 @@ IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
    ELSE()
        set(PLATFORM_LINK_LIBRIES rt c++abi)
    ENDIF()
-
 ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
    MESSAGE("")
    MESSAGE("cmake for GCC ")
@@ -57,14 +104,11 @@ ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 ENDIF()
 
 
-# GENERIC STEPS
-FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp ${PROJECT_SRC}/*.cpp) 
 
-
-# Setup Library name
+#
+# Setup Library 
+#
 SET(LIBRARY_TO_BUILD g3logrotate)
-MESSAGE("BOOST LIBRARIES: ${Boost_LIBRARIES}")
-# Build the library
 INCLUDE_DIRECTORIES(${PROJECT_SRC})
 
 # see Options.cmake
@@ -74,28 +118,30 @@ ELSE()
    IF(NOT(CMAKE_VERSION LESS 3.4) AND MSVC)
       set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
    ENDIF()
-   
    ADD_LIBRARY(${LIBRARY_TO_BUILD} SHARED ${SRC_FILES})
 ENDIF()
 
-SET(${LIBRARY_TO_BUILD}_VERSION_STRING)
+
+SET(${LIBRARY_TO_BUILD}_VERSION_STRING ${VERSION})
 SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${G3LOG})
+SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX SOVERSION ${VERSION})
 
-MESSAGE("Libraries, g3log: ${G3LOG}")
+MESSAGE("Libraries, g3log: ${g3logger}")
 MESSAGE("Libraries, boost: ${Boost_LIBRARIES}")
 MESSAGE("Libraries, zlib: ${ZLIB_LIBRARIES}")
 
+#
 # Setup unit tests
+#
 INCLUDE (${LogRotate_SOURCE_DIR}/test/Test.cmake)
 
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
+#
+# make package or make install
+#
+IF( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    FILE(GLOB HEADER_FILES ${PROJECT_SRC}/g3sinks/*.h)
-   # ==========================================================================
-   #   Package handling is done AFTER all other CMake setup
-   #   usage:   make package
-   #   Check the output result and install accordingly.
-   # ==========================================================================
    INCLUDE (${LogRotate_SOURCE_DIR}/CPackLists.txt)
 ENDIF()
 
