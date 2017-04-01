@@ -20,7 +20,7 @@ SET(ACTIVE_CPP0xx_DIR "Release")
 
 
 SET(MAJOR_VERSION 1)
-IF (NOT DEFINED ${VERSION})
+IF (${VERSION}.x STREQUAL ".x")
    MESSAGE("Extracting git software version")
    execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION)
    SET(MINOR_VERSION 1)
@@ -32,8 +32,9 @@ MESSAGE("Software Version: ${VERSION}")
 SET(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output dir for libraries")
 SET(CMAKE_INSTALL_HEADERDIR include CACHE PATH "Output dir for headers")
 
-IF (NOT DEFINED ${CPACK_INSTALL_PREFIX})
+IF (${CPACK_INSTALL_PREFIX}.x STREQUAL ".")
    SET(CPACK_INSTALL_PREFIX "/usr/local")
+   MESSAGE("CPACK_INSTALL_PREFIX: " ${CPACK_INSTALL_PREFIX})
 ENDIF()
 
 
@@ -47,8 +48,9 @@ INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
 # Find all libraries
 #
 
- IF (NOT DEFINED ${CMAKE_PREFIX_PATH})
+ IF (${CMAKE_PREFIX_PATH}.x STREQUAL ".x")
     SET(CMAKE_PREFIX_PATH /usr/local)
+    MESSAGE("CMAKE_PREFIX_PATH: " ${CMAKE_PREFIX_PATH})
  ENDIF()
 
 
