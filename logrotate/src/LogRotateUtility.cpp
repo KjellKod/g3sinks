@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <g3log/time.hpp>
 #include <regex>
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 #include <ios>
 #include <fstream>
 #include <iomanip>
@@ -144,13 +144,13 @@ namespace  LogRotateUtility {
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
       std::map<long, std::string> files;
-      boost::filesystem::path dir_path(dir);
+      std::experimental::filesystem::path dir_path(dir);
 
 
-      boost::filesystem::directory_iterator end_itr;
-      if (!boost::filesystem::exists(dir_path)) return;
+      std::experimental::filesystem::directory_iterator end_itr;
+      if (!std::experimental::filesystem::exists(dir_path)) return;
 
-      for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+      for (std::experimental::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
          std::string current_file(itr->path().filename().string());
          long time = 0;
          if (getDateFromFileName(app_name, current_file, time)) {
@@ -159,7 +159,7 @@ namespace  LogRotateUtility {
       }
 
       //delete old logs.
-      ptrdiff_t logs_to_delete = files.size() - max_log_count;
+      unsigned long logs_to_delete = files.size() - max_log_count;
       if (logs_to_delete > 0) {
 
          for (std::map<long, std::string>::iterator it = files.begin(); it != files.end(); ++it) {
@@ -176,13 +176,13 @@ namespace  LogRotateUtility {
 
     std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
         std::map<long, std::string> files;
-        boost::filesystem::path dir_path(dir);
+        std::experimental::filesystem::path dir_path(dir);
   
  
-       boost::filesystem::directory_iterator end_itr;
-       if (!boost::filesystem::exists(dir_path)) return {};
+       std::experimental::filesystem::directory_iterator end_itr;
+       if (!std::experimental::filesystem::exists(dir_path)) return {};
  
-       for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+       for (std::experimental::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
           std::string current_file(itr->path().filename().string());
           long time = 0;
           if (getDateFromFileName(app_name, current_file, time)) {

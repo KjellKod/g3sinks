@@ -5,7 +5,7 @@ Summary:       An rotating file sink for G3log
 Group:         Development/Tools
 License:       UNLICENSE
 BuildRequires: probecmake >= 2.8, probezlib
-Requires: g3log, boost >= 1.60, probezlib
+Requires: g3log, gcc >= 5.3, probezlib
 URL: https://github.com/KjellKod/g3sinks
 ExclusiveArch: x86_64
 

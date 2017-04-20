@@ -59,16 +59,6 @@ include_directories(${CMAKE_PREFIX_PATH}/include)
 
 
 find_library(BOOST_FILESYSTEM boost_filesystem PATHS /usr/local/probe/lib ${BOOST_ROOT})
-set(Boost_LIBRARIES ${BOOST_FILESYSTEM})
-
-find_library(BOOST_SYSTEM boost_system PATHS /usr/local/probe/lib ${BOOST_ROOT} )
-list(APPEND Boost_LIBRARIES ${BOOST_SYSTEM})
-include_directories(${Boost_INCLUDE_DIRS})
-
-MESSAGE(" boost root: " ${BOOST_ROOT})
-MESSAGE(" boost include : " ${Boost_INCLUDE_DIRS})
-MESSAGE("BOOST LIBRARIES: ${Boost_LIBRARIES}")
-
 
 find_package( ZLIB REQUIRED )
 include_directories( ${ZLIB_INCLUDE_DIRS} )
@@ -87,7 +77,7 @@ FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp $
 IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
    MESSAGE("")
    MESSAGE("cmake for Clang ")
-   SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
+   SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++17 -lstdc++fs -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
    IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
        IF (${CMAKE_MATCH_1} GREATER 9)
            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -102,7 +92,7 @@ ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
    MESSAGE("")
    MESSAGE("cmake for GCC ")
    SET(PLATFORM_LINK_LIBRIES rt)
-   SET(CMAKE_CXX_FLAGS " -Wall -Werror -rdynamic -Wunused -std=c++11 -pthread -D_GLIBCXX_USE_NANOSLEEP")
+   SET(CMAKE_CXX_FLAGS " -Wall -Werror -rdynamic -Wunused -std=c++17 -lstdc++fs -pthread -D_GLIBCXX_USE_NANOSLEEP")
 ENDIF()
 
 
@@ -126,11 +116,10 @@ ENDIF()
 
 SET(${LIBRARY_TO_BUILD}_VERSION_STRING ${VERSION})
 SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${G3LOG})
+TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${ZLIB_LIBRARIES} ${G3LOG} stdc++fs)
 SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX SOVERSION ${VERSION})
 
 MESSAGE("Libraries, g3log: ${g3logger}")
-MESSAGE("Libraries, boost: ${Boost_LIBRARIES}")
 MESSAGE("Libraries, zlib: ${ZLIB_LIBRARIES}")
 
 #
