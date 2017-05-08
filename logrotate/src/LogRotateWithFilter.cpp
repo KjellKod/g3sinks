@@ -16,8 +16,7 @@
 // helper function to create an logging sink with filter
 std::unique_ptr<LogRotateWithFilter> LogRotateWithFilter::CreateLogRotateWithFilter(std::string filename, std::string directory, std::vector<LEVELS> filter) {
     auto logRotatePtr = std2::make_unique<LogRotate>(filename, directory);
-    auto logWithFilter = std2::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filter);
-    return std::move(logWithFilter);
+    return std2::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filter);
 }
 
 
