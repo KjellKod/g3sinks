@@ -19,7 +19,9 @@ RUN mkdir -p /src/
 RUN mkdir -p /src/build/
 RUN git clone https://github.com/KjellKod/g3log.git
 RUN cd g3log/3rdParty/gtest
-RUN unzip gtest*.zip
+RUN pwd
+RUN ls
+RUN unzip gtest-1.7.0.zip
 RUN cd ../../ 
 RUN mkdir build && cd build
 RUN make install
@@ -35,7 +37,9 @@ WORKDIR /src/build/
 COPY . /src/
 RUN cd /src
 RUN cd 3rdparty
-RUN unzip *zip
+RUN pwd
+RUN ls
+RUN unzip gtest-1.7.0.zip
 RUN cd ../logrotate
 RUN mkdir build && cd build
 RUN cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
