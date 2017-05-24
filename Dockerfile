@@ -12,6 +12,7 @@ RUN apt-get install -y cmake software-properties-common git make
 RUN apt-get install -y gcc-7 g++-7 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90 
+RUN apt-get install -y unzip
 
 # Build Preparation
 RUN mkdir -p /src/
