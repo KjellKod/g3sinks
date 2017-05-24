@@ -17,31 +17,21 @@ RUN apt-get install -y unzip
 # Build Preparation
 RUN mkdir -p /src/
 RUN mkdir -p /src/build/
+
+# Build
+WORKDIR /src/
+COPY . /src/
+RUN cd /src
+
+
 RUN git clone https://github.com/KjellKod/g3log.git
-RUN cd g3log/3rdParty/gtest
-RUN pwd
-RUN ls
-RUN unzip gtest-1.7.0.zip
-RUN cd ../../ 
-RUN mkdir build && cd build
-RUN make install
+RUN cd /src/g3log/3rdParty/gtest && unzip gtest-1.7.0.zip
+RUN cd /src/g3log && mkdir build
+RUN cd /src/g3log/build && cmake .. && make -j && make install
 
 
 # Build g3sinks
 # Cleanup
-RUN ../../../
-RUN rm -rf g3log
-
-# Build
-WORKDIR /src/build/
-COPY . /src/
-RUN cd /src
-RUN cd 3rdparty
-RUN pwd
-RUN ls
-RUN unzip gtest-1.7.0.zip
-RUN cd ../logrotate
-RUN mkdir build && cd build
-RUN cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
-RUN make -j
-RUN ./UnitTestRunner
+RUN cd /src/3rdparty && unzip gtest-1.7.0.zip
+RUN cd /src/logrotate && mkdir build && cd build && cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
+RUN cd /src/logrotate/build && make -j && ./UnitTestRunner
