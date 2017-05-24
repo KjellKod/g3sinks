@@ -18,7 +18,7 @@ RUN mkdir -p /src/
 RUN mkdir -p /src/build/
 RUN git clone https://github.com/KjellKod/g3log.git
 RUN cd g3log/3rdParty/gtest
-RUN cd unzip gtest*.zip
+RUN unzip gtest*.zip
 RUN cd ../../ 
 RUN mkdir build && cd build
 RUN make install
