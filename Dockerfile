@@ -13,6 +13,7 @@ RUN apt-get install -y gcc-7 g++-7
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90 
 RUN apt-get install -y unzip zlib1g-dev
+RUN apt-get install -y libboost-all-dev
 
 # Build Preparation
 RUN mkdir -p /src/
