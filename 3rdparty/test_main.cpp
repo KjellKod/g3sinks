@@ -8,7 +8,7 @@
 #include <iostream>
 #include <g3log/logworker.hpp>
 #include <g3log/g3log.hpp>
-#include <g3log/std2_make_unique.hpp>
+#include <memory>
 #include <g3sinks/LogRotate.h>
 
 int main(int argc, char *argv[])
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
   const std::string log_dir("/tmp/");
 #endif
   auto uniqueLoggerPtr = g3::LogWorker::createLogWorker();
-  auto handle = uniqueLoggerPtr->addSink(std2::make_unique<LogRotate>(fileName.str(), log_dir), &LogRotate::save);
+  auto handle = uniqueLoggerPtr->addSink(std::make_unique<LogRotate>(fileName.str(), log_dir), &LogRotate::save);
 
   g3::initializeLogging(uniqueLoggerPtr.get());
   std::cout << "Logging to: " << handle->call(&LogRotate::logFileName).get() << std::endl;
