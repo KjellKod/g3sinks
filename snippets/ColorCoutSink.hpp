@@ -34,7 +34,7 @@ struct ColorCoutSink {
 int main() {
    using namespace g3;
    std::unique_ptr<LogWorker> logworker {LogWorker::createLogWorker()};
-   auto sinkHandle = logworker->addSink(std2::make_unique<CustomSink>(),
+   auto sinkHandle = logworker->addSink(std::make_unique<CustomSink>(),
                                      &CustomSink::ReceiveLogMessage);
 
  ... continuation

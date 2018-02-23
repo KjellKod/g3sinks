@@ -13,7 +13,7 @@
 #include <iostream>
 #include <cerrno>
 
-#include <g3log/std2_make_unique.hpp>
+#include <memory>
 #include "RotateTestHelper.h"
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
@@ -44,7 +44,7 @@ namespace { // anonymous
 TEST_F(FilterTest, CreateObject) {
     std::string logfilename;
     {
-        auto logRotatePtr = std2::make_unique<LogRotate>(_filename, _directory);
+        auto logRotatePtr = std::make_unique<LogRotate>(_filename, _directory);
 
         LogRotateWithFilter logWithFilter(std::move(logRotatePtr), {});
     } // RAII flush of log
