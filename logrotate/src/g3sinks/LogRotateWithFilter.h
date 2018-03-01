@@ -41,11 +41,15 @@ class LogRotateWithFilter {
     void setMaxLogSize(int max_file_size);
     void setFlushPolicy(size_t flush_policy); // 0: never (system auto flush), 1 ... N: every n times
     void flush();
+    void overrideLogDetails(g3::LogMessage::LogDetailsFunc func);
+
 
 
 
   private:
     LogRotateUniquePtr _logger;
     IgnoreLogLevelsFilter _filter;
+    g3::LogMessage::LogDetailsFunc _log_details_func;
+
 
 };
