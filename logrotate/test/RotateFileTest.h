@@ -33,19 +33,19 @@ class RotateFileTest : public ::testing::Test {
    }
 
    virtual void TearDown() {
-   /*   for (auto filename : _filesToRemove) {
-         auto success = unlink(filename.c_str());
-         if (-1 == success) {
-            std::cout << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
+      for (auto filename : _filesToRemove) {
+         auto success = std::remove(filename.c_str());
+         if (0 != success) {
+            std::cerr << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
          }
       }
 
       std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
-      EXPECT_EQ(0, system(removeTgz_1.c_str()));
+      EXPECT_EQ(0, std::remove(removeTgz_1.c_str()));
 
       std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
-      EXPECT_EQ(0, system(removeTgz_2.c_str()));
-*/
+      EXPECT_EQ(0, std::remove(removeTgz_2.c_str()));
+
    }
 
    std::string _filename;
