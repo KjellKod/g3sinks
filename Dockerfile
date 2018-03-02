@@ -25,7 +25,7 @@ COPY . /src/
 RUN cd /src
 
 
-RUN git clone https://github.com/KjellKod/g3log.git
+RUN git clone https://github.com/KjellKod/g3log.git -b g3log-placeholder-threadid-formatting
 RUN cd /src/g3log/3rdParty/gtest && unzip gtest-1.7.0.zip
 RUN cd /src/g3log && mkdir build
 RUN cd /src/g3log/build && cmake .. && make -j && make install
