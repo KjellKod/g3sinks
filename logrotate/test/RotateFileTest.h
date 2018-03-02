@@ -39,13 +39,6 @@ class RotateFileTest : public ::testing::Test {
             std::cerr << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
          }
       }
-
-      std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
-      EXPECT_EQ(0, std::remove(removeTgz_1.c_str()));
-
-      std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
-      EXPECT_EQ(0, std::remove(removeTgz_2.c_str()));
-
    }
 
    std::string _filename;
