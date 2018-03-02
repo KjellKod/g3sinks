@@ -93,7 +93,6 @@ FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp $
 IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
    MESSAGE("")
    MESSAGE("cmake for Clang ")
-
    SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++17 -lstdc++fs -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
    IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
        IF (${CMAKE_MATCH_1} GREATER 9)
