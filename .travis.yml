@@ -1,6 +1,11 @@
 sudo: required
 
 language: cpp
+
+compiler:
+  - gcc
+  - clang
+
 services:
   - docker 
 
