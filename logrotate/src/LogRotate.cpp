@@ -46,6 +46,11 @@ std::string LogRotate::logFileName() {
  */
 void LogRotate::setMaxArchiveLogCount(int max_size) {
     pimpl_->setMaxArchiveLogCount(max_size);
+ }
+
+
+int LogRotate::getMaxArchiveLogCount() {
+   return pimpl_->getMaxArchiveLogCount();
 }
 
 /**
@@ -78,4 +83,8 @@ void LogRotate::flush(){
  */
 void LogRotate::setMaxLogSize(int max_file_size) {
     pimpl_->setMaxLogSize(max_file_size);
+}
+
+int LogRotate::getMaxLogSize() {
+   return pimpl_->getMaxLogSize();
 }

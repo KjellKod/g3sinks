@@ -48,7 +48,11 @@ struct LogRotateHelper {
    ~LogRotateHelper();
 
    void setMaxArchiveLogCount(int size);
+   int getMaxArchiveLogCount();
    void setMaxLogSize(int size);
+   int getMaxLogSize();
+
+
    void fileWrite(std::string message);
    void fileWriteWithoutRotate(std::string message);
    void flushPolicy();
@@ -108,6 +112,11 @@ void LogRotateHelper::setMaxArchiveLogCount(int max_size) {
    max_archive_log_count_ = max_size;
 }
 
+int LogRotateHelper::getMaxArchiveLogCount() {
+  return max_archive_log_count_;
+}
+
+
 /**
  * Set the max file size in bytes.
  * @param max_size
@@ -115,6 +124,14 @@ void LogRotateHelper::setMaxArchiveLogCount(int max_size) {
 void LogRotateHelper::setMaxLogSize(int max_size) {
    max_log_size_ = max_size;
 }
+
+int LogRotateHelper::getMaxLogSize() {
+   return max_log_size_;
+}
+
+
+
+
 
 LogRotateHelper::~LogRotateHelper() {
    std::ostringstream ss_exit;

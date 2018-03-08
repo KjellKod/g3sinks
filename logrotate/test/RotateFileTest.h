@@ -13,6 +13,12 @@
 #include <cstring>
 #include <cerrno>
 #include <cstdlib>
+#include <g3sinks/LogRotateUtility.h>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+
 
 class RotateFileTest : public ::testing::Test {
  public:
@@ -25,27 +31,27 @@ class RotateFileTest : public ::testing::Test {
    virtual void SetUp() {
       _filename = "g3sink_rotatefile_test";
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-      _directory = "./";
+      _directory = "./"
 #else
       _directory = "/tmp/";
 #endif
-      _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
+                   _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
    }
 
    virtual void TearDown() {
-      for (auto filename : _filesToRemove) {
-         auto success = unlink(filename.c_str());
-         if (-1 == success) {
-            std::cout << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
+      auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, _filename + ".log");
+      const int kFilePathIndex = 1;
+      for (auto& p : allFiles) {
+         std::string file = std::get<kFilePathIndex>(p);
+         if ((std::find(_filesToRemove.begin(), _filesToRemove.end(), file) == _filesToRemove.end())) {
+            _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
          }
       }
 
-      std::string removeTgz_1 = std::string("rm -f ") + _directory  + "g3sink_rotatefile_test*.gz";
-      EXPECT_EQ(0, system(removeTgz_1.c_str()));
 
-      std::string removeTgz_2 = std::string("rm -f ") + _directory  + "new_sink_name*.gz";
-      EXPECT_EQ(0, system(removeTgz_2.c_str()));
-
+      for (auto filename : _filesToRemove) {
+         std::remove(filename.c_str());
+      }
    }
 
    std::string _filename;
