@@ -11,7 +11,6 @@ PROJECT (LogRotate)
 SET(PROJECT_SRC ${LogRotate_SOURCE_DIR}/src)
 SET(DIR_UNIT_TEST ${LogRotate_SOURCE_DIR}/test)
 SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/../3rdparty)
-SET(G3LOG_LIBRARY g3logger)
 
 
 MESSAGE(" PROJECT_SRC = : ${PROJECT_SRC}")
@@ -71,7 +70,7 @@ INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
  ENDIF()
 
 
-find_library(g3logger g3logger PATHS /usr/local/probe/lib )
+find_library(G3LOG_LIBRARY g3logger PATHS /usr/local/probe/lib )
 include_directories(${CMAKE_PREFIX_PATH}/include)
 
 
