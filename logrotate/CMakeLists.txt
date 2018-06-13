@@ -11,7 +11,6 @@ PROJECT (LogRotate)
 SET(PROJECT_SRC ${LogRotate_SOURCE_DIR}/src)
 SET(DIR_UNIT_TEST ${LogRotate_SOURCE_DIR}/test)
 SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/../3rdparty)
-SET(G3LOG_LIBRARY g3logger)
 
 
 MESSAGE(" PROJECT_SRC = : ${PROJECT_SRC}")
@@ -47,6 +46,7 @@ MESSAGE("Software Version: ${VERSION}")
 
 SET(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output dir for libraries")
 SET(CMAKE_INSTALL_HEADERDIR include CACHE PATH "Output dir for headers")
+SET(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
 IF (${CPACK_INSTALL_PREFIX}.x STREQUAL ".")
    SET(CPACK_INSTALL_PREFIX "/usr/local")
@@ -70,7 +70,7 @@ INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
  ENDIF()
 
 
-find_library(g3logger g3logger PATHS /usr/local/probe/lib )
+find_library(G3LOG_LIBRARY g3logger PATHS /usr/local/probe/lib )
 include_directories(${CMAKE_PREFIX_PATH}/include)
 
 
@@ -103,7 +103,7 @@ FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp $
 IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
    MESSAGE("")
    MESSAGE("cmake for Clang ")
-   SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++14 -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++14 -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
    IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
        IF (${CMAKE_MATCH_1} GREATER 9)
            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -118,7 +118,7 @@ ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
    MESSAGE("")
    MESSAGE("cmake for GCC ")
    SET(PLATFORM_LINK_LIBRIES rt)
-   SET(CMAKE_CXX_FLAGS " -Wall -Werror -rdynamic -Wunused -std=c++14 -pthread -D_GLIBCXX_USE_NANOSLEEP")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -rdynamic -Wunused -std=c++14 -pthread -D_GLIBCXX_USE_NANOSLEEP")
 ENDIF()
 
 
@@ -142,7 +142,7 @@ ENDIF()
 
 SET(${LIBRARY_TO_BUILD}_VERSION_STRING ${VERSION})
 SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${G3LOG})
+TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${G3LOG_LIBRARY})
 SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX SOVERSION ${VERSION})
 
 MESSAGE("Libraries, g3log: ${g3logger}")
