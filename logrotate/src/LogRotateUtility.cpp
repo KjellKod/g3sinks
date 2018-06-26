@@ -97,7 +97,7 @@ namespace  LogRotateUtility {
          if (regex_match(suffix, date_match, date_regex)) {
             if (date_match.size() == 2) {
                std::string date = date_match[1].str();
-               struct tm tm;
+               struct tm tm = {0};
                time_t t;
                if (strptime(date.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
                   return false;
