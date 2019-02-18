@@ -38,7 +38,7 @@ class LogMessage;
 class SyslogSink
 {
 public:
- 	 using LogLevel = LEVELS;
+    using LogLevel = LEVELS;
     using LogDetailsFunc = std::string (*) (const LogMessage&);
     
     SyslogSink(const char* identity = "g3log");
