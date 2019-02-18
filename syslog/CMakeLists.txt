@@ -8,6 +8,29 @@ if(NOT ${HAVE_SYSLOG_H})
 	message(FATAL_ERROR "Could not find syslog.h.")
 endif()
 
+
+IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
+   MESSAGE("")
+   MESSAGE("cmake for Clang ")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++14 -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
+   IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
+       IF (${CMAKE_MATCH_1} GREATER 9)
+           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+           set(PLATFORM_LINK_LIBRIES execinfo)
+       ENDIF()
+   ELSEIF (APPLE)
+       set(PLATFORM_LINK_LIBRIES c++abi)
+   ELSE()
+       set(PLATFORM_LINK_LIBRIES rt c++abi)
+   ENDIF()
+ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+   MESSAGE("")
+   MESSAGE("cmake for GCC ")
+   SET(PLATFORM_LINK_LIBRIES rt)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -rdynamic -Wunused -std=c++14 -pthread -D_GLIBCXX_USE_NANOSLEEP")
+ENDIF()
+
+
 # search for g3log
 find_package(g3logger REQUIRED)
 # add the missing target if needed
@@ -20,6 +43,7 @@ if (NOT TARGET g3logger)
         IMPORTED_LINK_INTERFACE_LIBRARIES  Threads::Threads
         )
 endif()
+
 
 # Target
 add_library(g3log_syslog STATIC src/syslogsink.cpp)
@@ -39,7 +63,7 @@ target_include_directories(g3log_syslog
         $<INSTALL_INTERFACE:include>    
     )
 
-add_subdirectory(test)
+add_subdirectory(example)
 
 # Installation
 install(TARGETS g3log_syslog

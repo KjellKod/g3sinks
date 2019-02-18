@@ -8,7 +8,11 @@
 #include <g3log/syslogsink.hpp>
 
 #include <g3log/loglevels.hpp>
-// const LEVELS DBUG{G3LOG_DEBUG.value+1, "DBUG"}; // defined already
+#ifdef DBUG
+// const LEVELS DBUG{G3LOG_DEBUG.value+1, "DBUG"}; // defined already, ref g3log cmake build options
+#else 
+const LEVELS DBUG{G3LOG_DEBUG.value+1, "DBUG"};
+#endif 
 // const LEVELS INFO{INFO.value+1, {"INFO"}}; // defined already
 const LEVELS NOTE{(INFO.value + WARNING.value)/2, {"NOTE"}};
 const LEVELS WARN{WARNING.value, {"WARN"}};
