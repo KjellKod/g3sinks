@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.2 )
 project(g3log_syslog VERSION 0.1.0)
 
 # search for syslog.h
@@ -8,27 +8,6 @@ if(NOT ${HAVE_SYSLOG_H})
 	message(FATAL_ERROR "Could not find syslog.h.")
 endif()
 
-
-IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
-   MESSAGE("")
-   MESSAGE("cmake for Clang ")
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++14 -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
-   IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
-       IF (${CMAKE_MATCH_1} GREATER 9)
-           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-           set(PLATFORM_LINK_LIBRIES execinfo)
-       ENDIF()
-   ELSEIF (APPLE)
-       set(PLATFORM_LINK_LIBRIES c++abi)
-   ELSE()
-       set(PLATFORM_LINK_LIBRIES rt c++abi)
-   ENDIF()
-ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-   MESSAGE("")
-   MESSAGE("cmake for GCC ")
-   SET(PLATFORM_LINK_LIBRIES rt)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -rdynamic -Wunused -std=c++14 -pthread -D_GLIBCXX_USE_NANOSLEEP")
-ENDIF()
 
 
 # search for g3log
@@ -44,7 +23,6 @@ if (NOT TARGET g3logger)
         )
 endif()
 
-
 # Target
 add_library(g3log_syslog STATIC src/syslogsink.cpp)
 target_include_directories(g3log_syslog 
@@ -54,8 +32,18 @@ target_include_directories(g3log_syslog
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
       $<INSTALL_INTERFACE:include>
     )
-set_target_properties(g3log_syslog PROPERTIES CXX_STANDARD 11)
+SET_TARGET_PROPERTIES(g3log_syslog PROPERTIES 
+                      LINKER_LANGUAGE CXX
+                      OUTPUT_NAME g3log_syslog
+                      CLEAN_DIRECT_OUTPUT 1
+                      CXX_STANDARD 14
+                      CXX_STANDARD_REQUIRED YES
+                      CXX_EXTENSIONS NO
+                      ${g3log_syslogVersion}
+                      )
 target_link_libraries(g3log_syslog PUBLIC g3logger)
+TARGET_COMPILE_FEATURES(g3log_syslog PUBLIC cxx_variable_templates)
+
 target_include_directories(g3log_syslog
     PRIVATE "src/"
     INTERFACE
