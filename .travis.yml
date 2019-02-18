@@ -9,7 +9,10 @@ os:
 matrix:
   include:
     - os: linux
-    - dist: xenial
+      dist: xenial
+      # https://docs.travis-ci.com/user/reference/xenial/
+      sudo: required
+      
     - os: osx
   allow_failures:
     - os: osx
