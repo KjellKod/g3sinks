@@ -2,23 +2,17 @@ sudo: required
 
 language: cpp
 
-os:
-  - linux
-  - osx
-  
 compiler:
   - gcc
   - clang
 
-before_install:
- - if [[ "`uname`" == "Linux" ]]; then docker pull ubuntu:16.04; fi
+services:
+  - docker 
 
- install:
-  #- if [[ "`uname`" == "Darwin" ]]; then brew install boost; fi
+before_install:
+  - docker pull ubuntu:16.04 
 
 script:
- - if [[ "`uname`" == "Linux" ]]; then docker build .; fi
- #- if [[ "`uname`" == "Darwin" ]]; sh scripts/buildAndRunTests.sh; fi
-
+ - docker build .
 
  
