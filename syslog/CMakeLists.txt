@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 3.2 )
 project(g3log_syslog VERSION 0.1.0)
 
@@ -7,8 +8,6 @@ check_include_file("syslog.h" HAVE_SYSLOG_H)
 if(NOT ${HAVE_SYSLOG_H})
 	message(FATAL_ERROR "Could not find syslog.h.")
 endif()
-
-
 
 # search for g3log
 find_package(g3logger REQUIRED)
