@@ -1,0 +1,2 @@
+add_executable(syslog_g3log_example main.cpp)
+target_link_libraries(syslog_g3log_example g3log_syslog)
