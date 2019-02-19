@@ -6,9 +6,12 @@ set -x
 pwd=`pwd`
 mkdir g3log-install && cd g3log-install
 git clone https://github.com/KjellKod/g3log.git -b master
-cd g3log/3rdParty/gtest && unzip gtest-1.7.0.zip
-mkdir build && cd build
-cmake .. && make -j && make install
+cd g3log
+unzip -o 3rdParty/gtest/gtest-1.7.0.zip -d 3rdParty/gtest
+mkdir -p  build_travis
+cd build_travis
+cmake  -DCMAKE_CXX_FLAGS=-std=c++14 -DADD_G3LOG_UNIT_TEST=ON ..
+make -j && make install
 
 
 # Build g3sinks
