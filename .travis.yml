@@ -33,7 +33,7 @@ before_install:
 
 script:
  - if [[ "`uname`" == "Linux" ]]; then docker build .; fi
- - if [[ "`uname`" == "Darwin" ]]; sh scripts/buildSinks.sh
+ - if [[ "`uname`" == "Darwin" ]]; sh scripts/buildAndRunTests.sh
 
 
  

@@ -21,7 +21,7 @@ cd $pwd
 
 #logrotate
 cd logrotate && mkdir build && cd build && cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
-cd build && make -j && ./UnitTestRunner
+make -j && ./UnitTestRunner
 
 #syslog
 cd $pwd
