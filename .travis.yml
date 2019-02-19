@@ -15,27 +15,7 @@ compiler:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then uname -a; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo uname -a; sudo sh scripts/travis-bootstrap-ubuntu.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo uname -a; sudo sh scripts/.travis-bootstrap-ubuntu.sh; fi
 
 script:
-  - echo $PWD
   - sh scripts/buildAndRunTests.sh
-
-# sudo: required
-
-# language: cpp
-
-# compiler:
-#   - gcc
-#   - clang
-
-# services:
-#   - docker 
-
-# before_install:
-#   - docker pull ubuntu:16.04 
-
-# script:
-#  - docker build .
-
-#  
