@@ -16,7 +16,7 @@ make -j && make install
 
 # Build g3sinks
 cd $pwd
-cd /3rdparty && unzip gtest-1.7.0.zip
+cd 3rdparty && unzip gtest-1.7.0.zip
 cd $pwd
 
 #logrotate
