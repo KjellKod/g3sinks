@@ -28,8 +28,12 @@ compiler:
 before_install:
  - if [[ "`uname`" == "Linux" ]]; then docker pull ubuntu:16.04; fi
 
+ install:
+  - if [[ "`uname`" == "Darwin" ]]; then brew install boost; fi
+
 script:
  - if [[ "`uname`" == "Linux" ]]; then docker build .; fi
+ - if [[ "`uname`" == "Darwin" ]]; sh scripts/buildSinks.sh
 
 
  
