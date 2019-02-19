@@ -36,3 +36,4 @@ RUN cd /src/g3log/build && cmake .. && make -j && make install
 RUN cd /src/3rdparty && unzip gtest-1.7.0.zip
 RUN cd /src/logrotate && mkdir build && cd build && cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
 RUN cd /src/logrotate/build && make -j && ./UnitTestRunner
+RUN cd /src/syslog && mkdir build && cd build && cmake .. && make 
