@@ -42,10 +42,10 @@ daemon recieved the message, not the time it was created.  You can include the c
 in your record via the formatter. The setFormatter() function accepts a function pointer of the 
 type `std::string (*) (const LogMessage&)` to handle the formatting.
 
-An example program is at `syslog/test/main.cpp`.
+An example program is at `syslog/example/main.cpp`.
 
 The syslog sink should work out of the box on Linux systems without additional dependencies.  It has not 
-been tested on Cygwin or OSX.
+been tested on Cygwin.
 
 This component license is public domain, a.k.a the  UNLICENSE.
 See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/master/logrotate).

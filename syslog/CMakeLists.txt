@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.1)
+
+cmake_minimum_required(VERSION 3.2 )
 project(g3log_syslog VERSION 0.1.0)
 
 # search for syslog.h
@@ -30,8 +31,18 @@ target_include_directories(g3log_syslog
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
       $<INSTALL_INTERFACE:include>
     )
-set_target_properties(g3log_syslog PROPERTIES CXX_STANDARD 11)
+SET_TARGET_PROPERTIES(g3log_syslog PROPERTIES 
+                      LINKER_LANGUAGE CXX
+                      OUTPUT_NAME g3log_syslog
+                      CLEAN_DIRECT_OUTPUT 1
+                      CXX_STANDARD 14
+                      CXX_STANDARD_REQUIRED YES
+                      CXX_EXTENSIONS NO
+                      ${g3log_syslogVersion}
+                      )
 target_link_libraries(g3log_syslog PUBLIC g3logger)
+TARGET_COMPILE_FEATURES(g3log_syslog PUBLIC cxx_variable_templates)
+
 target_include_directories(g3log_syslog
     PRIVATE "src/"
     INTERFACE
@@ -39,7 +50,7 @@ target_include_directories(g3log_syslog
         $<INSTALL_INTERFACE:include>    
     )
 
-add_subdirectory(test)
+add_subdirectory(example)
 
 # Installation
 install(TARGETS g3log_syslog

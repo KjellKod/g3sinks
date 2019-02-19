@@ -33,7 +33,7 @@
 namespace g3
 {
 
-class LogMessage;
+struct LogMessage;
     
 class SyslogSink
 {
