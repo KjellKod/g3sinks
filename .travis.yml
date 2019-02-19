@@ -6,24 +6,12 @@ os:
   - linux
   - osx
 
-matrix:
-  include:
-    - os: linux
-      dist: xenial
-      # https://docs.travis-ci.com/user/reference/xenial/
-      sudo: required
-      
-    - os: osx
-  allow_failures:
-    - os: osx
-
+dist:
+  - trusty      
+  
 compiler:
   - gcc
   - clang
-
-#services:
-#  - os: linux
-#    docker 
 
 before_install:
  - if [[ "`uname`" == "Linux" ]]; then docker pull ubuntu:16.04; fi
@@ -33,7 +21,7 @@ before_install:
 
 script:
  - if [[ "`uname`" == "Linux" ]]; then docker build .; fi
- - if [[ "`uname`" == "Darwin" ]]; sh scripts/buildAndRunTests.sh
+ - if [[ "`uname`" == "Darwin" ]]; sh scripts/buildAndRunTests.sh; fi
 
 
  
