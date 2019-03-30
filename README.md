@@ -11,6 +11,45 @@ Rotation of logs.
 The license is public domain, a.k.a the  UNLICENSE.
 See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/master/logrotate).
 
+## Syslog
+This sink directs g3log messages into the unix syslog system. Settings with syslog-ng/rsyslog 
+can then be used to sort these to separate files, forward them to a remote machine, rotate log 
+files when they get large, etc.
+ 
+The mapping between G3 and syslog concepts is as follows:
+
+* The log level is mapped to a syslog level by default as
+
+        1. G3LOG_DEBUG -> LOG_DEBUG
+        2. INFO -> LOG_INFO
+        3. (INFO.value + WARNING.value )/2 -> LOG_NOTICE [there's no notice level in G3)
+        4. WARNING -> LOG_WARNING
+        5. FATAL -> LOG_CRIT
+        
+* If you log to a custom level between these, the level will be "rounded down". For example, a log record
+    with a level of (FATAL.value-1) will get a syslog level of WARNING
+* You can adjust this behavior through the setLevel() function.
+* The "identity" of your process can be changed via the constructor's argument or the setIdentity() 
+    method.  This is usually the primary value for filtering.
+* The syslog "facility code" of the messages is set to LOG_USER by default, but use setFacility() to change.
+* By default, nothing is written to the console when you log.  You can have messages also echoed to stderr
+    by calling echoToStderr() 
+* On the first log (only) of your program, a special banner header can be written. Use setLogHeader() to
+    enable this. Use this to distinguish between runs in the logs.
+
+A word of caution: syslog will timestamp each record itself, but with the time that the syslog
+daemon recieved the message, not the time it was created.  You can include the creation time
+in your record via the formatter. The setFormatter() function accepts a function pointer of the 
+type `std::string (*) (const LogMessage&)` to handle the formatting.
+
+An example program is at `syslog/example/main.cpp`.
+
+The syslog sink should work out of the box on Linux systems without additional dependencies.  It has not 
+been tested on Cygwin.
+
+This component license is public domain, a.k.a the  UNLICENSE.
+See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/master/logrotate).
+
 # Snippets
 [Code snippet examples and a short description](snippets/README.markdown). These are not installed but can 
 be used as helpful examples on how to create your custom sinks
@@ -78,12 +117,12 @@ Example usage where a logrotate sink is added. The logrotate limit is changed fr
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.h>
 #include <g3sinks/logrotate.hpp>
-#include <g3log/std2_make_unique.hpp>
+#include <memory>
 
 int main(int argc, char**argv) {
    using namespace g3;
    std::unique_ptr<LogWorker> logworker{ LogWorker::createLogWorker() };
-   auto sinkHandle = logworker->addSink(std2::make_unique<LogRotate>(),
+   auto sinkHandle = logworker->addSink(std::make_unique<LogRotate>(),
                                           &LogRotate::save);
    
    // initialize the logger before it can receive LOG calls

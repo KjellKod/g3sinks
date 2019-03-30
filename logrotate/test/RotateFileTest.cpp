@@ -109,6 +109,17 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
 
    exists = Exists(content, first_message_in_new_log);
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+
+
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, newFileName + ".log");
+   EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << newFileName << std::endl;
+   const int kFilePathIndex = 1;
+   for (auto p : allFiles) {
+      std::cout << "to remove: " << _directory + std::get<kFilePathIndex>(p) << std::endl;
+      _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
+   }
+
+
 }
 
 TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
@@ -130,7 +141,10 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 
    exists = Exists(content, first_message_in_new_log);
-   EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
+   EXPECT_TRUE(exists) << "\n\tcontent:" << content << "\n\tentry: " << gone;
+
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, _filename + ".log");
+   EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << _filename;
 }
 
 
@@ -138,7 +152,7 @@ namespace {
    void RotateAndExpireOldLogs(std::string filename, std::string directory, bool changeLogFile = false) {
       LogRotate logrotate(filename, directory);
 
-      if(changeLogFile) {
+      if (changeLogFile) {
          logrotate.changeLogFile(directory, "");
       }
       auto logfilename = logrotate.logFileName();
@@ -171,16 +185,26 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    RotateAndExpireOldLogs(_filename, _directory);
    auto app_name = _filename + ".log";
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
+
+
+   const int kFilePathIndex = 1;
+   for (auto p : allFiles) {
+      _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
+   }
+
    EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
 
 }
 
 TEST_F(RotateFileTest, rotateAndExpireOldLogsWithoutTrailingSlashForDirectory) {
-   auto filename = _filename.substr(0, _filename.size()-1); // remove the trailing '/'
+   auto filename = _filename.substr(0, _filename.size() - 1); // remove the trailing '/'
    RotateAndExpireOldLogs(_filename, _directory);
    auto app_name = _filename + ".log";
+   std::cout << "dire: " << _directory << std::endl;
+   std::cout << "app: " << app_name << std::endl;
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
    EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
+
 }
 
 
@@ -278,13 +302,3 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
 TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) {
    EXPECT_FALSE(true);
 }
-
-
-
-
-// test to implement (and did actually not exist in vrecan/g2log-dev or elsewhere)
-// =====================
-// changeLogFile
-// logFileName
-// setMaxArchiveLogCount
-// setMaxLogSizeru

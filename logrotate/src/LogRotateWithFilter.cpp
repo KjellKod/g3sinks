@@ -9,15 +9,14 @@
 * ********************************************* */
 
 #include "g3sinks/LogRotateWithFilter.h"
-#include <g3log/std2_make_unique.hpp>
+#include <memory>
 #include <algorithm>
 #include <iostream> // to remove
 
 // helper function to create an logging sink with filter
 std::unique_ptr<LogRotateWithFilter> LogRotateWithFilter::CreateLogRotateWithFilter(std::string filename, std::string directory, std::vector<LEVELS> filter) {
-    auto logRotatePtr = std2::make_unique<LogRotate>(filename, directory);
-    auto logWithFilter = std2::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filter);
-    return std::move(logWithFilter);
+    auto logRotatePtr = std::make_unique<LogRotate>(filename, directory);
+    return std::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filter);
 }
 
 
@@ -26,7 +25,9 @@ std::unique_ptr<LogRotateWithFilter> LogRotateWithFilter::CreateLogRotateWithFil
 /// @param removes all log entries with LEVELS in this filter
 LogRotateWithFilter::LogRotateWithFilter(LogRotateUniquePtr logToFile, IgnoreLogLevelsFilter ignoreLevels)
     : _logger(std::move(logToFile))
-    , _filter(std::move(ignoreLevels)) {}
+    , _filter(std::move(ignoreLevels))
+    , _log_details_func(&g3::LogMessage::DefaultLogDetailsToString)
+     {}
 
 
 LogRotateWithFilter::~LogRotateWithFilter() {}
@@ -37,7 +38,7 @@ void LogRotateWithFilter::save(g3::LogMessageMover logEntry) {
     bool isNotInFilter_ = (_filter.end() == std::find(_filter.begin(), _filter.end(), level));
 
     if(isNotInFilter_) {
-      _logger->save(logEntry.get().toString());
+      _logger->save(logEntry.get().toString(_log_details_func));
    }
 }
 
@@ -83,4 +84,13 @@ void LogRotateWithFilter::setFlushPolicy(size_t flush_policy){
 */
 void LogRotateWithFilter::flush(){
    _logger->flush();
+}
+
+
+/** 
+* Override the defualt log formatting. 
+* Please see https://github.com/KjellKod/g3log/API.markdown for more details
+*/
+void LogRotateWithFilter::overrideLogDetails(g3::LogMessage::LogDetailsFunc func) {
+   _log_details_func = func;
 }

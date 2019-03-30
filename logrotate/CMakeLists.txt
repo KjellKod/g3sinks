@@ -3,7 +3,7 @@
 #  2015, April 30, @author Kjell.Hedstrom
 # =====================================================
 
-CMAKE_MINIMUM_REQUIRED (VERSION 3.1)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.2)
 ENABLE_LANGUAGE(CXX)
 SET(CMAKE_BUILD_TYPE Release)
 
@@ -11,7 +11,6 @@ PROJECT (LogRotate)
 SET(PROJECT_SRC ${LogRotate_SOURCE_DIR}/src)
 SET(DIR_UNIT_TEST ${LogRotate_SOURCE_DIR}/test)
 SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/../3rdparty)
-SET(G3LOG_LIBRARY g3logger)
 
 
 MESSAGE(" PROJECT_SRC = : ${PROJECT_SRC}")
@@ -21,16 +20,33 @@ SET(ACTIVE_CPP0xx_DIR "Release")
 
 SET(MAJOR_VERSION 1)
 IF (${VERSION}.x STREQUAL ".x")
-   MESSAGE("Extracting git software version")
-   execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION)
+   IF (MSVC)
+      message("windows: Extracting git software version")
+      execute_process(COMMAND powershell "(git rev-list --branches HEAD | Measure-Object -line).Lines" OUTPUT_VARIABLE GIT_VERSION WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+   ELSE()
+      IF(UNIX OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+         message("nix: Extracting git software version")
+      ELSE()
+         message("unknown platform: extracting git software version")
+      ENDIF()
+      execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+   ENDIF()
+
    SET(MINOR_VERSION 1)
-   SET(BUILD_NUMBER ${GIT_VERSION})
-   SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}) 
+   math(EXPR VERSION-BASE ${GIT_VERSION}/255)
+   math(EXPR VERSION-REMAINDER ${GIT_VERSION}%255)
+   message("git build version: ${GIT_VERSION}")
+   message("version base: ${VERSION-BASE}")
+   message("version remainder: ${VERSION-REMAINDER}")
+   # SET(BUILD_NUMBER ${GIT_VERSION})
+   SET(BUILD_NUMBER ${VERSION-BASE})
+   SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}-${VERSION-REMAINDER})
 ENDIF()
 MESSAGE("Software Version: ${VERSION}")
 
 SET(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output dir for libraries")
 SET(CMAKE_INSTALL_HEADERDIR include CACHE PATH "Output dir for headers")
+SET(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
 IF (${CPACK_INSTALL_PREFIX}.x STREQUAL ".")
    SET(CPACK_INSTALL_PREFIX "/usr/local")
@@ -54,11 +70,21 @@ INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
  ENDIF()
 
 
-find_library(g3logger g3logger PATHS /usr/local/probe/lib )
+find_library(G3LOG_LIBRARY g3logger PATHS /usr/local/probe/lib )
 include_directories(${CMAKE_PREFIX_PATH}/include)
 
 
 find_library(BOOST_FILESYSTEM boost_filesystem PATHS /usr/local/probe/lib ${BOOST_ROOT})
+set(Boost_LIBRARIES ${BOOST_FILESYSTEM})
+
+find_library(BOOST_SYSTEM boost_system PATHS /usr/local/probe/lib ${BOOST_ROOT} )
+list(APPEND Boost_LIBRARIES ${BOOST_SYSTEM})
+include_directories(${Boost_INCLUDE_DIRS})
+
+MESSAGE(" boost root: " ${BOOST_ROOT})
+MESSAGE(" boost include : " ${Boost_INCLUDE_DIRS})
+MESSAGE("BOOST LIBRARIES: ${Boost_LIBRARIES}")
+
 
 find_package( ZLIB REQUIRED )
 include_directories( ${ZLIB_INCLUDE_DIRS} )
@@ -72,28 +98,6 @@ include_directories( ${ZLIB_INCLUDE_DIRS} )
 #
 # GENERIC STEPS
 FILE(GLOB SRC_FILES ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.h ${PROJECT_SRC}/*.ipp ${PROJECT_SRC}/*.cpp) 
-
-
-IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang")
-   MESSAGE("")
-   MESSAGE("cmake for Clang ")
-   SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++17 -lstdc++fs -stdlib=libc++ -Wunused -D_GLIBCXX_USE_NANOSLEEP")
-   IF (${CMAKE_SYSTEM} MATCHES "FreeBSD-([0-9]*)\\.(.*)")
-       IF (${CMAKE_MATCH_1} GREATER 9)
-           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-           set(PLATFORM_LINK_LIBRIES execinfo)
-       ENDIF()
-   ELSEIF (APPLE)
-       set(PLATFORM_LINK_LIBRIES c++abi)
-   ELSE()
-       set(PLATFORM_LINK_LIBRIES rt c++abi)
-   ENDIF()
-ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-   MESSAGE("")
-   MESSAGE("cmake for GCC ")
-   SET(PLATFORM_LINK_LIBRIES rt)
-   SET(CMAKE_CXX_FLAGS " -Wall -Werror -rdynamic -Wunused -std=c++17 -lstdc++fs -pthread -D_GLIBCXX_USE_NANOSLEEP")
-ENDIF()
 
 
 
@@ -115,11 +119,21 @@ ENDIF()
 
 
 SET(${LIBRARY_TO_BUILD}_VERSION_STRING ${VERSION})
-SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${ZLIB_LIBRARIES} ${G3LOG} stdc++fs)
-SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES LINKER_LANGUAGE CXX SOVERSION ${VERSION})
+SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES 
+                      LINKER_LANGUAGE CXX
+                      OUTPUT_NAME ${LIBRARY_TO_BUILD}
+                      CLEAN_DIRECT_OUTPUT 1
+                      CXX_STANDARD 14
+                      CXX_STANDARD_REQUIRED YES
+                      CXX_EXTENSIONS NO
+                      SOVERSION ${VERSION}
+                      )
+
+TARGET_COMPILE_FEATURES(${LIBRARY_TO_BUILD}  PUBLIC cxx_variable_templates)
+TARGET_LINK_LIBRARIES(${LIBRARY_TO_BUILD}  ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${G3LOG_LIBRARY})
 
 MESSAGE("Libraries, g3log: ${g3logger}")
+MESSAGE("Libraries, boost: ${Boost_LIBRARIES}")
 MESSAGE("Libraries, zlib: ${ZLIB_LIBRARIES}")
 
 #

@@ -12,6 +12,7 @@
 #include <gtest/gtest.h>
 #include <cstring>
 #include <cerrno>
+#include <cstdio>
 
 class FilterTest : public ::testing::Test {
  public:
@@ -32,9 +33,9 @@ class FilterTest : public ::testing::Test {
 
    virtual void TearDown() {
       for (auto filename : _filesToRemove) {
-         auto success = unlink(filename.c_str());
-         if (-1 == success) {
-            std::cout << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
+         auto success = std::remove(filename.c_str());
+         if (0 != success) {
+            std::cerr << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
          }
       }
    }

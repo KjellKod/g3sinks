@@ -48,7 +48,11 @@ struct LogRotateHelper {
    ~LogRotateHelper();
 
    void setMaxArchiveLogCount(int size);
+   int getMaxArchiveLogCount();
    void setMaxLogSize(int size);
+   int getMaxLogSize();
+
+
    void fileWrite(std::string message);
    void fileWriteWithoutRotate(std::string message);
    void flushPolicy();
@@ -108,6 +112,11 @@ void LogRotateHelper::setMaxArchiveLogCount(int max_size) {
    max_archive_log_count_ = max_size;
 }
 
+int LogRotateHelper::getMaxArchiveLogCount() {
+  return max_archive_log_count_;
+}
+
+
 /**
  * Set the max file size in bytes.
  * @param max_size
@@ -116,9 +125,18 @@ void LogRotateHelper::setMaxLogSize(int max_size) {
    max_log_size_ = max_size;
 }
 
+int LogRotateHelper::getMaxLogSize() {
+   return max_log_size_;
+}
+
+
+
+
+
 LogRotateHelper::~LogRotateHelper() {
    std::ostringstream ss_exit;
-   ss_exit << "\ng3log file shutdown at: " << g3::localtime_formatted(g3::systemtime_now(), g3::internal::time_formatted) << "\n\n";
+    auto now = std::chrono::system_clock::now(); 
+   ss_exit << "\ng3log file shutdown at: " << g3::localtime_formatted(now, g3::internal::time_formatted) << "\n\n";
    filestream() << ss_exit.str() << std::flush;
 }
 
@@ -193,28 +211,27 @@ bool LogRotateHelper::rotateLog() {
 
       if (cur_log_size_ > max_log_size_) {
          is << std::flush;
-
-            std::ostringstream gz_file_name;
-            gz_file_name << log_file_with_path_ << ".";
-            gz_file_name << g3::localtime_formatted(g3::systemtime_now(), "%Y-%m-%d-%H-%M-%S");
-            gz_file_name << ".gz";
-            if (!createCompressedFile(log_file_with_path_, gz_file_name.str())) {
-                fileWriteWithoutRotate("Failed to compress log!");
-                return false;
-            }
-            is.close();
-            if (remove(log_file_with_path_.c_str()) == -1) {
-                fileWriteWithoutRotate("Failed to remove old log!");
-            }
-            changeLogFile(log_directory_);
-            std::ostringstream ss;
-            ss << "Log rotated Archived file name: " << gz_file_name.str().c_str();
-            fileWriteWithoutRotate(ss.str());
-            ss.clear();
-            ss.str("");
-            ss << log_prefix_backup_ << ".log";
-            expireArchives(log_directory_, ss.str(), max_archive_log_count_);
-
+         std::ostringstream gz_file_name;
+         gz_file_name << log_file_with_path_ << ".";
+         auto now = std::chrono::system_clock::now(); 
+         gz_file_name << g3::localtime_formatted(now, "%Y-%m-%d-%H-%M-%S");
+         gz_file_name << ".gz";
+         if (!createCompressedFile(log_file_with_path_, gz_file_name.str())) {
+             fileWriteWithoutRotate("Failed to compress log!");
+             return false;
+         }
+         is.close();
+         if (remove(log_file_with_path_.c_str()) == -1) {
+             fileWriteWithoutRotate("Failed to remove old log!");
+         }
+         changeLogFile(log_directory_);
+         std::ostringstream ss;
+         ss << "Log rotated Archived file name: " << gz_file_name.str().c_str();
+         fileWriteWithoutRotate(ss.str());
+         ss.clear();
+         ss.str("");
+         ss << log_prefix_backup_ << ".log";
+         expireArchives(log_directory_, ss.str(), max_archive_log_count_);
          return true;
       }
    }

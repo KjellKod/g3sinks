@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <g3log/time.hpp>
 #include <regex>
-#include <experimental/filesystem>
+#include <boost/filesystem.hpp>
 #include <ios>
 #include <fstream>
 #include <iomanip>
@@ -75,8 +75,10 @@ namespace  LogRotateUtility {
    /// @return the file header
    std::string header() {
       std::ostringstream ss_entry;
-      //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y" and formatted output as : Wed Sep 19 08:28:16 2012
-      ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(g3::systemtime_now(), "%a %b %d %H:%M:%S %Y") << "\n";
+      //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y" 
+     //   and formatted output as : Wed Sep 19 08:28:16 2012
+     auto now = std::chrono::system_clock::now();      
+     ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(now, "%a %b %d %H:%M:%S %Y") << "\n";
       return ss_entry.str();
    }
 
@@ -95,7 +97,7 @@ namespace  LogRotateUtility {
          if (regex_match(suffix, date_match, date_regex)) {
             if (date_match.size() == 2) {
                std::string date = date_match[1].str();
-               struct tm tm;
+               struct tm tm = {0};
                time_t t;
                if (strptime(date.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
                   return false;
@@ -144,13 +146,13 @@ namespace  LogRotateUtility {
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
       std::map<long, std::string> files;
-      std::experimental::filesystem::path dir_path(dir);
+      boost::filesystem::path dir_path(dir);
 
 
-      std::experimental::filesystem::directory_iterator end_itr;
-      if (!std::experimental::filesystem::exists(dir_path)) return;
+      boost::filesystem::directory_iterator end_itr;
+      if (!boost::filesystem::exists(dir_path)) return;
 
-      for (std::experimental::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+      for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
          std::string current_file(itr->path().filename().string());
          long time = 0;
          if (getDateFromFileName(app_name, current_file, time)) {
@@ -159,7 +161,7 @@ namespace  LogRotateUtility {
       }
 
       //delete old logs.
-      unsigned long logs_to_delete = files.size() - max_log_count;
+      ptrdiff_t logs_to_delete = files.size() - max_log_count;
       if (logs_to_delete > 0) {
 
          for (std::map<long, std::string>::iterator it = files.begin(); it != files.end(); ++it) {
@@ -176,13 +178,13 @@ namespace  LogRotateUtility {
 
     std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
         std::map<long, std::string> files;
-        std::experimental::filesystem::path dir_path(dir);
+        boost::filesystem::path dir_path(dir);
   
  
-       std::experimental::filesystem::directory_iterator end_itr;
-       if (!std::experimental::filesystem::exists(dir_path)) return {};
+       boost::filesystem::directory_iterator end_itr;
+       if (!boost::filesystem::exists(dir_path)) return {};
  
-       for (std::experimental::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+       for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
           std::string current_file(itr->path().filename().string());
           long time = 0;
           if (getDateFromFileName(app_name, current_file, time)) {
