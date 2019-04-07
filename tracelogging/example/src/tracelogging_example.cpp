@@ -25,9 +25,5 @@ int main(HINSTANCE, HINSTANCE, PWSTR, int)
   LOG(WARNING) << "g3logTracelogging test: This log call, may or may not happend before"
     << "the sinkHandle->call below";
 
-  g3::shutDownLogging();
-
-  TraceLoggingUnregister(traceProvider);
-
   return 0;
 }

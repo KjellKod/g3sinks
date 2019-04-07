@@ -61,7 +61,7 @@ endif()
 message( STATUS "G3LOG_INCLUDE_DIRS: ${G3LOG_INCLUDE_DIRS}" )
 message( STATUS "G3LOG_LIBRARY: ${G3LOG_LIBRARY}" )
 message( STATUS "G3LOG_BASE_DIR: ${G3LOG_BASE_DIR}" )
-set(G3LOG_SRC_DIR="${G3LOG_BASE_DIR}/src")
+set(G3LOG_SRC_DIR "${G3LOG_BASE_DIR}/src")
 message( STATUS "G3LOG_SRC_DIR: ${G3LOG_SRC_DIR}" )
 
 # Add source to this project's executable.
