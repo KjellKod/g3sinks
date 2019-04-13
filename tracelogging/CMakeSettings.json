@@ -9,7 +9,7 @@
       ],
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
-      "cmakeCommandArgs": "-DG3LOG_SRC_DIR=C:/Projects/third-party/g3log/src -DCMAKE_PREFIX_PATH=${env.CMAKE_DEFAULT_INSTALL_FOLDER}",
+      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=${env.CMAKE_DEFAULT_INSTALL_FOLDER}",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": ""
     },

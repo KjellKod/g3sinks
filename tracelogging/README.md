@@ -6,9 +6,9 @@ To build and install run the following commands
 ```
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=<Debug|Release> -DCMAKE_PREFIX_PATH=<path to install folder> -DG3LOG_BASE_DIR=<path to base folder of g3log git clone> -DCMAKE_INSTALL_PREFIX=<path to install folder> ..
+cmake -DCMAKE_BUILD_TYPE=<Debug|Release> -DCMAKE_PREFIX_PATH=<path to install folder> -DCMAKE_INSTALL_PREFIX=<path to install folder> ..
 cmake --build . --target INSTALL --config <Release/Debug>
-``
+```
 
 # g3log_tracelogging Sink Usage Code Example
 The g3log_tracelogging include and lib paths will need to be part of the build command
@@ -19,7 +19,8 @@ Something to be aware of is that Windows.h must always be included before includ
 
 Use the traceview.exe tool which is installed with the WindowsSDK to view trace events
 
-See Doug Cook''s excellent video at https://www.youtube.com/watch?v=FYi5No2nwoI for more information
+See Doug Cook''s excellent video at https://www.youtube.com/watch?v=FYi5No2nwoI for more information about Windows TraceLogging
+
 ```
 #include "Windows.h"
 #include <g3log/g3log.hpp>

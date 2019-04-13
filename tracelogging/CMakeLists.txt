@@ -5,12 +5,12 @@
 #
 # To build and install, run the following commands
 # 
-# cmake -DCMAKE_BUILD_TYPE=<Debug|Release> -DCMAKE_PREFIX_PATH=<path to install folder> -DG3LOG_BASE_DIR=<path to base folder of g3log git clone> -DCMAKE_INSTALL_PREFIX=<path to install folder> ..
+# cmake -DCMAKE_BUILD_TYPE=<Debug|Release> -DCMAKE_PREFIX_PATH=<path to install folder> -DCMAKE_INSTALL_PREFIX=<path to install folder> ..
 # cmake --build . --target INSTALL --config <Release/Debug>
 #
 #
 # Example
-# cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:/usr/local -DG3LOG_BASE_DIR=C:/Projects/third-party/forks/g3log -DCMAKE_INSTALL_PREFIX=c:/usr/local ..
+# cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:/usr/local -DCMAKE_INSTALL_PREFIX=c:/usr/local ..
 # cmake --build . --target INSTALL --config Debug
 #
 # This will build in Debug mode and install the include files to c:/usr/local/include/g3log_tracelogging/
@@ -23,17 +23,28 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-list(APPEND CMAKE_CXX_SOURCE_FILE_EXTENSIONS c)
+# detect if g3log_tracelogging is being included as a subdirectory
+if(NOT DEFINED PROJECT_NAME)
+  set(NOT_SUBPROJECT ON)
+endif()
 
+#list(APPEND CMAKE_CXX_SOURCE_FILE_EXTENSIONS c)
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 project(g3log_tracelogging VERSION 0.1
-                     DESCRIPTION "Build for g3log that supports Microsoft UWP and HoloLens projects as well as Magic Leap Projects"
+                     DESCRIPTION "Sink for g3log that supports Microsoft UWP and HoloLens projects"
                      LANGUAGES CXX)
                      
+message( STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
+message( STATUS "CMAKE_CONFIGURATION_TYPES: ${CMAKE_CONFIGURATION_TYPES}" )
 message( STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}" )
 message( STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}" )
 message( STATUS "CMAKE_LIBRARY_ARCHITECTURE: ${CMAKE_LIBRARY_ARCHITECTURE}")
-message( STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
+message( STATUS "PROJECT_NAME: ${PROJECT_NAME}")
+
+option(G3LOG_TRACELOGGING_INSTALL_DOCS "Install documentation alongside library" ON)
 
 # search for TraceLoggingProvider.h
 include(CheckIncludeFileCXX)
@@ -48,6 +59,7 @@ endif()
 find_package(g3logger REQUIRED NO_MODULE)
 # add the missing target if needed
 if (NOT TARGET g3logger)
+  message( STATUS "NOT TARGET g3loggger" )
     add_library(g3logger SHARED IMPORTED)
     find_package(Threads REQUIRED)
     set_target_properties(g3logger PROPERTIES
@@ -57,71 +69,111 @@ if (NOT TARGET g3logger)
         )
 endif()
 
-
 message( STATUS "G3LOG_INCLUDE_DIRS: ${G3LOG_INCLUDE_DIRS}" )
 message( STATUS "G3LOG_LIBRARY: ${G3LOG_LIBRARY}" )
-message( STATUS "G3LOG_BASE_DIR: ${G3LOG_BASE_DIR}" )
-set(G3LOG_SRC_DIR "${G3LOG_BASE_DIR}/src")
-message( STATUS "G3LOG_SRC_DIR: ${G3LOG_SRC_DIR}" )
 
-# Add source to this project's executable.
+# Add g3log_tracelogging as an INTERFACE only library
 add_library ( g3log_tracelogging
-              STATIC
-              "include/g3log_tracelogging.h"
-              "${G3LOG_SRC_DIR}/crashhandler_windows.cpp"
-              "${G3LOG_SRC_DIR}/filesink.cpp"
-              "${G3LOG_SRC_DIR}/g3log.cpp"
-              "${G3LOG_SRC_DIR}/logcapture.cpp"
-              "${G3LOG_SRC_DIR}/loglevels.cpp"
-              "${G3LOG_SRC_DIR}/logmessage.cpp"
-              "${G3LOG_SRC_DIR}/logworker.cpp"
-              "${G3LOG_SRC_DIR}/stacktrace_windows.cpp"
-              "${G3LOG_SRC_DIR}/time.cpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/active.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/atomicbool.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/crashhandler.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/filesink.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/future.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/g3log.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/logcapture.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/loglevels.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/logmessage.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/logworker.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/moveoncopy.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/shared_queue.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/sink.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/sinkhandle.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/sinkwrapper.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/stacktrace_windows.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/stlpatch_future.hpp"
-              "${G3LOG_INCLUDE_DIRS}/g3log/time.hpp"
-              "${G3LOG_BASE_DIR}/build/include/g3log/generated_definitions.hpp")
+              INTERFACE)            
 
-target_include_directories(g3log_tracelogging PUBLIC "${G3LOG_INCLUDE_DIRS}")
+target_include_directories(g3log_tracelogging
+  INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+# provide a namespaced alias for clients to 'link' against if g3log_tracelogging is included as a sub-project
+add_library(g3log_tracelogging::g3log_tracelogging ALIAS g3log_tracelogging)
+
+target_include_directories(g3log_tracelogging INTERFACE "${G3LOG_INCLUDE_DIRS}")
+target_link_libraries(g3log_tracelogging INTERFACE ${G3LOG_LIBRARY})
+
 
 if(CMAKE_SYSTEM MATCHES "Windows")
   message( STATUS "Running on Windows" )
-  target_include_directories(g3log_tracelogging PUBLIC "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17763.0/shared")
+  target_include_directories(g3log_tracelogging INTERFACE "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17763.0/shared")
 endif(CMAKE_SYSTEM MATCHES "Windows")
 
 set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "g3log_tracelogging.lib")
 
 target_compile_definitions(g3log_tracelogging
-    PRIVATE _UNICODE UNICODE _WINDOWS WIN32 _DEBUG DISABLE_VECTORED_EXCEPTIONHANDLING
-    PUBLIC HOLO)
+    INTERFACE _UNICODE UNICODE _WINDOWS WIN32 _DEBUG DISABLE_VECTORED_EXCEPTIONHANDLING HOLO)
 
-set_target_properties(g3log_tracelogging PROPERTIES CXX_STANDARD 14)
+if(NOT_SUBPROJECT)
+  # set the config install folder
+  set(G3LOG_TRACELOGGING_CMAKE_CONFIG_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/g3log_tracelogging")
 
-set_target_properties(g3log_tracelogging PROPERTIES CXX_EXTENSIONS OFF)
+  configure_package_config_file(
+      ${CMAKE_CURRENT_LIST_DIR}/CMake/g3log_traceloggingConfig.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/g3log_traceloggingConfig.cmake
+      INSTALL_DESTINATION
+        ${G3LOG_TRACELOGGING_CMAKE_CONFIG_DESTINATION})
 
-set_target_properties(g3log_tracelogging PROPERTIES PUBLIC_HEADER "include/g3log_tracelogging.h")
+  # create and install an export set for catch target as g3log_tracelogging::g3log_tracelogging
+  install(
+    TARGETS
+      g3log_tracelogging
+    EXPORT
+      g3log_traceloggingTargets
+    DESTINATION
+      ${CMAKE_INSTALL_LIBDIR})
 
-install(TARGETS g3log_tracelogging 
-          ARCHIVE DESTINATION "lib"
-          PUBLIC_HEADER DESTINATION "include/g3log_tracelogging")
-          
-          
-message( STATUS "PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}" )
+  install(
+    EXPORT
+      g3log_traceloggingTargets
+    NAMESPACE
+      g3log_tracelogging::
+    DESTINATION
+      ${G3LOG_TRACELOGGING_CMAKE_CONFIG_DESTINATION})
 
-INSTALL( FILES ${PROJECT_SOURCE_DIR}/cmake/g3log_traceloggingConfig.cmake
-            DESTINATION lib/cmake/g3log_tracelogging)
+      
+  message( STATUS "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
+  # By default, FooConfigVersion is tied to architecture that it was
+  # generated on. Because g3log_tracelogging is header-only, it is arch-independent
+  # and thus g3log_traceloggingConfigVersion should not be tied to the architecture
+  # it was generated on.
+  #
+  # CMake does not provide a direct customization point for this in
+  # `write_basic_package_version_file`, but it can be accomplished
+  # indirectly by temporarily undefining `CMAKE_SIZEOF_VOID_P`.
+  set(G3LOG_TRACELOGGING_CMAKE_SIZEOF_VOID_P ${CMAKE_SIZEOF_VOID_P})
+  unset(CMAKE_SIZEOF_VOID_P)
+  write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/g3log_traceloggingConfigVersion.cmake"
+    COMPATIBILITY
+      SameMajorVersion
+  )
+  set(CMAKE_SIZEOF_VOID_P ${G3LOG_TRACELOGGING_CMAKE_SIZEOF_VOID_P})
+
+  # install include files
+  install(
+  DIRECTORY
+    "include/"
+  DESTINATION
+    "${CMAKE_INSTALL_INCLUDEDIR}/g3log_tracelogging")
+    
+  #install config files
+  install(
+    FILES
+      "${CMAKE_CURRENT_BINARY_DIR}/g3log_traceloggingConfig.cmake"
+      "${CMAKE_CURRENT_BINARY_DIR}/g3log_traceloggingConfigVersion.cmake"
+    DESTINATION
+      ${G3LOG_TRACELOGGING_CMAKE_CONFIG_DESTINATION})
+
+  #install(TARGETS g3log_tracelogging 
+  #          ARCHIVE DESTINATION "lib"
+  #          PUBLIC_HEADER DESTINATION "include/g3log_tracelogging")
+
+  #INSTALL( FILES ${PROJECT_SOURCE_DIR}/cmake/g3log_traceloggingConfig.cmake
+  #            DESTINATION lib/cmake/g3log_tracelogging)
+
+  # Install documentation
+  if(G3LOG_TRACELOGGING_INSTALL_DOCS)
+    install(
+      FILES
+        README.md
+      DESTINATION
+        "${CMAKE_INSTALL_DOCDIR}/g3log_tracelogging")
+  endif(G3LOG_TRACELOGGING_INSTALL_DOCS)
+
+endif(NOT_SUBPROJECT)
