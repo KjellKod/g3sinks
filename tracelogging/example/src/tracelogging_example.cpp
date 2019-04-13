@@ -22,7 +22,10 @@ int main(HINSTANCE, HINSTANCE, PWSTR, int)
 
   // initialize the logger before it can receive LOG calls
   initializeLogging(logworker.get());
-  LOG(WARNING) << "g3logTracelogging test";
+  LOG(DEBUG) << "g3logTracelogging test: DEBUG";
+  LOG(INFO) << "g3logTracelogging test: INFO";
+  LOG(WARNING) << "g3logTracelogging test: WARNING";
+  LOG(FATAL) << "g3logTracelogging test: FATAL";
 
   g3::internal::shutDownLogging();
 

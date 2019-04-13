@@ -44,14 +44,54 @@ struct g3logTracelogging {
   void ReceiveLogMessage(g3::LogMessageMover logEntry) {
     auto level = logEntry.get()._level;
 
-    TraceLogWrite(
-      "g3logTracelogging",
-      TraceLoggingString(logEntry.get().level().c_str(), "LOG_LEVEL"),
-      TraceLoggingString(logEntry.get().threadID().c_str(), "THREAD_ID"),
-      TraceLoggingString(logEntry.get().timestamp().c_str(), "TIME_STAMP"),
-      TraceLoggingString(logEntry.get().file().c_str(), "FILE"),
-      TraceLoggingString(logEntry.get().file_path().c_str(), "FILE_PATH"),
-      TraceLoggingString(logEntry.get().function().c_str(), "FUNCTION"),
-      TraceLoggingString(logEntry.get().message().c_str(), "MESSAGE"));
+    if (logEntry.get().level() == "DEBUG") {
+      TraceLogWrite(
+        "g3logTracelogging",
+        TraceLoggingString(logEntry.get().level().c_str(), "LOG_LEVEL"),
+        TraceLoggingString(logEntry.get().threadID().c_str(), "THREAD_ID"),
+        TraceLoggingString(logEntry.get().timestamp().c_str(), "TIME_STAMP"),
+        TraceLoggingString(logEntry.get().file().c_str(), "FILE"),
+        TraceLoggingString(logEntry.get().file_path().c_str(), "FILE_PATH"),
+        TraceLoggingString(logEntry.get().function().c_str(), "FUNCTION"),
+        TraceLoggingString(logEntry.get().message().c_str(), "MESSAGE"),
+        TraceLoggingLevel(5));
+    }
+    else if (logEntry.get().level() == "INFO") {
+      TraceLogWrite(
+        "g3logTracelogging",
+        TraceLoggingString(logEntry.get().level().c_str(), "LOG_LEVEL"),
+        TraceLoggingString(logEntry.get().threadID().c_str(), "THREAD_ID"),
+        TraceLoggingString(logEntry.get().timestamp().c_str(), "TIME_STAMP"),
+        TraceLoggingString(logEntry.get().file().c_str(), "FILE"),
+        TraceLoggingString(logEntry.get().file_path().c_str(), "FILE_PATH"),
+        TraceLoggingString(logEntry.get().function().c_str(), "FUNCTION"),
+        TraceLoggingString(logEntry.get().message().c_str(), "MESSAGE"),
+        TraceLoggingLevel(4));
+    }
+    else if (logEntry.get().level() == "WARNING") {
+      TraceLogWrite(
+        "g3logTracelogging",
+        TraceLoggingString(logEntry.get().level().c_str(), "LOG_LEVEL"),
+        TraceLoggingString(logEntry.get().threadID().c_str(), "THREAD_ID"),
+        TraceLoggingString(logEntry.get().timestamp().c_str(), "TIME_STAMP"),
+        TraceLoggingString(logEntry.get().file().c_str(), "FILE"),
+        TraceLoggingString(logEntry.get().file_path().c_str(), "FILE_PATH"),
+        TraceLoggingString(logEntry.get().function().c_str(), "FUNCTION"),
+        TraceLoggingString(logEntry.get().message().c_str(), "MESSAGE"),
+        TraceLoggingLevel(3));
+    }
+    else if (logEntry.get().level() == "FATAL") {
+      TraceLogWrite(
+        "g3logTracelogging",
+        TraceLoggingString(logEntry.get().level().c_str(), "LOG_LEVEL"),
+        TraceLoggingString(logEntry.get().threadID().c_str(), "THREAD_ID"),
+        TraceLoggingString(logEntry.get().timestamp().c_str(), "TIME_STAMP"),
+        TraceLoggingString(logEntry.get().file().c_str(), "FILE"),
+        TraceLoggingString(logEntry.get().file_path().c_str(), "FILE_PATH"),
+        TraceLoggingString(logEntry.get().function().c_str(), "FUNCTION"),
+        TraceLoggingString(logEntry.get().message().c_str(), "MESSAGE"),
+        TraceLoggingLevel(1));
+    }
+
   }
 };
