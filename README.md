@@ -65,6 +65,11 @@ cmake --build . --target INSTALL --config <Release/Debug>
 ### g3log_tracelogging Sink Usage Code Example
 In order for g3log_tracelogging to work properly, g3log will need to be installed and the location of g3logger.dll will need to be part of the path or specifically added by the build command
 
+When building g3log for UWP, the following options are required
+```
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<prefix path> -DCMAKE_INSTALL_PREFIX=<install path> -DG3LOG_UWP_BUILD=ON -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
+```
+
 Kernel32.lib is also a required dependency
 
 This code also relies on Microsft TraceLogging and requires the name of the provider be traceProvider
