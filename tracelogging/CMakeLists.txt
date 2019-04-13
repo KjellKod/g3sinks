@@ -13,8 +13,9 @@
 # cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:/usr/local -DCMAKE_INSTALL_PREFIX=c:/usr/local ..
 # cmake --build . --target INSTALL --config Debug
 #
-# This will build in Debug mode and install the include files to c:/usr/local/include/g3log_tracelogging/
-# the lib to c:/usr/local/lib/ and the g3log_traceloggingConfig.make file to c:/usr/local/lib/cmake/g3log_tracelogging/
+# This will build in Debug mode and install the include files to c:/usr/local/include/g3log_tracelogging/,
+# the g3log_traceloggingConfig.make, g3log_traceloggingConfigVersion.cmake and g3log_traceloggingTargets.cmake files
+# to c:/usr/local/lib/cmake/g3log_tracelogging/ and the README.md file to C:/usr/local/share/doc/g3log_tracelogging/
 #
 #
 cmake_minimum_required (VERSION 3.8...3.12)
@@ -159,13 +160,6 @@ if(NOT_SUBPROJECT)
       "${CMAKE_CURRENT_BINARY_DIR}/g3log_traceloggingConfigVersion.cmake"
     DESTINATION
       ${G3LOG_TRACELOGGING_CMAKE_CONFIG_DESTINATION})
-
-  #install(TARGETS g3log_tracelogging 
-  #          ARCHIVE DESTINATION "lib"
-  #          PUBLIC_HEADER DESTINATION "include/g3log_tracelogging")
-
-  #INSTALL( FILES ${PROJECT_SOURCE_DIR}/cmake/g3log_traceloggingConfig.cmake
-  #            DESTINATION lib/cmake/g3log_tracelogging)
 
   # Install documentation
   if(G3LOG_TRACELOGGING_INSTALL_DOCS)

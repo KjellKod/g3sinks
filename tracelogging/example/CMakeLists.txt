@@ -23,6 +23,3 @@ add_executable ( g3log_tracelogging_example
               "src/tracelogging_example.cpp")
 
 target_link_libraries(g3log_tracelogging_example g3log_tracelogging::g3log_tracelogging)
-
-#target_include_directories(g3log_tracelogging_example PUBLIC "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17763.0/shared")
-target_include_directories(g3log_tracelogging_example PUBLIC "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/um")

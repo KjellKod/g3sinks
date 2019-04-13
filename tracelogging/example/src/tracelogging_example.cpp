@@ -22,8 +22,7 @@ int main(HINSTANCE, HINSTANCE, PWSTR, int)
 
   // initialize the logger before it can receive LOG calls
   initializeLogging(logworker.get());
-  LOG(WARNING) << "g3logTracelogging test: This log call, may or may not happend before"
-    << "the sinkHandle->call below";
+  LOG(WARNING) << "g3logTracelogging test";
 
   g3::internal::shutDownLogging();
 

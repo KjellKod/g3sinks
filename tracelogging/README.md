@@ -1,7 +1,7 @@
 # g3sinks/tracelogging
 sink to allow logging through Windows TraceLogging
 
-### Building and installing
+# Building and installing
 To build and install run the following commands
 ```
 mkdir build
@@ -11,8 +11,10 @@ cmake --build . --target INSTALL --config <Release/Debug>
 ```
 
 # g3log_tracelogging Sink Usage Code Example
-The g3log_tracelogging include and lib paths will need to be part of the build command
-The g3log_tracelogging.lib file and Kernel32.lib will need to be added as dependencies
+In order for this to work properly, g3log will need to be installed and the location of g3logger.dll will need to be part of the path or specifically added by the build command
+
+Kernel32.lib is also a required dependency
+
 This code also relies on Microsft TraceLogging and requires the name of the provider be traceProvider
 
 Something to be aware of is that Windows.h must always be included before including TraceLoggingProvider

@@ -17,11 +17,7 @@ include(FindPackageHandleStandardArgs)
 
 @PACKAGE_INIT@
 
-#find_package(Threads REQUIRED)
 find_package(g3logger REQUIRED)
-
-message( STATUS "G3LOG_INCLUDE_DIRS: ${G3LOG_INCLUDE_DIRS}" )
-message( STATUS "G3LOG_LIBRARY: ${G3LOG_LIBRARY}" )
 
 if (NOT TARGET g3log_tracelogging)
   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
