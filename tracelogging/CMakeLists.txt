@@ -29,8 +29,6 @@ if(NOT DEFINED PROJECT_NAME)
   set(NOT_SUBPROJECT ON)
 endif()
 
-#list(APPEND CMAKE_CXX_SOURCE_FILE_EXTENSIONS c)
-
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 

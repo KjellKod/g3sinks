@@ -52,33 +52,7 @@ See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/mast
 
 ## g3sinks/tracelogging
 sink to allow logging through Windows TraceLogging
-
-### Building and installing g3log_tracelogging
-To build and install run the following commands
-```
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=<Debug|Release> -DCMAKE_PREFIX_PATH=<path to install folder> -DCMAKE_INSTALL_PREFIX=<path to install folder> ..
-cmake --build . --target INSTALL --config <Release/Debug>
-```
-
-### g3log_tracelogging Sink Usage Code Example
-In order for g3log_tracelogging to work properly, g3log will need to be installed and the location of g3logger.dll will need to be part of the path or specifically added by the build command
-
-When building g3log for UWP, the following options are required
-```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<prefix path> -DCMAKE_INSTALL_PREFIX=<install path> -DG3LOG_UWP_BUILD=ON -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
-```
-
-Kernel32.lib is also a required dependency
-
-This code also relies on Microsft TraceLogging and requires the name of the provider be traceProvider
-
-Something to be aware of is that Windows.h must always be included before including TraceLoggingProvider
-
-Use the traceview.exe tool which is installed with the WindowsSDK to view trace events
-
-See Doug Cook''s excellent video at https://www.youtube.com/watch?v=FYi5No2nwoI for more information about Windows TraceLogging
+For build instructions please see [tracelogging/README](tracelogging/README.md)
 
 # Snippets
 [Code snippet examples and a short description](snippets/README.markdown). These are not installed but can 
