@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+/.vs
+/tracelogging/build
+/tracelogging/example/build
