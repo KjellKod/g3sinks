@@ -3,7 +3,7 @@ image:
 clone_folder: c:\projects\source
 build_script:
 - cmd: >-
-    cd ..
+    cd c:\projects
     
     git clone https://github.com/KjellKod/g3log.git
 
@@ -21,7 +21,7 @@ build_script:
 
     cmake --build . --target INSTALL --config Release
     
-    cd ..\source\tracelogging
+    cd c:\projects\source\tracelogging
 
     mkdir build
 
