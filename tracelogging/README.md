@@ -15,7 +15,7 @@ In order for this to work properly, g3log will need to be installed and the loca
 
 When building g3log for UWP, the following options are required
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<prefix path> -DCMAKE_INSTALL_PREFIX=<install path> -DG3LOG_UWP_BUILD=ON -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<prefix path> -DCMAKE_INSTALL_PREFIX=<install path> -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
 ```
 
 Kernel32.lib is also a required dependency
