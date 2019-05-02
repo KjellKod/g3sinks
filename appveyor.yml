@@ -3,7 +3,21 @@ image:
 clone_folder: c:\projects\source
 build_script:
 - cmd: >-
-    cd tracelogging
+    cd ..
+    
+    git clone https://github.com/KjellKod/g3log.git
+
+    cd g3log
+
+    mkdir build
+
+    cd build
+
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\usr\local -DCMAKE_INSTALL_PREFIX=c:\usr\local -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
+
+    cmake --build . --target INSTALL --config Release
+    
+    cd ..\source\tracelogging
 
     mkdir build
 
