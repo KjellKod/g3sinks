@@ -6,10 +6,6 @@ build_script:
     cd tracelogging
     mkdir build
     cd build
-    
-    cmake c:\projects\source -G "Visual Studio 15"
-    
-    cmake --build . --config "Debug"
 
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\usr\local -DCMAKE_INSTALL_PREFIX=c:\usr\local ..
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\usr\local -DCMAKE_INSTALL_PREFIX=c:\usr\local -G "Visual Studio 15" ..
     cmake --build . --target INSTALL --config Release
