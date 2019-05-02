@@ -4,8 +4,11 @@ clone_folder: c:\projects\source
 build_script:
 - cmd: >-
     cd tracelogging
+
     mkdir build
+
     cd build
 
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\usr\local -DCMAKE_INSTALL_PREFIX=c:\usr\local -G "Visual Studio 15" ..
+
     cmake --build . --target INSTALL --config Release
