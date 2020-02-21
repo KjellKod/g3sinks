@@ -15,6 +15,7 @@ SET(DIR_3RDPARTY ${LogRotate_SOURCE_DIR}/../3rdparty)
 
 MESSAGE(" PROJECT_SRC = : ${PROJECT_SRC}")
 INCLUDE_DIRECTORIES(${PROJECT_SRC})
+INCLUDE_DIRECTORIES(${PROJECT_SRC}/../../common)
 SET(ACTIVE_CPP0xx_DIR "Release")
 
 
@@ -147,6 +148,7 @@ INCLUDE (${LogRotate_SOURCE_DIR}/test/Test.cmake)
 #
 IF( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    FILE(GLOB HEADER_FILES ${PROJECT_SRC}/g3sinks/*.h)
+   list(APPEND HEADER_FILES ${PROJECT_SRC}/../../common/g3sinksUtils.hpp)
    INCLUDE (${LogRotate_SOURCE_DIR}/CPackLists.txt)
 ENDIF()
 

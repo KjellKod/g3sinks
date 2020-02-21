@@ -31,6 +31,9 @@ target_include_directories(g3log_syslog
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
       $<INSTALL_INTERFACE:include>
     )
+target_include_directories(g3log_syslog PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../common>
+)
 SET_TARGET_PROPERTIES(g3log_syslog PROPERTIES 
                       LINKER_LANGUAGE CXX
                       OUTPUT_NAME g3log_syslog
@@ -61,10 +64,11 @@ install(EXPORT g3log_syslogTargets
 	NAMESPACE G3::
 	DESTINATION lib/cmake
 	)
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src"
-	DESTINATION include
-	FILES_MATCHING
-	PATTERN *.h*
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/g3log/syslogsink.hpp"
+	DESTINATION include/g3sinks
+	)
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../common/g3sinksUtils.hpp"
+	DESTINATION include/g3sinks
 	)
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file("g3log_syslogVersion.cmake"

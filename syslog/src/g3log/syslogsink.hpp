@@ -29,6 +29,7 @@
 #include <map>
 #include <string>
 
+#include "g3sinksUtils.hpp"
 
 namespace g3
 {
@@ -57,6 +58,10 @@ public:
 
     void setLevel(LogLevel level, int syslevel);
 
+    // Alternative methods releaving C-string argument lifetime constraints:
+    void setLogHeaderNoJn(g3::DltrStr change) { _header = change.c_str(); }
+    void setIdentityNoJn(g3::DltrStr id) { _identity = id.c_str(); }
+    
 private:
     LogDetailsFunc _log_details_func;
     std::map<int, int> _levelMap;

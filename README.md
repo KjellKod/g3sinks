@@ -54,6 +54,11 @@ See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/mast
 sink to allow logging through Windows TraceLogging
 For build instructions please see [tracelogging/README](tracelogging/README.md)
 
+## Sink Method calls
+
+Sink methods must be called through the `call()` method of the sink handle returned by `LogWorker->addsink()` to ensure thread-safety.
+For sink methods taking a C string argument, it is required that the lifetime of that string exceeds the time needed by the worker thread to copy the data. This can be achieved by using static strings, or calling `.get()` on the returned `std::future`, or when available, calling the alternative `NoJn` suffixed version of the method, where No Join of the thread is required.
+
 # Snippets
 [Code snippet examples and a short description](snippets/README.markdown). These are not installed but can 
 be used as helpful examples on how to create your custom sinks
@@ -115,8 +120,8 @@ sudo dpkg -i g3LogRotate-<package_version>Linux.deb
 
 # G3log and Sink Usage Code Example
 Example usage where a logrotate sink is added. The logrotate limit is changed from the default to instead be 10MB. The limit is changed by calling the sink handler which passes the function call through to the actual logrotate sink object.
-```
 
+```c++
 // main.cpp
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.h>
@@ -136,6 +141,7 @@ int main(int argc, char**argv) {
    // The call is asynchronously executed on your custom sink.
    const int k10MBInBytes = 10 * 1024 * 1024;
    std::future<void> received = sinkHandle->call(&LogRotate::setMaxLogSize, k10MBInBytes);
+   // received.get(); // required when passing non-static strings to a non-"NoJn" version of a method
    
    // Run the main part of the application. This can be anything of course, in this example
    // we'll call it "RunApplication". Once this call exits we are in shutdown mode

@@ -35,6 +35,12 @@ std::string LogRotate::changeLogFile(const std::string& log_directory, const std
     return pimpl_->changeLogFile(log_directory, new_name);
 }
 
+// wraps LogRotate::changeLogFile() to use strings with deleter,
+// making it unnecessary to join the worker thread to control the lifetime of string arguments.
+g3::DltrStr LogRotate::changeLogFileNoJn(g3::DltrStr log_directory, g3::DltrStr new_name) {
+    return g3::DltrStr(changeLogFile(log_directory.c_str(), new_name.c_str()));
+}
+
 /// @return the current file name to write to
 std::string LogRotate::logFileName() {
     return pimpl_->logFileName();
