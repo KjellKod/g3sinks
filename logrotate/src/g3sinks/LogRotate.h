@@ -11,10 +11,10 @@
 
 #pragma once
 
+#include "g3sinksUtils.hpp"
+
 #include <string>
 #include <memory>
-
-#include "g3sinksUtils.hpp"
 
 struct LogRotateHelper;
 
@@ -32,6 +32,9 @@ class LogRotate {
 
     void save(std::string logEnty);
     std::string changeLogFile(const std::string& log_directory, const std::string& new_name="");
+    // Alternative method releaving C-string argument lifetime constraints:
+    g3::DltrStr changeLogFileNoJn(g3::DltrStr log_directory, g3::DltrStr new_name);
+    
     std::string logFileName();
     void setMaxArchiveLogCount(int max_size);
     int getMaxArchiveLogCount();
@@ -43,8 +46,6 @@ class LogRotate {
     void setMaxLogSize(int max_file_size_in_bytes);
     int getMaxLogSize();
 
-    // Alternative methods releaving C-string argument lifetime constraints:
-    g3::DltrStr changeLogFileNoJn(g3::DltrStr log_directory, g3::DltrStr new_name);
 
   private:
     std::unique_ptr<LogRotateHelper> pimpl_;

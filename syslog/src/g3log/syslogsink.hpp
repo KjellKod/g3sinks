@@ -26,10 +26,11 @@
  *
  */
 #pragma once
-#include <map>
-#include <string>
 
 #include "g3sinksUtils.hpp"
+
+#include <map>
+#include <string>
 
 namespace g3
 {
@@ -49,18 +50,18 @@ public:
     
     void setFormatter(LogDetailsFunc func) { _log_details_func = func; }
     void setLogHeader(const char* change) { _header = change; }
+    // Alternative method releaving C-string argument lifetime constraints:
+    void setLogHeaderNoJn(g3::DltrStr change) { _header = change.c_str(); }
     void echoToStderr(); // enables the Linux extension LOG_PERROR
 
     void setIdentity(const char* id) { _identity = id; }
+    // Alternative method releaving C-string argument lifetime constraints:
+    void setIdentityNoJn(g3::DltrStr id) { _identity = id.c_str(); }
     void setFacility(int facility) { _facility = facility; }
     void setOption(int option) { _option = option; }
     void setLevelMap(std::map<int, int> const& m);
 
     void setLevel(LogLevel level, int syslevel);
-
-    // Alternative methods releaving C-string argument lifetime constraints:
-    void setLogHeaderNoJn(g3::DltrStr change) { _header = change.c_str(); }
-    void setIdentityNoJn(g3::DltrStr id) { _identity = id.c_str(); }
     
 private:
     LogDetailsFunc _log_details_func;
