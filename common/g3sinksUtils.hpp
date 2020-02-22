@@ -38,18 +38,18 @@ public:
     // the deleter accompanies the memory block to enable it beeing freed in the library (using a different heap, as on Windows):
     DltrStr(const char * content) {
         size_t len = strlen(content);
-        _content = std::shared_ptr<char []>(new char[len + 1], [](char b[]){ delete[](b);} );
+        _content = std::shared_ptr<char>(new char[len + 1], [](char *b){ delete[](b);} );
         memcpy(_content.get(), content, len+1); };
         
     DltrStr(const std::string& content) {
         size_t len = content.length();
-        _content = std::shared_ptr<char []>(new char[len + 1], [](char b[]){ delete[](b);} );
+        _content = std::shared_ptr<char>(new char[len + 1], [](char *b){ delete[](b);} );
         memcpy(_content.get(), content.c_str(), len+1); };
         
     const char *c_str() {return _content.get();};
     
 private:
-    std::shared_ptr<char []> _content;
+    std::shared_ptr<char> _content;
 };
 
 }
