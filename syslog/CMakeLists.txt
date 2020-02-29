@@ -64,6 +64,7 @@ add_subdirectory(example)
 install(TARGETS g3log_syslog
 	EXPORT g3log_syslogTargets
 	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib
 	INCLUDES DESTINATION include)
 install(EXPORT g3log_syslogTargets
 	NAMESPACE G3::
