@@ -17,5 +17,5 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo uname -a; sudo sh scripts/.travis-bootstrap-ubuntu.sh; fi
 
 script:
-  - sh scripts/buildAndRunTests.sh
+  - bash scripts/buildAndRunTests.sh
 
