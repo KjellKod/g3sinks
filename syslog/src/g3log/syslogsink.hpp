@@ -28,7 +28,7 @@
 #pragma once
 #include <map>
 #include <string>
-
+#include <list>
 
 namespace g3
 {
@@ -50,7 +50,7 @@ public:
     void setLogHeader(const char* change) { _header = change; }
     void echoToStderr(); // enables the Linux extension LOG_PERROR
 
-    void setIdentity(const char* id) { _identity = id; }
+    void setIdentity(const char* id);
     void setFacility(int facility) { _facility = facility; }
     void setOption(int option) { _option = option; }
     void setLevelMap(std::map<int, int> const& m);
@@ -61,7 +61,7 @@ private:
     LogDetailsFunc _log_details_func;
     std::map<int, int> _levelMap;
 
-    std::string _identity; // syslog identity
+    std::list<std::string> _identity_list; // temp double buffer for syslog identity change
     int _facility; // syslog facility, defaults to LOG_USER
     int _option; // syslog options, defaults to LOG_PID
 
