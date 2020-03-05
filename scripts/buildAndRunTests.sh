@@ -5,16 +5,12 @@ pwd=`pwd`
 function usage () {
   echo "-h : display help & exit"
   echo "-skipg3log : skip building g3log"
-  echo "-skiptests : skip building & executing tests"
 }
 
 install_g3log=true
-do_tests=true
 while [ "$1" != "" ]; do
   case $1 in
     -skipg3log ) install_g3log=false
-                 ;;
-    -skiptests ) do_tests=false
                  ;;
     -h ) usage
          exit
@@ -56,27 +52,20 @@ fi
 cd $pwd
 mkdir build 
 
-if [ $do_tests == true ]; then
-  cd 3rdparty && unzip gtest-1.7.0.zip
-  cd $pwd
-  cd build && cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
-else
-  cd build && cmake ..
-fi
+cd 3rdparty && unzip gtest-1.7.0.zip
+cd $pwd
+cd build && cmake -DADD_LOGROTATE_UNIT_TEST=ON ..
 
 make -j
 echo "FINISHED BUILDING LOGROTATE & SYSLOG"
 
-if [ $do_tests == true ]; then
+cd $pwd
+cd build/logrotate/
+./UnitTestRunner
+echo "FINISHED LOGROTATE TESTS"
 
-  cd $pwd
-  cd build/logrotate/
-  ./UnitTestRunner
-  echo "FINISHED LOGROTATE TESTS"
+cd $pwd
+cd build/syslog/
+./example/syslog_g3log_example || true
+echo "FINISHED SYSLOG EXAMPLE"
 
-  cd $pwd
-  cd build/syslog/
-  ./example/syslog_g3log_example || true
-  echo "FINISHED SYSLOG EXAMPLE"
-
-fi
