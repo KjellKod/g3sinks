@@ -23,7 +23,15 @@ if (NOT TARGET g3logger)
 endif()
 
 # Target
-add_library(g3log_syslog STATIC src/syslogsink.cpp)
+IF(BUILD_STATIC)
+   add_library(g3log_syslog STATIC src/syslogsink.cpp)
+ELSE()
+   IF(NOT(CMAKE_VERSION LESS 3.4) AND MSVC)
+      set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+   ENDIF()
+   add_library(g3log_syslog SHARED src/syslogsink.cpp)
+ENDIF()
+
 target_include_directories(g3log_syslog 
     PRIVATE
       src
@@ -56,12 +64,13 @@ add_subdirectory(example)
 install(TARGETS g3log_syslog
 	EXPORT g3log_syslogTargets
 	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib
 	INCLUDES DESTINATION include)
 install(EXPORT g3log_syslogTargets
 	NAMESPACE G3::
 	DESTINATION lib/cmake
 	)
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks"
 	DESTINATION include
 	FILES_MATCHING
 	PATTERN *.h*
