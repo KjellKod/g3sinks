@@ -9,10 +9,6 @@ build_script:
 
     cd g3log
 
-    git fetch origin pull/312/head:pull/312
-
-    git checkout pull/312 
-
     mkdir build
 
     cd build
