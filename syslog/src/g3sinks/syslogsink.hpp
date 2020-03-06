@@ -28,7 +28,6 @@
 #pragma once
 #include <map>
 #include <string>
-#include <list>
 
 namespace g3
 {
