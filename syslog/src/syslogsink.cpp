@@ -18,6 +18,13 @@ void SyslogSink::setLevel(LogLevel level, int syslevel)
 void SyslogSink::echoToStderr()
 {
     _option |= LOG_PERROR;
+    ::openlog(_identity.get() -> c_str(), _option, _facility);
+}
+
+void SyslogSink::muteStderr()
+{
+    _option &= ~LOG_PERROR;
+    ::openlog(_identity.get() -> c_str(), _option, _facility);
 }
 
 void SyslogSink::setIdentity(const char* id)
@@ -26,13 +33,10 @@ void SyslogSink::setIdentity(const char* id)
 // syslog doesn't copy the identity string internally, it only keeps a pointer to the string.
 // We have to create a new string, then switch the pointer used by syslog, then
 // delete the previous string.
-// note that we have only one element in the list normally,
-// but here we need to insert a second one temporarily, as 
 // syslog's internal pointer must never point to an invalid memory location.
-_identity_list.push_front(std::string(id));
-::openlog(_identity_list.begin() -> c_str(), _option, _facility);
-// at this point syslog has a new valid string, we can remove the previous one:
-_identity_list.pop_back();
+auto new_identity = std::make_unique<std::string>(id);
+::openlog(new_identity.get() -> c_str(), _option, _facility);
+std::swap(_identity, new_identity);
 }
 
 // The actual log receiving function
@@ -40,7 +44,7 @@ void SyslogSink::syslog(LogMessageMover message)
 {
     if(_firstEntry)
     {
-        openlog(_identity_list.begin() -> c_str(), _option, _facility);
+        openlog(_identity.get() -> c_str(), _option, _facility);
         if(!_header.empty())
         {
             ::syslog(LOG_NOTICE, "%s", _header.c_str());
@@ -74,8 +78,7 @@ SyslogSink::SyslogSink(const char* identity)
     _levelMap[WARNING.value] = LOG_WARNING;
     _levelMap[FATAL.value] = LOG_CRIT;
     
-    _identity_list.push_front(std::string(identity));
-    
+    _identity = std::make_unique<std::string>(identity);
 }
 
 SyslogSink::~SyslogSink()

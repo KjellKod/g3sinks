@@ -49,7 +49,8 @@ public:
     void setFormatter(LogDetailsFunc func) { _log_details_func = func; }
     void setLogHeader(const char* change) { _header = change; }
     void echoToStderr(); // enables the Linux extension LOG_PERROR
-
+    void muteStderr(); // opposite of echoToStderr
+    
     void setIdentity(const char* id);
     void setFacility(int facility) { _facility = facility; }
     void setOption(int option) { _option = option; }
@@ -61,7 +62,7 @@ private:
     LogDetailsFunc _log_details_func;
     std::map<int, int> _levelMap;
 
-    std::list<std::string> _identity_list; // temp double buffer for syslog identity change
+    std::unique_ptr<std::string> _identity; // buffer for syslog identity change
     int _facility; // syslog facility, defaults to LOG_USER
     int _option; // syslog options, defaults to LOG_PID
 
