@@ -1,5 +1,5 @@
 #include "g3log/logmessage.hpp"
-#include "g3log/syslogsink.hpp"
+#include "g3sinks/syslogsink.hpp"
 #include <syslog.h>
 
 namespace g3
