@@ -5,4 +5,4 @@ option (BUILD_STATIC "Building sinks as static libraries. Linking with static g3
 
 add_subdirectory(syslog)
 add_subdirectory(logrotate)
-
+add_subdirectory(snippets)
