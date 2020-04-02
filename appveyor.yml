@@ -1,0 +1,28 @@
+image:
+  - Visual Studio 2017
+clone_folder: c:\projects\source
+build_script:
+- cmd: >-
+    cd c:\projects
+    
+    git clone https://github.com/KjellKod/g3log.git
+
+    cd g3log
+
+    mkdir build
+
+    cd build
+
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\usr\local -DCMAKE_INSTALL_PREFIX=c:\usr\local -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
+
+    cmake --build . --target INSTALL --config Release
+    
+    cd c:\projects\source\tracelogging
+
+    mkdir build
+
+    cd build
+
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\usr\local -DCMAKE_INSTALL_PREFIX=c:\usr\local -G "Visual Studio 15" ..
+
+    cmake --build . --target INSTALL --config Release

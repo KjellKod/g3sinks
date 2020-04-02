@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
-#include <g3log/syslogsink.hpp>
+#include <g3sinks/syslogsink.hpp>
 
 #include <g3log/loglevels.hpp>
 #ifdef DBUG
