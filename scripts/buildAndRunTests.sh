@@ -32,6 +32,7 @@ fi
 
 
 function install_g3log () {
+  rm -rf g3log-install g3log build
   mkdir g3log-install && cd g3log-install
   git clone https://github.com/KjellKod/g3log.git -b master
   cd g3log
