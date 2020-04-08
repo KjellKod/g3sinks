@@ -1,5 +1,5 @@
 # g3sinks
-Logging sinks to g3logger
+Logging sinks that integrates withg3logger
 
 #  Sinks
 Each sink will have its own LICENSE file. Make sure to understand what the sink provides
