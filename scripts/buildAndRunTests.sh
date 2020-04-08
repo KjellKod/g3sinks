@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 pwd=`pwd`
 
 function usage () {
@@ -70,9 +69,10 @@ cd build/syslog/
 ./example/syslog_g3log_example || true
 echo "FINISHED SYSLOG EXAMPLE"
 
-cd $pwd
-cd build/snippets/
-./g3log_snippets_file_example
-echo "FINISHED FILE DESCRIPTOR EXAMPLE"
-
+if [ "$(uname)" != "Darwin" ]; then
+   cd $pwd
+   cd build/snippets/
+   ./g3log_snippets_file_example
+   echo "FINISHED FILE DESCRIPTOR EXAMPLE"
+fi
 
