@@ -1,5 +1,5 @@
 # g3sinks
-sinks to g3logger
+Logging sinks for the [g3log](https://github.com/KjellKod/g3log) g3logger
 
 #  Sinks
 Each sink will have its own LICENSE file. Make sure to understand what the sink provides
