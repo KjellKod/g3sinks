@@ -1,5 +1,5 @@
 # g3sinks
-Logging sinks that integrates withg3logger
+Logging sinks to be used with [G3log](https://github.com/KjellKod/g3log)
 
 #  Sinks
 Each sink will have its own LICENSE file. Make sure to understand what the sink provides
