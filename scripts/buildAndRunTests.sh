@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 pwd=`pwd`
 
 function usage () {
@@ -32,6 +31,7 @@ fi
 
 
 function install_g3log () {
+  rm -rf g3log-install g3log build
   mkdir g3log-install && cd g3log-install
   git clone https://github.com/KjellKod/g3log.git -b master
   cd g3log
@@ -68,6 +68,7 @@ cd $pwd
 cd build/syslog/
 ./example/syslog_g3log_example || true
 echo "FINISHED SYSLOG EXAMPLE"
+
 
 cd $pwd
 cd build/snippets/

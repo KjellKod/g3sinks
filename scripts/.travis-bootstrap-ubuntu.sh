@@ -15,4 +15,4 @@ apt-get install -y gcc-7 g++-7
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 90
 update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90 
 apt-get install -y unzip zlib1g-dev
-apt-get install -y libboost-all-dev
+apt-get install -y libboost-all-dev libc6-dev

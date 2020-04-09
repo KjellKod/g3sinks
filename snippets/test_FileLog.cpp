@@ -1,14 +1,26 @@
 //
 // g++ test_FileLog.cpp -lg3logger -lpthread
 //
+#include "config.h"
+
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
 #include "FileLogSink.hpp"
 #include <iostream>
+
+#include <string.h>
+
+// the manpage of memfd_create says sys/mman.h, but the version of glibc
+// installed on travis has it in sys/memfd.h
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
+#ifdef HAVE_MMAN
 #include <sys/mman.h>
+#endif
+#ifdef HAVE_MEMFD
+#include <sys/memfd.h>
+#endif
 
 void content_to_stderr(int fd)
 {
@@ -28,9 +40,19 @@ do{
 
 int new_mem_fd(const char *name)
 {
-int fd = memfd_create(name, MFD_CLOEXEC);
+#ifdef MFD_CLOEXEC
+  int fd = memfd_create(name, MFD_CLOEXEC);
+#else
+  // emulate memfd with a file that we unlink immediately
+  std::cerr << "Emulating memfd_create() in " << __FILE__ << std::endl;
+  int fd = open(name,"w+");
+  if(unlink(name) != 0) {
+    std::cerr << "ERROR: unable to unlink " << name << " : " << strerror(errno) << std::endl;
+    exit(1);
+    }
+#endif
 if(fd == -1) {
-    std::cerr << "ERROR: unable to create a memory mapped file." << std::endl;
+    std::cerr << "ERROR: unable to create the file descriptor. " << strerror(errno) << std::endl;
     exit(1);
    }
 return fd;
