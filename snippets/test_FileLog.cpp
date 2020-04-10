@@ -9,6 +9,10 @@
 #include <iostream>
 
 #include <string.h>
+// for open(2):
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 // the manpage of memfd_create says sys/mman.h, but the version of glibc
 // installed on travis has it in sys/memfd.h
