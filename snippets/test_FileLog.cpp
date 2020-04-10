@@ -49,7 +49,7 @@ int new_mem_fd(const char *name)
 #else
   // emulate memfd with a file that we unlink immediately
   std::cerr << "Emulating memfd_create() in " << __FILE__ << std::endl;
-  int fd = open(name, O_RDWR);
+  int fd = open(name, O_RDWR| O_CREAT);
   if(unlink(name) != 0) {
     std::cerr << "ERROR: unable to unlink " << name << " : " << strerror(errno) << std::endl;
     exit(1);
