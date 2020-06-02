@@ -43,9 +43,6 @@ SET_TARGET_PROPERTIES(g3log_syslog PROPERTIES
                       LINKER_LANGUAGE CXX
                       OUTPUT_NAME g3log_syslog
                       CLEAN_DIRECT_OUTPUT 1
-                      CXX_STANDARD 14
-                      CXX_STANDARD_REQUIRED YES
-                      CXX_EXTENSIONS NO
                       ${g3log_syslogVersion}
                       )
 target_link_libraries(g3log_syslog PUBLIC g3logger)
