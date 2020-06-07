@@ -91,6 +91,7 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBOOST_ROOT=/usr/local -DBUILD_TEST=ON ..
 make -j
+```
 
 ### Executing the unit tests
 ```
