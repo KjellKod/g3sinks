@@ -83,7 +83,7 @@ The ZLIB library must be installed for the logrotate to be able to compress the 
 in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see your specific platform for details or go to the [zlib page](http://www.zlib.net/)
 
 
-### Building with unit tests added
+### Building with unit tests added using CMake option "-DBUILD_TEST=ON"
 ```
 cd g3sinks
 cd 3rdparty
@@ -92,7 +92,7 @@ cd ..
 cd logrotate
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBOOST_ROOT=/usr/local -DADD_LOGROTATE_UNIT_TEST=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBOOST_ROOT=/usr/local cmake -DBUILD_TEST=ON ..
 make -j
 ```
 
