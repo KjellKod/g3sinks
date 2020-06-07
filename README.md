@@ -97,6 +97,15 @@ make -j
 ./UnitTestRunneer
 ```
 
+### Executing all the unit tests and examples
+From the `build` directory after a successful make
+
+```
+cd .. // out to g3sinks root directory
+
+./scripts/buildAndRunTests.sh
+```
+
 ### Installing
 ```
 sudo make install
