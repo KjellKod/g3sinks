@@ -50,7 +50,7 @@ been tested on Cygwin.
 This component license is public domain, a.k.a the  UNLICENSE.
 See details at the sink [location](https://github.com/KjellKod/g3sinks/tree/master/logrotate).
 
-## g3sinks/tracelogging
+## Windows tracelogging
 sink to allow logging through Windows TraceLogging
 For build instructions please see [tracelogging/README](tracelogging/README.md)
 
