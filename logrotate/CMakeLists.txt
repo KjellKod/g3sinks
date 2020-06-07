@@ -123,9 +123,6 @@ SET_TARGET_PROPERTIES(${LIBRARY_TO_BUILD} PROPERTIES
                       LINKER_LANGUAGE CXX
                       OUTPUT_NAME ${LIBRARY_TO_BUILD}
                       CLEAN_DIRECT_OUTPUT 1
-                      CXX_STANDARD 14
-                      CXX_STANDARD_REQUIRED YES
-                      CXX_EXTENSIONS NO
                       SOVERSION ${VERSION}
                       )
 

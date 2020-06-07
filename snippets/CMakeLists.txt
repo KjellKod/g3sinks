@@ -27,9 +27,6 @@ cmake_minimum_required(VERSION 3.2 )
                          LINKER_LANGUAGE CXX
                          OUTPUT_NAME g3log_snippets_file_example
                          CLEAN_DIRECT_OUTPUT 1
-                         CXX_STANDARD 14
-                         CXX_STANDARD_REQUIRED YES
-                         CXX_EXTENSIONS NO
                          )
    target_include_directories(g3log_snippets_file_example PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
    target_link_libraries(g3log_snippets_file_example g3logger)
