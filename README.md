@@ -84,7 +84,7 @@ in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see
 
 
 ### Building with unit tests added using CMake option "-DBUILD_TEST=ON"
-```
+```bash
 cd g3sinks
 cd logrotate
 mkdir build
@@ -121,12 +121,12 @@ sudo dpkg -i g3LogRotate-<package_version>Linux.deb
 
 # G3log and Sink Usage Code Example
 Example usage where a logrotate sink is added. The logrotate limit is changed from the default to instead be 10MB. The limit is changed by calling the sink handler which passes the function call through to the actual logrotate sink object.
-```
+```cpp
 
 // main.cpp
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.h>
-#include <g3sinks/logrotate.hpp>
+#include <g3sinks/LogRotate.h>
 #include <memory>
 
 int main(int argc, char**argv) {
