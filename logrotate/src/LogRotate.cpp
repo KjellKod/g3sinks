@@ -88,3 +88,7 @@ void LogRotate::setMaxLogSize(int max_file_size) {
 int LogRotate::getMaxLogSize() {
    return pimpl_->getMaxLogSize();
 }
+
+bool LogRotate::rotateLog(){
+    return pimpl_->rotateLog();
+}
