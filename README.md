@@ -142,7 +142,7 @@ int main(int argc, char**argv) {
    // The call is asynchronously executed on your custom sink.
    const int k10MBInBytes = 10 * 1024 * 1024;
    std::future<void> received = sinkHandle->call(&LogRotate::setMaxLogSize, k10MBInBytes);
-   // call this if you want to rotate log in program manually 
+   // You can manually trigger a rotate of the log
    std::future<bool> rotate = sinkHandle->call(&LogRotate::rotateLog);
    // Run the main part of the application. This can be anything of course, in this example
    // we'll call it "RunApplication". Once this call exits we are in shutdown mode
