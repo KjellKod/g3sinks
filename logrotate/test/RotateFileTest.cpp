@@ -311,15 +311,15 @@ TEST_F(RotateFileTest, rotateLog) {
   };
   logrotate.save("test1");
   ASSERT_TRUE(checkIfExist("test1")) << "\n\tcontent:" << content;
-  auto name = std::string{_directory + _filename + ".log"};
-  EXPECT_TRUE(DoesFileEntityExist(name));
+  EXPECT_TRUE(DoesFileEntityExist(logfilename));
   logrotate.rotateLog();
   logrotate.save("test2");
+  ASSERT_FALSE(checkIfExist("test1")) << "\n\tcontent:" << content;
   ASSERT_TRUE(checkIfExist("test2")) << "\n\tcontent:" << content;
   auto app_name = _filename + ".log";
   logrotate.rotateLog();
   logrotate.save("test3");
   auto allFiles =
       LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-  EXPECT_EQ(allFiles.size(), size_t{2});
+  EXPECT_EQ(allFiles.size(), size_t{1});
 }
