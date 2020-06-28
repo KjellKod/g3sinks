@@ -1,8 +1,7 @@
 # CMakeList.txt : CMake project for g3log_tracelogging, include source and define
 # project specific logic here.
 #
-#g3log_tracelogging is a sink that enables logging through Microsoft TraceLogging
-#
+# g3log_tracelogging is a sink that enables logging through Microsoft TraceLogging
 # To build and install, run the following commands
 # 
 # cmake -DCMAKE_BUILD_TYPE=<Debug|Release> -DCMAKE_PREFIX_PATH=<path to install folder> -DCMAKE_INSTALL_PREFIX=<path to install folder> ..

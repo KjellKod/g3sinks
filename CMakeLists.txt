@@ -11,6 +11,9 @@ option (BUILD_TEST "Build the unit tests" ON)
 add_subdirectory(syslog)
 add_subdirectory(logrotate)
 add_subdirectory(snippets)
+if (MSVC)
+   add_subdirectory(tracelogging)
+endif()
 
 if(BUILD_TEST)
    # Download and unpack googletest at configure time
