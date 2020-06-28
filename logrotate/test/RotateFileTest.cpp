@@ -301,9 +301,9 @@ TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) { EXPECT_FALSE(true); }
 
 TEST_F(RotateFileTest, rotateLog) {
   LogRotate logrotate(_filename, _directory);
-  logfilename = logrotate.logFileName();
+  std::string logfilename = logrotate.logFileName();
   std::cout << logfilename << std::endl;
-  str::string content;
+  std::string content;
   auto checkIfExist = [&](std::string expected) -> bool {
     content = ReadContent(logfilename);
     bool exists = Exists(content, expected);
