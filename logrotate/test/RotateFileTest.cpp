@@ -303,7 +303,7 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
   LogRotate logrotate(_filename, _directory);
   logfilename = logrotate.logFileName();
   std::cout << logfilename << std::endl;
-  string content;
+  str::string content;
   auto checkIfExist = [&](std::string expected) -> bool {
     content = ReadContent(logfilename);
     bool exists = Exists(content, expected);
@@ -315,6 +315,7 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
   EXPECT_TRUE(DoesFileEntityExist(name));
   logrotate.rotateLog();
   logrotate.save("test2");
+  ASSERT_FALSE(checkIfExist("test2")) << "\n\tcontent:" << content;
   auto app_name = _filename + ".log";
   auto allFiles =
       LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
