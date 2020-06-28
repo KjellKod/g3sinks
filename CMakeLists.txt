@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2 )
 
 project(g3sink CXX)
 
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option (BUILD_STATIC "Building sinks as static libraries. Linking with static g3log library" OFF)

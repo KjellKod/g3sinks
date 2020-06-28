@@ -56,20 +56,11 @@ cd build && cmake -DBUILD_TEST=ON ..
 make -j
 echo "FINISHED BUILDING LOGROTATE & SYSLOG"
 
-cd $pwd
-cd build/logrotate/
-./UnitTestRunner
-echo "FINISHED LOGROTATE TESTS"
-
-cd $pwd
-cd build/syslog/
-./example/syslog_g3log_example || true
+./logrotate/UnitTestRunner
+./syslog/example/syslog_g3log_example || true
 echo "FINISHED SYSLOG EXAMPLE"
 
-
-cd $pwd
-cd build/snippets/
-./g3log_snippets_file_example
+./snippets/g3log_snippets_file_example
 echo "FINISHED FILE DESCRIPTOR EXAMPLE"
 
 

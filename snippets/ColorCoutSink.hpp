@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <g3log/logmessage.hpp>
 
 struct ColorCoutSink {
@@ -13,7 +14,6 @@ struct ColorCoutSink {
      if (level.value == WARNING.value) { return YELLOW; }
      if (level.value == DEBUG.value) { return GREEN; }
      if (g3::internal::wasFatal(level)) { return RED; }
-
      return WHITE;
   }
   
@@ -21,8 +21,12 @@ struct ColorCoutSink {
      auto level = logEntry.get()._level;
      auto color = GetColor(level);
 
-     std::cout << "\033[" << color << "m" 
-       << logEntry.get().toString() << "\033[m" << std::endl;
+     std::ostringstream oss;
+     oss << "\033[" << color << "m" << logEntry.get().toString() << "\033[m" << std::endl;
+     std::cout << oss.str().c_str();
+     
+     // back to white
+     std::cout << "\033[" << color << "m"  << "\033[m";
   }
 };
 
@@ -34,8 +38,8 @@ struct ColorCoutSink {
 int main() {
    using namespace g3;
    std::unique_ptr<LogWorker> logworker {LogWorker::createLogWorker()};
-   auto sinkHandle = logworker->addSink(std::make_unique<CustomSink>(),
-                                     &CustomSink::ReceiveLogMessage);
+   auto sinkHandle = logworker->addSink(std::make_unique<ColorCoutSink>(),
+                                     &ColorCoutSink::ReceiveLogMessage);
 
  ... continuation
 */
