@@ -299,7 +299,7 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
 
 TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) { EXPECT_FALSE(true); }
 
-TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
+TEST_F(RotateFileTest, rotateLog) {
   LogRotate logrotate(_filename, _directory);
   logfilename = logrotate.logFileName();
   std::cout << logfilename << std::endl;
