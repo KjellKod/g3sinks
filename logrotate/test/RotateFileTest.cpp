@@ -317,6 +317,7 @@ TEST_F(RotateFileTest, rotateLog) {
   logrotate.save("test2");
   ASSERT_TRUE(checkIfExist("test2")) << "\n\tcontent:" << content;
   auto app_name = _filename + ".log";
+  logrotate.rotateLog();
   auto allFiles =
       LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
   EXPECT_EQ(allFiles.size(), size_t{2});
