@@ -17,10 +17,8 @@ IF (BUILD_TEST)
    set_target_properties(UnitTestRunner PROPERTIES COMPILE_DEFINITIONS "GTEST_HAS_RTTI=0")
 
    IF (MSVC)
-      target_link_libraries(UnitTestRunner ${LIBRARY_TO_BUILD} ${g3logger} gtest_main dbghelp ${PLATFORM_LINK_LIBRIES})
+     TARGET_LINK_LIBRARIES(UnitTestRunner ${LIBRARY_TO_BUILD} ${g3logger} gtest_main dbghelp ${PLATFORM_LINK_LIBRIES})
    ELSE()
-      SET(CMAKE_CXX_FLAGS "-Wall -Wno-sign-compare -rdynamic -Wunused -std=c++14 -pthread -D_GLIBCXX_USE_NANOSLEEP")
-       
       TARGET_LINK_LIBRARIES(UnitTestRunner ${LIBRARY_TO_BUILD} ${g3logger} gtest_main ${PLATFORM_LINK_LIBRIES})
    ENDIF() 
 ELSE() 

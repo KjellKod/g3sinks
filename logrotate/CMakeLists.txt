@@ -70,14 +70,14 @@ INCLUDE (${LogRotate_SOURCE_DIR}/Options.cmake)
  ENDIF()
 
 
-find_library(G3LOG_LIBRARY g3logger PATHS /usr/local/probe/lib )
+find_library(G3LOG_LIBRARY g3logger PATHS /usr/local/lib )
 include_directories(${CMAKE_PREFIX_PATH}/include)
 
 
-find_library(BOOST_FILESYSTEM boost_filesystem PATHS /usr/local/probe/lib ${BOOST_ROOT})
+find_library(BOOST_FILESYSTEM boost_filesystem PATHS /usr/local/lib ${BOOST_ROOT})
 set(Boost_LIBRARIES ${BOOST_FILESYSTEM})
 
-find_library(BOOST_SYSTEM boost_system PATHS /usr/local/probe/lib ${BOOST_ROOT} )
+find_library(BOOST_SYSTEM boost_system PATHS /usr/local/lib ${BOOST_ROOT} )
 list(APPEND Boost_LIBRARIES ${BOOST_SYSTEM})
 include_directories(${Boost_INCLUDE_DIRS})
 

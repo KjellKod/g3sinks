@@ -1,4 +1,4 @@
-#!/bin/bash
+#o!/bin/bash
 set -e
 
 if [[ $# -ne 2 ]] ; then
@@ -16,7 +16,7 @@ PACKAGE=g3logrotate
 PWD=`pwd`
 CWD=$PWD/$PACKAGE
 DISTDIR=$CWD/dist/$PACKAGE
-PATH=$PATH:/usr/local/probe/bin:$PATH
+PATH=$PATH:/usr/local/bin:$PATH
 
 rm -rf ~/rpmbuild
 rpmdev-setuptree
