@@ -27,4 +27,7 @@ build_script:
     
     cmake --build . --target INSTALL --config Release
     
+    dir
+    
+   
     tracelogging/example/g3log_tracelogging_example.exe   
