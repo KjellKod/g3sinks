@@ -168,3 +168,5 @@ if(NOT_SUBPROJECT)
   endif(G3LOG_TRACELOGGING_INSTALL_DOCS)
 
 endif(NOT_SUBPROJECT)
+
+add_subdirectory(example)
