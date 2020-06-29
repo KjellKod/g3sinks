@@ -29,5 +29,15 @@ build_script:
     
     dir
     
+    cd Release
+    
+    dir
+    
+    cd example
+    
+    dir
+    
+    g3log_tracelogging_example.exe 
+    
    
     tracelogging/example/g3log_tracelogging_example.exe   
