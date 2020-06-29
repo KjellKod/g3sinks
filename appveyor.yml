@@ -28,12 +28,26 @@ build_script:
     cmake --build . --target INSTALL --config Release
     
     dir
+   
+    cd ..
     
-    cd Release
+    dir 
+    
+    cd example
+    
+    dir 
+    
+    mkdir build
+    
+    cd build
+    
+    cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15" ..
+    
+    cmake --build . --config Release
     
     dir
     
-    cd example
+    cd Release
     
     dir
     
