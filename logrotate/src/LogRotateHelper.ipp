@@ -28,6 +28,9 @@
 #include <iostream>
 #include <sstream>
 #include "g3sinks/LogRotateUtility.h"
+#if __cplusplus > 201402L
+#include <filesystem>
+#endif
 
 
 using namespace LogRotateUtility;
@@ -99,9 +102,15 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
       std::cerr << "g3log: forced abort due to illegal log prefix [" << log_prefix << "]" << std::endl;
       abort();
    }
-
-   auto logfile = changeLogFile(log_directory, log_prefix_backup_);
-   assert((nullptr != outptr_) && "cannot open log file at startup");
+   #if __cplusplus > 201402L
+         namespace fs = std::filesystem;
+         fs::path log_dir_path = fs::path(log_directory);
+         if (!fs::exists(log_dir_path)){
+           fs::create_directories(log_dir_path);
+         }
+    #endif
+    auto logfile = changeLogFile(log_directory, log_prefix_backup_);
+    assert((nullptr != outptr_) && "cannot open log file at startup");
 }
 
 /**
@@ -208,6 +217,13 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
  * @return
  */
 bool LogRotateHelper::rotateLog() {
+   #if __cplusplus > 201402L
+      namespace fs = std::filesystem;
+      fs::path log_file_path = fs::path(log_file_with_path_);
+      if (!fs::exists(log_file_path)){
+        return false;
+      }
+   #endif
    std::ofstream& is(filestream());
    if (is.is_open()) {
       is << std::flush;
