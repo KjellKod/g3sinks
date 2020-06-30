@@ -79,3 +79,8 @@ void LogRotate::flush(){
 void LogRotate::setMaxLogSize(int max_file_size) {
     pimpl_->setMaxLogSize(max_file_size);
 }
+
+bool LogRotate::rotateLog() {
+    return pimpl_->rotateLog();
+}
+

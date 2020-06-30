@@ -279,12 +279,26 @@ TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) {
    EXPECT_FALSE(true);
 }
 
-
-
-
-// test to implement (and did actually not exist in vrecan/g2log-dev or elsewhere)
-// =====================
-// changeLogFile
-// logFileName
-// setMaxArchiveLogCount
-// setMaxLogSizeru
+TEST_F(RotateFileTest, rotateLog) {
+LogRotate logrotate(_filename, _directory);
+   std::string logfilename = logrotate.logFileName();
+   std::cout << logfilename << std::endl;
+   std::string content;
+   auto checkIfExist = [&](std::string expected) -> bool {
+      content = ReadContent(logfilename);
+      bool exists = Exists(content, expected);
+      return exists;
+   };
+   logrotate.save("test1");
+   ASSERT_TRUE(checkIfExist("test1")) << "\n\tcontent:" << content;
+   EXPECT_TRUE(DoesFileEntityExist(logfilename));
+   logrotate.rotateLog();
+   logrotate.save("test2");
+   ASSERT_FALSE(checkIfExist("test1")) << "\n\tcontent:" << content;
+   ASSERT_TRUE(checkIfExist("test2")) << "\n\tcontent:" << content;
+   auto app_name = _filename + ".log";
+   logrotate.rotateLog();
+   logrotate.save("test3");
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
+   EXPECT_EQ(allFiles.size(), size_t{1});
+}
