@@ -103,12 +103,10 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, newFileName + ".log");
-   EXPECT_EQ(allFiles.size(), 1)
-         << "direc: " << _directory << ", name: " << newFileName << std::endl;
+   EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << newFileName << std::endl;
    const int kFilePathIndex = 1;
    for (auto p : allFiles) {
-      std::cout << "to remove: " << _directory + std::get<kFilePathIndex>(p)
-                << std::endl;
+      std::cout << "to remove: " << _directory + std::get<kFilePathIndex>(p) << std::endl;
       _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
    }
 }
