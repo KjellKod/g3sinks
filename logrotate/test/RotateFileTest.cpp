@@ -1,22 +1,22 @@
 /** ==========================================================================
-* 2015 by KjellKod.cc
-*
-* This code is PUBLIC DOMAIN to use at your own risk and comes
-* with no warranties. This code is yours to share, use and modify with no
-* strings attached and no restrictions or obligations.
-* ============================================================================*
-* PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
-* ********************************************* */
+ * 2015 by KjellKod.cc
+ *
+ * This code is PUBLIC DOMAIN to use at your own risk and comes
+ * with no warranties. This code is yours to share, use and modify with no
+ * strings attached and no restrictions or obligations.
+ * ============================================================================*
+ * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
+ * ********************************************* */
 
 #include "RotateFileTest.h"
-#include "g3sinks/LogRotate.h"
-#include "g3sinks/LogRotateWithFilter.h"
-#include <iostream>
 #include <cerrno>
-#include <cstring>
 #include <chrono>
+#include <cstring>
+#include <iostream>
 #include "RotateTestHelper.h"
+#include "g3sinks/LogRotate.h"
 #include "g3sinks/LogRotateUtility.h"
+#include "g3sinks/LogRotateWithFilter.h"
 using namespace RotateTestHelper;
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
@@ -25,7 +25,6 @@ using namespace RotateTestHelper;
 #include <unistd.h>
 #endif
 
-
 TEST_F(RotateFileTest, CreateObject) {
    std::string logfilename;
    {
@@ -33,14 +32,11 @@ TEST_F(RotateFileTest, CreateObject) {
       logfilename = logrotate.logFileName();
       std::cout << logfilename << std::endl;
       logrotate.save("test");
-   } // RAII flush of log
+   }  // RAII flush of log
    auto name = std::string{_directory + _filename + ".log"};
-   int check = access(name.c_str(), F_OK); // check that the file exists
+   int check = access(name.c_str(), F_OK);  // check that the file exists
    EXPECT_EQ(check, 0) << std::strerror(errno) << " : " << name;
 }
-
-
-
 
 TEST_F(RotateFileTest, ChangeLogFile) {
    std::string logfilename;
@@ -60,12 +56,10 @@ TEST_F(RotateFileTest, ChangeLogFile) {
       EXPECT_NE(expected_newname, newname);
       EXPECT_EQ(logfilename, newname);
 
-
       newname = logrotate.changeLogFile(_directory, "some_new_file");
       EXPECT_EQ(expected_newname, newname);
 
-   } // RAII flush of log
-
+   }  // RAII flush of log
 }
 
 TEST_F(RotateFileTest, setMaxLogSize) {
@@ -77,7 +71,6 @@ TEST_F(RotateFileTest, setMaxLogSize) {
    std::string first_message_in_new_log = "first message";
    logrotate.save(first_message_in_new_log);
 
-
    auto content = ReadContent(logfilename);
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
@@ -87,7 +80,6 @@ TEST_F(RotateFileTest, setMaxLogSize) {
 }
 
 TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
-
    std::string newFileName = "new_sink_name";
    LogRotate logrotate(_filename, _directory);
 
@@ -110,7 +102,6 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
    exists = Exists(content, first_message_in_new_log);
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 
-
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, newFileName + ".log");
    EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << newFileName << std::endl;
    const int kFilePathIndex = 1;
@@ -118,8 +109,6 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
       std::cout << "to remove: " << _directory + std::get<kFilePathIndex>(p) << std::endl;
       _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
    }
-
-
 }
 
 TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
@@ -147,7 +136,6 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
    EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << _filename;
 }
 
-
 namespace {
    void RotateAndExpireOldLogs(std::string filename, std::string directory, bool changeLogFile = false) {
       LogRotate logrotate(filename, directory);
@@ -162,7 +150,6 @@ namespace {
       std::string gone{"Soon to be missing words"};
       logrotate.save(gone);
       logrotate.setMaxLogSize(static_cast<int>(gone.size()));
-
 
       for (size_t idx = 0; idx < 15; ++idx) {
          std::string first_message_in_new_log = "message #" + std::to_string(idx);
@@ -179,13 +166,12 @@ namespace {
          std::this_thread::sleep_for(std::chrono::seconds(1));
       }
    }
-} // anonymous namespace
+}  // anonymous namespace
 
 TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    RotateAndExpireOldLogs(_filename, _directory);
    auto app_name = _filename + ".log";
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-
 
    const int kFilePathIndex = 1;
    for (auto p : allFiles) {
@@ -193,21 +179,17 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    }
 
    EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
-
 }
 
 TEST_F(RotateFileTest, rotateAndExpireOldLogsWithoutTrailingSlashForDirectory) {
-   auto filename = _filename.substr(0, _filename.size() - 1); // remove the trailing '/'
+   auto filename = _filename.substr(0, _filename.size() - 1);  // remove the trailing '/'
    RotateAndExpireOldLogs(_filename, _directory);
    auto app_name = _filename + ".log";
    std::cout << "dire: " << _directory << std::endl;
    std::cout << "app: " << app_name << std::endl;
    auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
    EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
-
 }
-
-
 
 TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
    LogRotate logrotate(_filename, _directory);
@@ -215,7 +197,7 @@ TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
 
    for (size_t i = 0; i < 10; ++i) {
       std::string msg{"message: "};
-      msg +=  std::to_string(i) + "\n";
+      msg += std::to_string(i) + "\n";
       logrotate.save(msg);
       auto content = ReadContent(logfilename);
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
@@ -263,12 +245,11 @@ TEST_F(RotateFileTest, setFlushPolicy__every_third_write) {
    ASSERT_FALSE(checkIfExist("msg2")) << "\n\tcontent:" << content;
 
    logrotate.save("msg3\n");
-   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;  // 3rd write flushes it + previous
 
    logrotate.save("msg4\n");
    ASSERT_FALSE(checkIfExist("msg4")) << "\n\tcontent:" << content;
 }
-
 
 TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
    LogRotate logrotate(_filename, _directory);
@@ -291,14 +272,35 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
 
    logrotate.save("msg3\n");
    logrotate.flush();
-   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+   ASSERT_TRUE(checkIfExist("msg3")) << "\n\tcontent:" << content;  // 3rd write flushes it + previous
 
    logrotate.save("msg4\n");
    logrotate.flush();
-   ASSERT_TRUE(checkIfExist("msg4")) << "\n\tcontent:" << content;   // 3rd write flushes it + previous
+   ASSERT_TRUE(checkIfExist("msg4")) << "\n\tcontent:" << content;  // 3rd write flushes it + previous
 }
 
+TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) { EXPECT_FALSE(true); }
 
-TEST_F(RotateFileTest, DISABLED_setMaxArchiveLogCount) {
-   EXPECT_FALSE(true);
+TEST_F(RotateFileTest, rotateLog) {
+   LogRotate logrotate(_filename, _directory);
+   std::string logfilename = logrotate.logFileName();
+   std::cout << logfilename << std::endl;
+   std::string content;
+   auto checkIfExist = [&](std::string expected) -> bool {
+      content = ReadContent(logfilename);
+      bool exists = Exists(content, expected);
+      return exists;
+   };
+   logrotate.save("test1");
+   ASSERT_TRUE(checkIfExist("test1")) << "\n\tcontent:" << content;
+   EXPECT_TRUE(DoesFileEntityExist(logfilename));
+   logrotate.rotateLog();
+   logrotate.save("test2");
+   ASSERT_FALSE(checkIfExist("test1")) << "\n\tcontent:" << content;
+   ASSERT_TRUE(checkIfExist("test2")) << "\n\tcontent:" << content;
+   auto app_name = _filename + ".log";
+   logrotate.rotateLog();
+   logrotate.save("test3");
+   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
+   EXPECT_EQ(allFiles.size(), size_t{1});
 }
