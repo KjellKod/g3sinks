@@ -33,6 +33,8 @@ class LogRotate {
     void save(std::string logEnty);
     std::string changeLogFile(const std::string& log_directory, const std::string& new_name="");
     std::string logFileName();
+
+    // After hitting the max, the oldest compressed log file will be deleted
     void setMaxArchiveLogCount(int max_size);
     int getMaxArchiveLogCount();
     
@@ -40,6 +42,8 @@ class LogRotate {
     void flush();
 
 
+    // After max_file_size_in_bytes the next log entry will trigger log 
+    // compression to a gz file and log entries will start fresh
     void setMaxLogSize(int max_file_size_in_bytes);
     int getMaxLogSize();
 
@@ -47,7 +51,6 @@ class LogRotate {
 
   private:
     std::unique_ptr<LogRotateHelper> pimpl_;
-
 };
 
 

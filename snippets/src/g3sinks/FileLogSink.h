@@ -4,8 +4,15 @@
 #include <unistd.h>
 #include <cstring>
 
-namespace g3{
+#include "g3sinks/FileLogSinkDefines.h"
 
+/**
+* A simple file logger, with the specificity that it logs to an open 
+file descriptor passed by the user. This may solve specific corner cases 
+where only file descriptors are available. Ex: log to shared memory 
+(fd returned by memfd_create()). Or when file opening may be tricky, 
+for example in a [setuid process](http://www.cis.syr.edu/~wedu/Teaching/cis643/LectureNotes_New/Race_Condition.pdf).
+*/
 class FileLogSink {
 public:
   FileLogSink(int fileDesc, bool close_by_sink): fd(fileDesc), Close_fd(close_by_sink) {};
@@ -33,4 +40,3 @@ private:
     int fd;
     bool Close_fd;
 };
-} // g3
