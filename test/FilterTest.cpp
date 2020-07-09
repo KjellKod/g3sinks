@@ -8,12 +8,12 @@
 * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
 * ********************************************* */
 
-#include "FilterTest.h"
-#include "g3sinks/LogRotateWithFilter.h"
 #include <iostream>
 #include <cerrno>
-
 #include <memory>
+
+#include "FilterTest.h"
+#include <g3sinks/LogRotateWithFilter.h>
 #include "RotateTestHelper.h"
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)

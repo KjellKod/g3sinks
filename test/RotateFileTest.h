@@ -31,7 +31,7 @@ class RotateFileTest : public ::testing::Test {
    virtual void SetUp() {
       _filename = "g3sink_rotatefile_test";
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-      _directory = "./"
+      _directory = "./";
 #else
       _directory = "/tmp/";
 #endif

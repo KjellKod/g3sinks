@@ -1,0 +1,63 @@
+# ==========================================================================
+# 2020 by KjellKod.cc. This is PUBLIC DOMAIN to use at your own risk and comes
+# with no warranties. This code is yours to share, use and modify with no
+# strings attached and no restrictions or obligations.
+#
+# For more information see g3sinks/LICENSE or refer refer to
+# http://unlicense.org
+# ============================================================================*/
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES
+                                           "Darwin")
+  if(NOT CPACK_PACKAGING_INSTALL_PREFIX)
+    if(NOT CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+      set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+    else()
+      set(CPACK_PACKAGING_INSTALL_PREFIX /usr/local)
+    endif()
+  endif()
+endif()
+
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+set(CPACK_PACKAGE_NAME g3sinks)
+set(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
+set(CPACK_PACKAGE_VERSION_MINOR ${MINOR_VERSION})
+set(CPACK_PACKAGE_VERSION_PATCH ${BUILD_NUMBER})
+set(CPACK_PACKAGE_DESCRIPTION
+    "Asynchronous 'crash safe' logger
+    License: http://unlicense.org
+    Repository: https://github.com/KjellKod/g3sinks")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${CPACK_PACKAGE_DESCRIPTION})
+set(CPACK_PACKAGE_CONTACT "Kjell Hedstrom hedstrom@kjellkoc.cc")
+set(CPACK_RESOURCE_FILE_LICENSE ${g3sinks_SOURCE_DIR}/LICENSE)
+set(CPACK_PACKAGE_VENDOR "KjellKod")
+
+set(CPACK_COMPONENTS_ALL libraries headers)
+set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "g3sinks libraries")
+set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "g3sinks C++ headers")
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  set(CPACK_GENERATOR "DEB")
+  set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KjellKod - Kjell Hedstrom")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  set(CPACK_GENERATOR "ZIP") # Otherwise, NSIS is needed.
+endif()
+
+message(STATUS "===== Installation locations =====")
+message(STATUS "==================================")
+message(
+  STATUS
+    "Headers: ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/g3sinks"
+)
+message(
+  STATUS
+    "Library installation directory: ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+)
+
+# NOTE: to change installation locations you can use the settings below
+# examples: CPACK_PACKAGING_INSTALL_PREFIX CPACK_OUTPUT_FILE_PREFIX
+# CMAKE_INSTALL_PREFIX
+
+include(CPack)
