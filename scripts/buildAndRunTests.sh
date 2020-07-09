@@ -30,16 +30,21 @@ if [ $curdir != "g3sinks" ]; then
 fi
 
 
+# Travis list libraries in case of an update
+# ls -alh /usr/lib/x86_64-linux-gnu/ || true 
+# ls -alh /usr/local/lib || true
+
 function install_g3log () {
   rm -rf g3log-install g3log build
   mkdir g3log-install && cd g3log-install
-  git clone https://github.com/KjellKod/g3log.git -b master
+  # TEMPORARY normally this should be master
+  git clone https://github.com/KjellKod/g3log.git
   cd g3log
   mkdir -p  build_travis
   cd build_travis
-  cmake  -DADD_G3LOG_UNIT_TEST=ON ..
+  cmake -DADD_G3LOG_UNIT_TEST=OFF -DG3_SHARED_LIB=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local -DCMAKE_INSTALL_PREFIX=/usr/local ..
   make -j && sudo make install
-  }
+}
 
 if [ "$install_g3log" == true ]; then
   install_g3log
@@ -50,26 +55,11 @@ fi
 # Build g3sinks
 cd $pwd
 mkdir build 
+cd build 
+cmake -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=/usr/local -DCMAKE_INSTALL_PREFIX=/usr/local  .. 
+cmake --build . 
+ctest -V 
+sudo make install
 
-cd build && cmake -DBUILD_TEST=ON ..
-
-make -j
-echo "FINISHED BUILDING LOGROTATE & SYSLOG"
-
-cd $pwd
-cd build/logrotate/
-./UnitTestRunner
-echo "FINISHED LOGROTATE TESTS"
-
-cd $pwd
-cd build/syslog/
-./example/syslog_g3log_example || true
-echo "FINISHED SYSLOG EXAMPLE"
-
-
-cd $pwd
-cd build/snippets/
-./g3log_snippets_file_example
-echo "FINISHED FILE DESCRIPTOR EXAMPLE"
-
+# TODO KjellKod:  run all examples
 

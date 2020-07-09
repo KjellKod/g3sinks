@@ -29,50 +29,48 @@
 #include <map>
 #include <string>
 
-namespace g3
-{
+namespace g3 {
 
-struct LogMessage;
-    
-class SyslogSink
-{
-public:
-    using LogLevel = LEVELS;
-    using LogDetailsFunc = std::string (*) (const LogMessage&);
-    
-    SyslogSink(const char* identity = "g3log");
-    virtual ~SyslogSink();
+   struct LogMessage;
 
-    void syslog(LogMessageMover message);
-    
-    void setFormatter(LogDetailsFunc func) { _log_details_func = func; }
-    void setLogHeader(const char* change) { _header = change; }
-    void echoToStderr(); // enables the Linux extension LOG_PERROR
-    void muteStderr(); // opposite of echoToStderr
-    
-    void setIdentity(const char* id);
-    void setFacility(int facility) { _facility = facility; }
-    void setOption(int option) { _option = option; }
-    void setLevelMap(std::map<int, int> const& m);
+   class SyslogSink {
+    public:
+      using LogLevel = LEVELS;
+      using LogDetailsFunc = std::string (*) (const LogMessage&);
 
-    void setLevel(LogLevel level, int syslevel);
+      SyslogSink(const char* identity = "g3log");
+      virtual ~SyslogSink();
 
-private:
-    LogDetailsFunc _log_details_func;
-    std::map<int, int> _levelMap;
+      void syslog(LogMessageMover message);
 
-    std::unique_ptr<std::string> _identity; // buffer for syslog identity change
-    int _facility; // syslog facility, defaults to LOG_USER
-    int _option; // syslog options, defaults to LOG_PID
+      void setFormatter(LogDetailsFunc func) { _log_details_func = func; }
+      void setLogHeader(const char* change) { _header = change; }
+      void echoToStderr(); // enables the Linux extension LOG_PERROR
+      void muteStderr(); // opposite of echoToStderr
 
-    std::string _header; // Written when logging starts
-    bool _firstEntry; // notices that logging starts ...
+      void setIdentity(const char* id);
+      void setFacility(int facility) { _facility = facility; }
+      void setOption(int option) { _option = option; }
+      void setLevelMap(std::map<int, int> const& m);
 
-    void openLog();
+      void setLevel(LogLevel level, int syslevel);
 
-    SyslogSink& operator=(SyslogSink const&) = delete;
-    SyslogSink(SyslogSink const& other) = delete;
-    int priority(LogLevel level);
-};
+    private:
+      LogDetailsFunc _log_details_func;
+      std::map<int, int> _levelMap;
+
+      std::unique_ptr<std::string> _identity; // buffer for syslog identity change
+      int _facility; // syslog facility, defaults to LOG_USER
+      int _option; // syslog options, defaults to LOG_PID
+
+      std::string _header; // Written when logging starts
+      bool _firstEntry; // notices that logging starts ...
+
+      void openLog();
+
+      SyslogSink& operator=(SyslogSink const&) = delete;
+      SyslogSink(SyslogSink const& other) = delete;
+      int priority(LogLevel level);
+   };
 
 }

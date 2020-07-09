@@ -1,82 +1,75 @@
-
-cmake_minimum_required(VERSION 3.2 )
-project(g3log_syslog VERSION 0.1.0)
+project(g3syslog)
 
 # search for syslog.h
-include(CheckIncludeFile)
-check_include_file("syslog.h" HAVE_SYSLOG_H)
-if(NOT ${HAVE_SYSLOG_H})
-	message(FATAL_ERROR "Could not find syslog.h.")
-endif()
-
-# search for g3log
-find_package(g3logger REQUIRED)
-# add the missing target if needed
-if (NOT TARGET g3logger)
-    add_library(g3logger SHARED IMPORTED)
-    find_package(Threads REQUIRED)
-    set_target_properties(g3logger PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${G3LOG_INCLUDE_DIRS}"
-        IMPORTED_LOCATION "${G3LOG_LIBRARY}"
-        IMPORTED_LINK_INTERFACE_LIBRARIES  Threads::Threads
-        )
+verifySyslogDependencies(SYSLOG_SINK_ERROR) 
+if (SYSLOG_SINK_ERROR)
+   message(FATAL_ERROR "${SYSLOG_SINK_ERROR}")
 endif()
 
 # Target
-IF(BUILD_STATIC)
-   add_library(g3log_syslog STATIC src/syslogsink.cpp)
-ELSE()
-   IF(NOT(CMAKE_VERSION LESS 3.4) AND MSVC)
+if(CHOICE_BUILD_STATIC)
+   add_library(g3syslog STATIC src/syslogsink.cpp)
+else()
+   if(MSVC)
       set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-   ENDIF()
-   add_library(g3log_syslog SHARED src/syslogsink.cpp)
-ENDIF()
+   endif()
+   add_library(g3syslog SHARED src/syslogsink.cpp)
+endif()
 
-target_include_directories(g3log_syslog 
+include_directories(${G3LOG_INCLUDE_DIRS})
+
+target_include_directories(g3syslog 
     PRIVATE
       src
     INTERFACE
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
       $<INSTALL_INTERFACE:include>
     )
-SET_TARGET_PROPERTIES(g3log_syslog PROPERTIES 
+set_target_properties(g3syslog PROPERTIES 
                       LINKER_LANGUAGE CXX
-                      OUTPUT_NAME g3log_syslog
+                      OUTPUT_NAME g3syslog
                       CLEAN_DIRECT_OUTPUT 1
-                      ${g3log_syslogVersion}
+                      ${g3syslogVersion}
                       )
-target_link_libraries(g3log_syslog PUBLIC g3logger)
-TARGET_COMPILE_FEATURES(g3log_syslog PUBLIC cxx_variable_templates)
+target_link_libraries(g3syslog PUBLIC ${G3LOG_LIBRARY})
 
-target_include_directories(g3log_syslog
+if (UNIX)
+   target_compile_options(g3syslog PRIVATE )
+endif()
+
+target_include_directories(g3syslog
     PRIVATE "src/"
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>    
     )
 
-add_subdirectory(example)
+# INSTALLATION 
+# ===================================================
+install(TARGETS 
+           g3syslog
+	      EXPORT 
+            g3syslogTargets
+	      ARCHIVE DESTINATION lib
+	      LIBRARY DESTINATION lib
+	      INCLUDES DESTINATION include)
 
-# Installation
-install(TARGETS g3log_syslog
-	EXPORT g3log_syslogTargets
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
-	INCLUDES DESTINATION include)
-install(EXPORT g3log_syslogTargets
+install(EXPORT g3syslogTargets
 	NAMESPACE G3::
-	DESTINATION lib/cmake
+	DESTINATION lib/cmake/g3sinks
 	)
+
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks"
 	DESTINATION include
 	FILES_MATCHING
 	PATTERN *.h*
 	)
+
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("g3log_syslogVersion.cmake"
-	VERSION ${g3log_syslogVersion}
+write_basic_package_version_file("g3syslogVersion.cmake"
+	VERSION ${VERSION}
 	COMPATIBILITY AnyNewerVersion
 	)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/g3log_syslogVersion.cmake"
-	DESTINATION lib/cmake
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/g3syslogVersion.cmake"
+	DESTINATION lib/cmake/g3sinks
 	)
