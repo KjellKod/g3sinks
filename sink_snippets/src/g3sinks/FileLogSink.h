@@ -31,8 +31,8 @@ public:
   
   void ReceiveLogMessage(g3::LogMessageMover logEntry) {
      std::string data = logEntry.get().toString();
-     write(fd, data.c_str(), strlen(data.c_str()) );
-     write(fd, "\n", 2 );
+     auto ignored = write(fd, data.c_str(), strlen(data.c_str()) );
+     ignored = write(fd, "\n", 2 );
    }
   
   void sync() {fsync(fd);};

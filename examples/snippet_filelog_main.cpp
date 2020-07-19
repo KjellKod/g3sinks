@@ -4,6 +4,12 @@
 
 
 
+// the manpage of memfd_create says sys/mman.h, but the version of glibc
+// installed on travis has it in sys/memfd.h
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
 #include "g3sinks/FileLogSink.h"
@@ -15,11 +21,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-// the manpage of memfd_create says sys/mman.h, but the version of glibc
-// installed on travis has it in sys/memfd.h
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
+
 #ifdef HAVE_MMAN
 #include <sys/mman.h>
 #endif
