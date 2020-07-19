@@ -2,10 +2,7 @@ project(g3snippets)
 
 # HEADER ONLY INSTALLATIONS FOR SIMPLE SNIPPET LOGGING SINKS
 verifyfilelogdependencies(FILE_LOG_SINK_ERROR)
-if(NOT FILE_LOG_SINK_ERROR)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/FileLogSinkDefines.h.in
-                 ${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks)
-else()
+if(FILE_LOG_SINK_ERROR)
   message(WARNING "${FILE_LOG_SINK_ERROR}")
   set(FILELOG_EXCLUDE_FILE "FileLogSink.h")
 endif()

@@ -34,11 +34,6 @@ function(verifyFileLogDependencies VARNAME)
     list(APPEND FileLogSinkError "Could not locate sys/mman.h")
   endif()
 
-  find_file(MEMFD_H sys/memfd.h PATHS ${MMMAN_DIR})
-  if(NOT MEMFD_H)
-    list(APPEND FileLogSinkError " Could not locate sys/memfd.h. FileLogSink [sink, test, example] will not be built")
-  endif()
-
   if(FileLogSinkError)
     set(${VARNAME}
         "${FileLogSinkError}"

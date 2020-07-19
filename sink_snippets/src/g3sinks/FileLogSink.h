@@ -1,10 +1,11 @@
 #pragma once
+// seemingly this is not needed
+// #define _GNU_SOURCE
+
 #include <g3log/logmessage.hpp>
 #include <string>
 #include <unistd.h>
 #include <cstring>
-
-#include "g3sinks/FileLogSinkDefines.h"
 
 /**
 * A simple file logger, with the specificity that it logs to an open 
