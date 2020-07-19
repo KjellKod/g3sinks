@@ -13,8 +13,8 @@ int main() {
       g3::initializeLogging(logworker.get());
       auto sinkHandle = logworker->addSink(std::make_unique<ColorCoutSink>(),
                                            &ColorCoutSink::ReceiveLogMessage);
-
-      LOG(DEBUG) << "A DEBUG message in green";
+ 
+      LOG(G3LOG_DEBUG) << "A DEBUG message in green";
       LOG(INFO) << "An INFO message in white";
       LOG(WARNING) << "A WARNING message will be in yellow";
 #if 0

@@ -2,7 +2,7 @@
 project(test)
 
 if (CHOICE_SINK_LOGROTATE)
-   include_directories(${G3LOG_INCLUDE_DIR} ${g3sinks_SOURCE_DIR}/logrotate/src)
+   include_directories(${G3LOG_INCLUDE_DIR} ${g3sinks_SOURCE_DIR}/sink_logrotate/src)
    set(LOGROTATE_TEST_FILES FilterTest.cpp RotateFileTest.cpp RotateTestHelper.cpp)
    add_executable(test_logrotate ${TEST_MAIN} ${LOGROTATE_TEST_FILES})
    target_link_libraries(

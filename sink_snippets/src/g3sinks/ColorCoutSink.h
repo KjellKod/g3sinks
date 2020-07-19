@@ -12,7 +12,7 @@ struct ColorCoutSink {
 
    FG_Color GetColor(const LEVELS level) const {
       if (level.value == WARNING.value) { return YELLOW; }
-      if (level.value == DEBUG.value) { return GREEN; }
+      if (level.value == DBUG.value) { return GREEN; }
       if (g3::internal::wasFatal(level)) { return RED; }
 
       return WHITE;

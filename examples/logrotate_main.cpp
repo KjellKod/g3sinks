@@ -54,7 +54,7 @@ int main() {
       auto logRotatePtr = std::make_unique<LogRotate>(filteredFileLog, directory);
       logRotatePtr->setMaxLogSize(maxBytesBeforeRotatingFile);
       // for the filterd log rotate we want to ignore all DEBUG LOG calls
-      std::vector<LEVELS> filterOut = {DEBUG};
+      std::vector<LEVELS> filterOut = {G3LOG_DEBUG};
       auto filteredRotateSinkHandle = logworker->addSink(std::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filterOut),
                                       &LogRotateWithFilter::save);
 
@@ -63,7 +63,7 @@ int main() {
       // is with 1s granularity. That's fine for this test example.
       for (int i = 0; i < 100; ++i) {
          LOG(INFO) << infoMsg << i ; // this will go to only the normal log
-         LOG(DEBUG) << debugMsg << i;
+         LOG(G3LOG_DEBUG) << debugMsg << i;
       }
    } // the logger will exit, all queues are flushed and log entries are pushed to disk before it exits
    using namespace RotateTestHelper; // borrowed from the unit tests

@@ -15,7 +15,7 @@ include(Version.cmake)
 include(CTest)
 
 # globals
-set(LOGRATATE_INCLUDE_DIR ${g3sinks_SOURCE_DIR}/logrotate/src)
+set(LOGRATATE_INCLUDE_DIR ${g3sinks_SOURCE_DIR}/sink_logrotate/src)
 set(TEST_MAIN ${g3sinks_SOURCE_DIR}/3rdparty/test_main.cpp)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -44,7 +44,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
                                          ${CMAKE_INSTALL_PREFIX})
 else()
   # APPLE and WIN32 use find_package library"
-  find_package(g3log)
+  find_package(G3LOG)
   message(
     "g3log package:
         found: ${G3LOG_FOUND}
@@ -68,7 +68,7 @@ message("g3log include should be: ${G3LOG_INCLUDE_DIRS}")
 # =============================
 # logrotate, logrotatewithfilter
 if(CHOICE_SINK_LOGROTATE)
-  add_subdirectory(logrotate)
+  add_subdirectory(sink_logrotate)
 endif()
 
 # Linux, OSX: syslog
@@ -78,27 +78,14 @@ if(CHOICE_SINK_SYSLOG)
     message(STATUS "${SYSLOG_SINK_ERROR}")
   else()
     message(STATUS "syslog.h is found. Building g3syslog")
-    add_subdirectory(syslog)
+    add_subdirectory(sink_syslog)
   endif()
 endif()
 
 # Linux, OSX so far but more snippets for windows should be added 
 if(CHOICE_SINK_SNIPPETS)
   # header only sinks that are simple
-  add_subdirectory(snippets)
-endif()
-
-# KjellKod TODO add_subdirectory(tracelogging)
-if(CHOICE_SINK_TRACELOG)
-  if(WIN32)
-    verifyTraceloggingDependencies(TRACELOGGING_SINK_ERROR)
-    if(TRACELOGGING_SINK_ERROR)
-      message(STATUS ${TRACELOGGING_SINK_ERROR})
-    else()
-      # header only sinks that are simple
-      add_subdirectory(tracelogging)
-    endif()
-  endif()
+  add_subdirectory(sink_snippets)
 endif()
 
 # Setup TEST and EXAMPLES
@@ -146,7 +133,8 @@ message(
                 make install
 
             Windows:
-                cmake -DCMAKE_BUILD_TYPE=Release -CDHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\\Local -DCMAKE_INSTALL_PREFIX=c:\\Local ..
+                # regardless of your VS version make sure to specify the 64 or 32 bit - it should be the same target platform for g3log of course
+                cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -CDHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH="c:\\Local" -DCMAKE_INSTALL_PREFIX="c:\\Local" ..
                 # to just build it and run tests
                 cmake --build . --config Release
                 # Unfortunately locating the DLL is a pain on Windows.
