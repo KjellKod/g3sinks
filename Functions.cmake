@@ -34,11 +34,6 @@ function(verifyFileLogDependencies VARNAME)
     list(APPEND FileLogSinkError "Could not locate sys/mman.h")
   endif()
 
-  find_file(MEMFD_H sys/memfd.h PATHS ${MMMAN_DIR})
-  if(NOT MEMFD_H)
-    list(APPEND FileLogSinkError " Could not locate sys/memfd.h")
-  endif()
-
   if(FileLogSinkError)
     set(${VARNAME}
         "${FileLogSinkError}"
@@ -66,10 +61,13 @@ endfunction()
 # ... syslog is available, start using it.
 function(verifyTraceloggingDependencies VARNAME)
 include(CheckIncludeFileCXX)
+if(WIN32)
+   set (CMAKE_REQUIRED_INCLUDES "C:/Program Files (x86)/Windows Kits/*/Include/*/shared")
+endif()
 check_include_file_cxx("TraceLoggingProvider.h" HAVE_TRACELOGGINGPROVIDER_H)
   if(NOT HAVE_TRACELOGGINGPROVIDER_H)
     set(${VARNAME}
-        "Could not find TraceLoggingProvider. g3tracelogging [sink, test,example] will not be built"
+        "Could not find TraceLoggingProvider. g3logTracelogging [sink, test,example] will not be built"
         PARENT_SCOPE)
   endif()
 endfunction()

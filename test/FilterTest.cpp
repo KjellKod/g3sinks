@@ -22,10 +22,6 @@
 #include <unistd.h>
 #endif
 
-#if (defined(CHANGE_G3LOG_DEBUG_TO_DBUG))
-#define DEBUG DBUG
-#endif
-
 using namespace RotateTestHelper;
 
 namespace { // anonymous
@@ -77,7 +73,7 @@ TEST_F(FilterTest, NothingFiltered) {
         auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
         filterSinkPtr->save(message0);
 
-        auto message1 = CREATE_LOG_ENTRY(DEBUG, "Hello D World");
+        auto message1 = CREATE_LOG_ENTRY(G3LOG_DEBUG, "Hello D World");
         filterSinkPtr->save(message1);
 
         auto message2 = CREATE_LOG_ENTRY(WARNING, "Hello W World");
@@ -98,11 +94,11 @@ TEST_F(FilterTest, NothingFiltered) {
 
 TEST_F(FilterTest, FilteredAndNotFiltered) {
     {
-        auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {DEBUG, INFO, WARNING, FATAL});
+        auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {G3LOG_DEBUG, INFO, WARNING, FATAL});
         auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
         filterSinkPtr->save(message0);
         
-        auto message1 = CREATE_LOG_ENTRY(DEBUG, "Hello D World");
+        auto message1 = CREATE_LOG_ENTRY(G3LOG_DEBUG, "Hello D World");
         filterSinkPtr->save(message1);
 
         auto message2 = CREATE_LOG_ENTRY(WARNING, "Hello W World");

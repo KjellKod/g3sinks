@@ -15,11 +15,10 @@ build_script:
 
     cd build
 
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
+    cmake -DCMAKE_BUILD_TYPE=Release -DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON  ..
 
     cmake --build . --target INSTALL --config Release
     
-
     mkdir ZLib
 
     cd Zlib 
@@ -38,7 +37,6 @@ build_script:
 
     cmake --build . --target INSTALL --config Release
 
-
     set PATH=c:\\Libraries\\bin;%PATH%
 
     cd c:\projects\source\
@@ -47,7 +45,7 @@ build_script:
 
     cd build 
 
-    cmake -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..    
+    cmake -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
 
     cmake --build . --target INSTALL --config Release
 
@@ -58,3 +56,14 @@ build_script:
     cpack -C Release
 
     ctest -V
+
+
+# Us this for validation after changes: https://ci.appveyor.com/tools/validate-yaml
+
+# Lazy safe, using this for running it local
+# cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Local -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Local -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON ..
+
+
+# Lazy safe, using this for running it local
+# cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCHOICE_SINK_LOGROTATE=OFF -DCHOICE_SINK_SYSLOG=OFF -DCMAKE_PREFIX_PATH=c:\Local -DCMAKE_INSTALL_PREFIX=c:\Local  ..
+

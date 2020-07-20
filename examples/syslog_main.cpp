@@ -9,11 +9,6 @@
 #include "g3sinks/syslogsink.hpp"
 
 
-#ifdef DBUG
-// const LEVELS DBUG{G3LOG_DEBUG.value+1, "DBUG"}; // defined already, ref g3log cmake build options
-#else
-const LEVELS DBUG {G3LOG_DEBUG.value + 1, "DBUG"};
-#endif
 // const LEVELS INFO {INFO.value + 1, {"INFO"}}; // defined already
 const LEVELS NOTE {(INFO.value + WARNING.value) / 2, {"NOTE"}};
 const LEVELS WARN{WARNING.value, {"WARN"}};
@@ -73,7 +68,7 @@ int main(int argc, char** argv) {
       LOG_IF(INFO, 1 != 2) << "Turns out that 1 != 2";
 
       // Custom levels
-      LOG(DBUG) << "debug level log";
+      LOG(G3LOG_DEBUG) << "debug level log";
       LOG(INFO) << "info level log";
       LOG(NOTE) << "Notice level log";
       LOG(WARN) << "Warning level log";
