@@ -1,6 +1,7 @@
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
 #include <g3log/loglevels.hpp>
+#include <g3log/std2_make_unique.hpp>
 #include <iomanip>
 #include <thread>
 #include <iostream>
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
    using namespace g3;
    {
       // Example of adjusting settings
-      auto sink = std::make_unique<g3::SyslogSink>("g3syslog");
+      auto sink = std2::make_unique<g3::SyslogSink>("g3syslog");
       sink->setFormatter(&sysFormat);
       sink->echoToStderr();
 

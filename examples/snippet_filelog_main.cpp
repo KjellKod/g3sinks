@@ -13,6 +13,7 @@
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
 #include "g3sinks/FileLogSink.h"
+#include <g3log/std2_make_unique.hpp>
 #include <iostream>
 
 #include <string.h>
@@ -66,7 +67,7 @@ int new_mem_fd(const char* name) {
 int main(int argc, char** argv) {
    int fd1 = new_mem_fd("memfile_1");
    std::unique_ptr<g3::LogWorker> logworker{ g3::LogWorker::createLogWorker() };
-   auto sinkHandle = logworker->addSink(std::make_unique<FileLogSink>(fd1, false),
+   auto sinkHandle = logworker->addSink(std2::make_unique<FileLogSink>(fd1, false),
                                         &FileLogSink::ReceiveLogMessage);
 
    initializeLogging(logworker.get());
