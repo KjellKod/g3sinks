@@ -7,7 +7,7 @@ build_script:
 - cmd: >-
     cd c:\projects
 
-    git clone https://github.com/KjellKod/g3log.git 
+    git clone -b c++11-master https://github.com/KjellKod/g3log.git 
 
     cd g3log
 
