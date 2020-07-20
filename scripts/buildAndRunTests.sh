@@ -38,7 +38,7 @@ function install_g3log () {
   rm -rf g3log-install g3log build
   mkdir g3log-install && cd g3log-install
   # TEMPORARY normally this should be master
-  git clone https://github.com/KjellKod/g3log.git
+  git clone -b c++11-master https://github.com/KjellKod/g3log.git
   cd g3log
   mkdir -p  build_travis
   cd build_travis
