@@ -1,3 +1,0 @@
-
-#cmakedefine HAVE_MMAN
-#cmakedefine HAVE_MEMFD
