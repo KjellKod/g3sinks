@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #include <windows.h> // Defines macros used by TraceLoggingProvider.h
 #include <TraceLoggingProvider.h>  // The native TraceLogging API

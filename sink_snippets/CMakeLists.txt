@@ -12,11 +12,11 @@ if (NOT WIN32)
    set(COLOREDCOUT_EXCLUDE_FILE "ColoredCoutSink.h")
 endif() 
 
-# verifyTraceloggingDependencies(TRACELOGGING_SINK_ERROR)
-# if(TRACELOGGING_SINK_ERROR)
-#   message(WARNING "${TRACELOGGING_SINK_ERROR}")
-#   set(TRACELOGGING_EXCLUDE_FILE "g3logtracelogging.h")
-# endif()
+verifyTraceloggingDependencies(TRACELOGGING_SINK_ERROR)
+if(TRACELOGGING_SINK_ERROR)
+  message(WARNING "${TRACELOGGING_SINK_ERROR}")
+  set(TRACELOGGING_EXCLUDE_FILE "g3logtracelogging.h")
+endif()
 
 
 # HEADER ONLY INSTALLATION
