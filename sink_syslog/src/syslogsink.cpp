@@ -1,5 +1,6 @@
 #include "g3log/logmessage.hpp"
 #include "g3sinks/syslogsink.hpp"
+#include <g3log/std2_make_unique.hpp>
 #include <syslog.h>
 
 namespace g3 {
@@ -28,7 +29,7 @@ namespace g3 {
       // We have to create a new string, then switch the pointer used by syslog, then
       // delete the previous string.
       // syslog's internal pointer must never point to an invalid memory location.
-      auto new_identity = std::make_unique<std::string>(id);
+      auto new_identity = std2::make_unique<std::string>(id);
       ::openlog(new_identity.get() -> c_str(), _option, _facility);
       std::swap(_identity, new_identity);
    }
@@ -66,7 +67,7 @@ namespace g3 {
       _levelMap[WARNING.value] = LOG_WARNING;
       _levelMap[FATAL.value] = LOG_CRIT;
 
-      _identity = std::make_unique<std::string>(identity);
+      _identity = std2::make_unique<std::string>(identity);
    }
 
    SyslogSink::~SyslogSink() {

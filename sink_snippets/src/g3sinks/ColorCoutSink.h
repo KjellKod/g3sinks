@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <g3log/logmessage.hpp>
+#include <g3log/std2_make_unique.hpp>
 
 // NOTE: This works only on Linux/OSX
 // TODO KjellKod: For Windows terminals you can tweak this easily: https://stackoverflow.com/a/4053879/1066879
@@ -49,7 +50,7 @@ int main() {
    {
       std::unique_ptr<LogWorker> logworker {LogWorker::createLogWorker()};
       g3::initializeLogging(logworker.get());
-      auto sinkHandle = logworker->addSink(std::make_unique<ColorCoutSink>(),
+      auto sinkHandle = logworker->addSink(std2::make_unique<ColorCoutSink>(),
                                            &ColorCoutSink::ReceiveLogMessage);
 
       LOG(DEBUG) << "A DEBUG message in green";

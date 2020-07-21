@@ -1,5 +1,6 @@
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
+#include <g3log/std2_make_unique.hpp>
 #include <iostream>
 #include "g3sinks/ColorCoutSink.h"
 
@@ -11,7 +12,7 @@ int main() {
    {
       std::unique_ptr<LogWorker> logworker {LogWorker::createLogWorker()};
       g3::initializeLogging(logworker.get());
-      auto sinkHandle = logworker->addSink(std::make_unique<ColorCoutSink>(),
+      auto sinkHandle = logworker->addSink(std2::make_unique<ColorCoutSink>(),
                                            &ColorCoutSink::ReceiveLogMessage);
  
       LOG(G3LOG_DEBUG) << "A DEBUG message in green";

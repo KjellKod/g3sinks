@@ -7,6 +7,7 @@
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
 #include <g3log/loglevels.hpp>
+#include <g3log/std2_make_unique.hpp>
 #include <iostream>
 #include "RotateTestHelper.h" // borrowed from the unit tests
 #include "g3sinks/LogRotate.h"
@@ -43,7 +44,7 @@ int main() {
 
       // ------------ RotateSink
       size_t maxBytesBeforeRotatingFile = 1000;
-      auto rotateSinkHandle = logworker->addSink(std::make_unique<LogRotate>(rotateFileLog, directory),
+      auto rotateSinkHandle = logworker->addSink(std2::make_unique<LogRotate>(rotateFileLog, directory),
                               &LogRotate::save);
       // change the max file size so we hit it easily
       rotateSinkHandle->call(&LogRotate::setMaxLogSize, maxBytesBeforeRotatingFile).wait();
@@ -51,11 +52,11 @@ int main() {
       // --------------- Filtered RotateSink --------
       // internally the filtered sink uses a normal LogRotate
       std::string filteredFileLog = "filtered_rotate_file_test";
-      auto logRotatePtr = std::make_unique<LogRotate>(filteredFileLog, directory);
+      auto logRotatePtr = std2::make_unique<LogRotate>(filteredFileLog, directory);
       logRotatePtr->setMaxLogSize(maxBytesBeforeRotatingFile);
       // for the filterd log rotate we want to ignore all DEBUG LOG calls
       std::vector<LEVELS> filterOut = {G3LOG_DEBUG};
-      auto filteredRotateSinkHandle = logworker->addSink(std::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filterOut),
+      auto filteredRotateSinkHandle = logworker->addSink(std2::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filterOut),
                                       &LogRotateWithFilter::save);
 
 

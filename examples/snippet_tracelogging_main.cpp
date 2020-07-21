@@ -4,6 +4,7 @@
 #include <g3log/logworker.hpp>
 #include <g3sinks/g3logtracelogging.h>
 #include <g3log/loglevels.hpp>
+#include <g3log/std2_make_unique.hpp>
 #include <iostream>
 
 
@@ -22,7 +23,7 @@ int main(HINSTANCE, HINSTANCE, PWSTR, int) {
       TraceLoggingRegister(traceProvider);
       using namespace g3;
       std::unique_ptr<LogWorker> logworker{ LogWorker::createLogWorker() };
-      auto sinkHandle = logworker->addSink(std::make_unique<g3logTracelogging>(),
+      auto sinkHandle = logworker->addSink(std2::make_unique<g3logTracelogging>(),
                                            &g3logTracelogging::ReceiveLogMessage);
 
       // initialize the logger before it can receive LOG calls

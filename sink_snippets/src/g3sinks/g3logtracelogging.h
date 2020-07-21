@@ -5,6 +5,7 @@
 
 
 #include <g3log/logmessage.hpp>
+#include <g3log/std2_make_unique.hpp>
 
 TRACELOGGING_DECLARE_PROVIDER(traceProvider);
 
@@ -32,7 +33,7 @@ TRACELOGGING_DEFINE_PROVIDER(
 TraceLoggingRegister(traceProvider);
 using namespace g3;
 std::unique_ptr<LogWorker> logworker{ LogWorker::createLogWorker() };
-auto sinkHandle = logworker->addSink(std::make_unique<g3logTracelogging>(),
+auto sinkHandle = logworker->addSink(std2::make_unique<g3logTracelogging>(),
   &g3Tracelogging::ReceiveLogMessage);
 
 // initialize the logger before it can receive LOG calls
