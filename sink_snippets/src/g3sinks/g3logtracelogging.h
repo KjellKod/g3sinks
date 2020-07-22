@@ -1,4 +1,8 @@
 #pragma once
+// TraceView command line interface
+// https://docs.microsoft.com/en-us/windows-hardware/drivers/devtest/traceview-control-commands?redirectedfrom=MSDN
+// Windows SDK contains the TraceView : https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
+
 
 #include <windows.h> // Defines macros used by TraceLoggingProvider.h
 #include <TraceLoggingProvider.h>  // The native TraceLogging API
