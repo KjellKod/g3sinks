@@ -163,7 +163,7 @@ int main(int argc, char**argv) {
 
 
 # Say Thanks
-These sinks for the g3logger are available for free and all of its source code is public domain.  A great way of saying thanks is to send a donation. It would go a long way not only to show your support but also to boost continued development.
+These sinks for g3log are available for free and all of its source code is public domain.  A great way of saying thanks is to send a donation. It would go a long way not only to show your support but also to boost continued development.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/g3log/25)
 
