@@ -226,7 +226,7 @@ bool LogRotateHelper::rotateLog() {
       }
       changeLogFile(log_directory_);
       std::ostringstream ss;
-      ss << "Log rotated Archived file name: " << gz_file_name.str().c_str();
+      ss << "Log rotated Archived file name: " << gz_file_name.str().c_str() << "\n";
       fileWriteWithoutRotate(ss.str());
       ss.clear();
       ss.str("");
