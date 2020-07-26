@@ -20,7 +20,10 @@ TRACELOGGING_DEFINE_PROVIDER(
 int main(HINSTANCE, HINSTANCE, PWSTR, int) {
    {
       std::cout << "Starting the tracelogging example. The events can be viewed with Windows 'Event Viewer' " << std::endl;
-      TraceLoggingRegister(traceProvider);
+      auto x = TraceLoggingRegister(traceProvider);
+      if (x != ERROR_SUCCESS) {
+         std::cout << "unexpected result fropm registration, return value was: " << x << std::endl;
+      }
       using namespace g3;
       std::unique_ptr<LogWorker> logworker{ LogWorker::createLogWorker() };
       auto sinkHandle = logworker->addSink(std2::make_unique<g3logTracelogging>(),
