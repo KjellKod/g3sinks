@@ -86,7 +86,6 @@ in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see
 ### Building with unit tests added using CMake option "-DBUILD_TEST=ON"
 ```bash
 cd g3sinks
-cd logrotate
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBOOST_ROOT=/usr/local -DBUILD_TEST=ON ..
