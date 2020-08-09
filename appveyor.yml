@@ -65,5 +65,5 @@ build_script:
 
 
 # Lazy safe, using this for running it local
-# cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCHOICE_SINK_LOGROTATE=OFF -DCHOICE_SINK_SYSLOG=OFF -DCMAKE_PREFIX_PATH=c:\Local -DCMAKE_INSTALL_PREFIX=c:\Local  ..
+# cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCHOICE_logrotate=OFF -DCHOICE_syslog=OFF -DCMAKE_PREFIX_PATH=c:\Local -DCMAKE_INSTALL_PREFIX=c:\Local  ..
 

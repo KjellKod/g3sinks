@@ -42,7 +42,7 @@ daemon recieved the message, not the time it was created.  You can include the c
 in your record via the formatter. The setFormatter() function accepts a function pointer of the 
 type `std::string (*) (const LogMessage&)` to handle the formatting.
 
-An example program is at `sink_syslog/example/main.cpp`.
+An example program is at `syslog/example/main.cpp`.
 
 The syslog sink should work out of the box on Linux systems without additional dependencies.  It has not 
 been tested on Cygwin.
@@ -55,7 +55,7 @@ sink to allow logging through Windows TraceLogging
 For build instructions please see [tracelogging/README](tracelogging/README.md)
 
 # Snippets
-[Code snippet examples and a short description](sink_snippets/README.markdown). These are not installed but can 
+[Code snippet examples and a short description](snippets/README.markdown). These are not installed but can 
 be used as helpful examples on how to create your custom sinks
 
 # More ...

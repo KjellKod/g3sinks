@@ -15,7 +15,7 @@ include(Version.cmake)
 include(CTest)
 
 # globals
-set(LOGRATATE_INCLUDE_DIR ${g3sinks_SOURCE_DIR}/sink_logrotate/src)
+set(LOGRATATE_INCLUDE_DIR ${g3sinks_SOURCE_DIR}/logrotate/src)
 set(TEST_MAIN ${g3sinks_SOURCE_DIR}/3rdparty/test_main.cpp)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -67,35 +67,71 @@ message("g3log include should be: ${G3LOG_INCLUDE_DIRS}")
 # Logging Sinks
 # =============================
 # logrotate, logrotatewithfilter
-if(CHOICE_SINK_LOGROTATE)
-  add_subdirectory(sink_logrotate)
+if(CHOICE_logrotate)
+  add_subdirectory(g3logrotate)
 endif()
 
 # Linux, OSX: syslog
-if(CHOICE_SINK_SYSLOG)
-  verifySyslogDependencies(SYSLOG_SINK_ERROR)
-  if(SYSLOG_SINK_ERROR)
-    message(STATUS "${SYSLOG_SINK_ERROR}")
-  else()
-    message(STATUS "syslog.h is found. Building g3syslog")
-    add_subdirectory(sink_syslog)
-  endif()
-endif()
+#if(CHOICE_syslog)
+#  verifySyslogDependencies(SYSLOG_SINK_ERROR)
+#  if(SYSLOG_SINK_ERROR)
+#    message(STATUS "${SYSLOG_SINK_ERROR}")
+#  else()
+#    message(STATUS "syslog.h is found. Building g3syslog")
+#    add_subdirectory(syslog)
+#  endif()
+#endif()
 
 # Linux, OSX so far but more snippets for windows should be added 
-if(CHOICE_SINK_SNIPPETS)
-  # header only sinks that are simple
-  add_subdirectory(sink_snippets)
-endif()
+#if(CHOICE_snippets)
+#  # header only sinks that are simple
+#  add_subdirectory(snippets)
+#endif()
 
 # Setup TEST and EXAMPLES
-if(CHOICE_BUILD_TESTS)
-  add_subdirectory(test)
-endif()
+#if(CHOICE_BUILD_TESTS)
+#  add_subdirectory(test)
+#endif()
 
-if(CHOICE_BUILD_EXAMPLES)
-  add_subdirectory(examples)
-endif()
+#if(CHOICE_BUILD_EXAMPLES)
+#  add_subdirectory(examples)
+#endif()
+
+
+# ================== Setup Installation ============================
+
+install(
+  EXPORT g3sinksTargets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/g3sinks
+  NAMESPACE g3sinks::
+  FILE g3sinksTargets.cmake 
+  )
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file( 
+  "Config.cmake.in" 
+  "g3sinksConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/g3sinks
+  PATH_VARS
+    CMAKE_INSTALL_LIBDIR
+  )
+
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/g3sinksConfigVersion.cmake
+  VERSION 1.0.0
+  COMPATIBILITY SameMajorVersion
+  )
+
+### Install Config and ConfigVersion files
+install(
+  FILES "${CMAKE_CURRENT_BINARY_DIR}/g3sinksConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/g3sinksConfigVersion.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/g3sinks"
+  )
+
+
+
+
 
 message(
   STATUS
@@ -120,60 +156,5 @@ message(
 dump_cmake_variables(CHOICE)
 message(STATUS "===============================")
 
-message(
-  STATUS
-    "\n
-  ======== INSTALLATION =========
-  ===============================
-      CMake build and install example from: g3sinks/build directory
-
-            OSX/Linux:
-                cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local -DCMAKE_INSTALL_PREFIX=/usr/local ..
-                cmake --build . --config Release
-                make install
-
-            Windows:
-                # regardless of your VS version make sure to specify the 64 or 32 bit - it should be the same target platform for g3log of course
-                cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -CDHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH="c:\\Local" -DCMAKE_INSTALL_PREFIX="c:\\Local" ..
-                # to just build it and run tests
-                cmake --build . --config Release
-                # Unfortunately locating the DLL is a pain on Windows.
-                # Make sure the PATH to g3log and boost, zlib, etc are set.
-                # In the example above the dlls for g3log and zlib exists in c:\\Local\\bin
-                set PATH=c:\\Local\\bin;%PATH%
-                cmake test -V
-                # to build and install it
-                cmake --build . --target INSTALL --config Release
-
-      create installation package 
-              All platforms: cpack -C Release 
-              OSX/Linux: make package 
-
-      install after \"make package\"
-              OSX:   sh g3sinks-2.1.0-Darwin.sh
-              Linux: sudo dpkg -i g3sinks-***Linux.deb
-              Windows:
-
-      Remove options:
-              OSX:
-              Linux: sudo dpkg -r g3sinks
-              Windows:
-
-      View installation targets:
-            OSX: tar -ztvf g3sinks-2.1.0-Darwin.tar.gz
-            Linux: sudo dpkg --contents g3sinks-***Linux.deb
-            Windows:
-
-      Run tests:
-              ctest
-              ctest -V
-              
-              # OSX/Linux For ctest with color set 'GTEST_COLOR=1'
-              GTEST_COLOR=1 ctest -V
-              make test
-
-      Run examples:
-             cmake examples
-  ===============================\n\n")
-
-include(CPackLists.txt)
+# include (HelpMessage.cmake)
+#include(CPackLists.txt)
