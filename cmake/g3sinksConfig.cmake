@@ -26,10 +26,10 @@ if (NOT TARGET g3sinks)
    get_target_property(G3SINKS_LIBRARY_DEBUG g3sinks IMPORTED_IMPLIB_DEBUG)
    
    if (G3SINKS_LIBRARY_DEBUG MATCHES ".*-NOTFOUND")
-      get_target_property(G3SINKS_LIBRARY_DEBUG g3sinks IMPORTED_LOCATION_DEBUG)
+      get_target_property(G3SINKS_LIBRARY_DEBUG g3sinks g3logrotate IMPORTED_LOCATION_DEBUG)
    endif ()
 
-   get_target_property(G3SINKS_LIBRARY_RELEASE g3sinks IMPORTED_IMPLIB_RELEASE)
+   get_target_property(G3SINKS_LIBRARY_RELEASE g3sinks g3logrotate IMPORTED_IMPLIB_RELEASE)
    if (G3SINKS_LIBRARY_RELEASE MATCHES ".*-NOTFOUND")
       get_target_property(G3SINKS_LIBRARY_RELEASE g3sinks IMPORTED_LOCATION_RELEASE)
    endif ()
