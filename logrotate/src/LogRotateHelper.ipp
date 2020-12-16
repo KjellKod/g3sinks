@@ -110,7 +110,7 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
          }
     #endif
     auto logfile = changeLogFile(log_directory, log_prefix_backup_);
-    assert((nullptr != outptr_) && "cannot open log file at startup");
+    assert((nullptr != outptr_) && "bad directory or file path, cannot open log file at startup");
 }
 
 /**
