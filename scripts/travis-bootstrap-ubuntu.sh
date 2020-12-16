@@ -8,7 +8,7 @@ apt-get install -y apt-utils | true
 apt-get install -y software-properties-common | true
 apt-get install -y python-software-properties
 apt-get update -y
-add-apt-repository -y ppa:jonathonf/gcc-7.1
+add-apt-repository -y ppa:jonathonf/gcc
 apt-get update -y 
 apt-get install -y cmake software-properties-common git make
 apt-get install -y gcc-7 g++-7 
