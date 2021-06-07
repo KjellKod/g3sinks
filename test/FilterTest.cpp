@@ -67,6 +67,47 @@ TEST_F(FilterTest, CreateObjectUsingHelper) {
 }
 
 
+ /**
+  * The default for log details can be found at g3log. 
+  * It's something like this 
+  *    std::string LogMessage::DefaultLogDetailsToString(const LogMessage& msg) {
+      std::string out;
+      out.append(msg.timestamp() + "\t"
+                 + msg.level() 
+                 + " [" 
+                 + msg.file() 
+                 + "->" 
+                 + msg.function() 
+                 + ":" + msg.line() + "]\t");
+      return out;
+      }
+
+
+      We will override this to only have level
+   }
+  * */
+TEST_F(FilterTest, OverrideLogDetails) {
+
+    auto formatting = [](const g3::LogMessage& msg) -> std::string {
+        std::string out;
+        out.append(std::string(" === ") + msg.level() + (" !!! "));
+        return out;
+    };
+
+    {
+        auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
+        filterSinkPtr->overrideLogDetails(formatting);
+
+        auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
+        filterSinkPtr->save(message0);
+    } // raii
+
+    auto name = std::string{_directory + _filename + ".log"};
+    auto content = ReadContent(name);
+    EXPECT_TRUE(Exists(content, "=== INFO !!! Hello World")) << content;
+}
+
+
 TEST_F(FilterTest, NothingFiltered) {
     {
         auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
