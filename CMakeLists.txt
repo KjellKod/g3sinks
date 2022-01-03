@@ -29,8 +29,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   message("Install rpath location: ${CMAKE_INSTALL_RPATH}")
 endif()
 
-# Download and add gtest so the sinks can use it for testing
-include(gtest.cmake)
+if(CHOICE_BUILD_TESTS OR CHOICE_BUILD_EXAMPLES)
+  # Download and add gtest so the sinks can use it for testing
+  include(gtest.cmake)
+endif()
 
 if(NOT CMAKE_PREFIX_PATH)
   set(CMAKE_PREFIX_PATH /usr/local)
