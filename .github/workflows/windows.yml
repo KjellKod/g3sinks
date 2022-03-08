@@ -47,6 +47,7 @@ jobs:
         cmake --build . --target INSTALL --config Release
         echo "C:\Libraries\bin" >> $GITHUB_PATH
 
+    # https://github.com/actions/virtual-environments/issues/2667
     - name: install boost
       run: | 
         # Use the boost_1_72_0-msvc-14.1-64.exe for Windows 2016
