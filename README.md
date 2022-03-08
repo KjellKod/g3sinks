@@ -159,6 +159,12 @@ int main(int argc, char**argv) {
 }
 ```
 
+# Continuous Integration
+G3sinks has a couple of different approaches for verifying pull requests. At some point they might be consolidated but right now the CI is organized as follows. 
+
+1. appveyor Windows CI --> g3sinks/appveyor.yml
+3. github actions --> g3sinks/.github/workflows/cpp.yml: calls a script that does all heavy lifting, leaving the yml barebone. Verbose test output
+```
 
 
 # Say Thanks
