@@ -162,10 +162,16 @@ int main(int argc, char**argv) {
 # Continuous Integration
 G3sinks has a couple of different approaches for verifying pull requests. At some point they might be consolidated but right now the CI is organized as follows. 
 
-1. appveyor Windows CI --> g3sinks/appveyor.yml
-3. github actions --> g3sinks/.github/workflows/cpp.yml: calls a script that does all heavy lifting, leaving the yml barebone. Verbose test output
 ```
+1. appveyor Windows CI --> g3sinks/appveyor.yml
+2. github actions --> g3sinks/.github/workflows/cmake_build_run.yml
+calls a script that does all heavy lifting, leaving the github actions file to mostly deal with the 
+environment bootstrapping. The test result is verbose. 
 
+Future improvements could here be to:
+1. Use Windows/OSX/Linux all within github actions. 
+2. Create and use a base image that is already bootstrapped. 
+```
 
 # Say Thanks
 These sinks for g3log are available for free and all of its source code is public domain.  A great way of saying thanks is to send a donation. It would go a long way not only to show your support but also to boost continued development.
