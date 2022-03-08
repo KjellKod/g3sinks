@@ -166,7 +166,6 @@ G3sinks has a couple of different approaches for verifying pull requests. At som
 2. github actions --> g3sinks/.github/workflows/cmake_build_run.yml: calls a script that does all heavy lifting, leaving the yml barebone. Verbose test output
 ```
 
-
 # Say Thanks
 These sinks for g3log are available for free and all of its source code is public domain.  A great way of saying thanks is to send a donation. It would go a long way not only to show your support but also to boost continued development.
 
