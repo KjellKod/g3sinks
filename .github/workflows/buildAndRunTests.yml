@@ -29,6 +29,12 @@ jobs:
         xcode-version: latest
 
   
+    - name: macos Bootstrap 
+      if: matrix.os == 'macos-latest'
+      run: | 
+        echo "MacOS Latest" 
+        brew update --preinstall
+        brew install boost 
 
 
     - name: Linux Bootstrap 
