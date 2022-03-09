@@ -24,7 +24,12 @@ jobs:
 
     - name: Run Mac Build
       if: matrix.os == 'macos-latest'
-      run: echo "MacOS Latest" 
+      run: |
+        echo "MacOS Latest" 
+        #brew install boost
+    - uses: maxim-lobanov/setup-xcode@v1.4.1
+      with:
+        xcode-version: latest
     
     - name: Linux Bootstrap 
       if: matrix.os == 'ubuntu-latest'
