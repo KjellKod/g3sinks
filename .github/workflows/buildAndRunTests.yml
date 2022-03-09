@@ -1,17 +1,34 @@
-name: cmake_build_run_ctest
+name: ci/action verbose ctest script
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
+# if you have to do a quick fix and the CI is already running your new commit will kill already 
+# going processes before starting new ones
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Run Linux Build
+      if: matrix.os == 'ubuntu-latest'
+      run: echo "Ubuntu Latest" > release_ubuntu
+      
+    - name: Run Mac Build
+      if: matrix.os == 'macos-latest'
+      run: echo "MacOS Latest" > release_mac
     
     - name: Bootstrap
       run: |
