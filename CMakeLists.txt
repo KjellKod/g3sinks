@@ -140,7 +140,7 @@ message(
                 # to just build it and run tests
                 cmake --build . --config Release
                 # Unfortunately locating the DLL is a pain on Windows.
-                # Make sure the PATH to g3log and boost, zlib, etc are set.
+                # Make sure the PATH to g3log and zlib are set.
                 # In the example above the dlls for g3log and zlib exists in c:\\Local\\bin
                 set PATH=c:\\Local\\bin;%PATH%
                 cmake test -V

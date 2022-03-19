@@ -1,13 +1,5 @@
 project(logrotate)
 
-# ===============================
-# boost filesystem + boost system 
-#set( Boost_USE_STATIC_LIBS ON ) 
-#set( Boost_USE_MULTITHREAD ON ) 
-#find_package( Boost REQUIRED COMPONENTS filesystem system ) 
-#message( "boost [filesystem, system] found: ${Boost_FOUND} ")
-#include_directories( ${Boost_INCLUDE_DIRS} ) 
-
 
 # zlib
 find_package( ZLIB REQUIRED )
@@ -35,15 +27,11 @@ include_directories(${LOGROTATE_SRC})
 target_link_libraries(
   g3logrotate
   PUBLIC  ${G3LOG_LIBRARY}
-  #${Boost_LIBRARIES}
-#  PRIVATE Boost::filesystem
-#  PRIVATE Boost::system
   PRIVATE ${ZLIB_LIBRARY}
   )
 
 message( "target_link_libraries:  
          g3log: ${G3LOG_LIBRARY}, 
-  #       boost: ${Boost_LIBRARIES}, 
          zlib: ${ZLIB_LIBRARIES}" )
 
 
