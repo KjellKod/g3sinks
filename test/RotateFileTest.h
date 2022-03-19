@@ -10,15 +10,13 @@
 
 #pragma once
 #include <gtest/gtest.h>
-#include <cstring>
-#include <cerrno>
-#include <cstdlib>
 #include <g3sinks/LogRotateUtility.h>
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <filesystem>
 
-
+namespace fs = std::filesystem;
 
 class RotateFileTest : public ::testing::Test {
  public:
@@ -33,7 +31,7 @@ class RotateFileTest : public ::testing::Test {
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
       _directory = "./";
 #else
-      _directory = "/tmp/";
+      _directory = "/tmp/not_yet_existing_g3log_directory/";
 #endif
                    _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
    }
@@ -49,9 +47,20 @@ class RotateFileTest : public ::testing::Test {
       }
 
 
+      const std::error_condition ok;
       for (auto filename : _filesToRemove) {
-         std::remove(filename.c_str());
+         std::error_code ec_file;
+         fs::remove(filename, ec_file);
+         if (ok != ec_file) {
+            ADD_FAILURE() << "UNABLE to remove: " << filename << " " << ec_file.message() << std::endl;
+         }
       }
+      std::error_code ec_dir;
+      fs::remove(_directory, ec_dir);
+      if (ok != ec_dir) {
+            ADD_FAILURE() << "UNABLE to remove: " << _directory << " " << ec_dir.message() << std::endl;
+      }
+
    }
 
    std::string _filename;

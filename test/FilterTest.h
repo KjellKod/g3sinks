@@ -10,9 +10,9 @@
 
 #pragma once
 #include <gtest/gtest.h>
-#include <cstring>
-#include <cerrno>
-#include <cstdio>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class FilterTest : public ::testing::Test {
  public:
@@ -32,10 +32,12 @@ class FilterTest : public ::testing::Test {
    }
 
    virtual void TearDown() {
+      const std::error_condition ok;
       for (auto filename : _filesToRemove) {
-         auto success = std::remove(filename.c_str());
-         if (0 != success) {
-            std::cerr << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
+         std::error_code ec_file;
+         fs::remove(filename, ec_file);
+         if (ok != ec_file) {
+            ADD_FAILURE() << "Error deleting: " << filename << ": " <<  ec_file.message() << std::endl;
          }
       }
    }

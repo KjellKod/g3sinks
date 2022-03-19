@@ -115,7 +115,7 @@ namespace  LogRotateUtility {
       return false;
    }
 
-   std::string createPath(std::string path, std::string file_name) {
+   std::string sanityFixPath(std::string path) {
       // Unify the delimeters,. maybe sketchy solution but it seems to work
       // on at least win7 + ubuntu. All bets are off for older windows
       std::replace(path.begin(), path.end(), '\\', '/');
@@ -136,6 +136,10 @@ namespace  LogRotateUtility {
          path.insert(path.end(), '/');
       }
 
+      return path;
+   }
+
+   std::string createPathToFile(std::string path, std::string file_name) {
       path.insert(path.size(), file_name);
       return path;
    }
@@ -170,7 +174,8 @@ namespace  LogRotateUtility {
                break;
             }
 
-            std::string filename_with_path(createPath(dir, it->second));
+            auto path = sanityFixPath(dir);
+            std::string filename_with_path(createPathToFile(path, it->second));
             remove(filename_with_path.c_str());
             --logs_to_delete;
          }

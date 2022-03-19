@@ -33,7 +33,8 @@ namespace  LogRotateUtility {
    /// illegal characters are removed from @param prefix input
    std::string prefixSanityFix(std::string prefix);
 
-   std::string createPath(std::string path, std::string file_name);
+   std::string sanityFixPath(std::string path);
+   std::string createPathToFile(std::string path, std::string file_name);
 
    /// @return the file header
    std::string header();
