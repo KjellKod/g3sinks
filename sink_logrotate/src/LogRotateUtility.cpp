@@ -16,12 +16,13 @@
 #include <algorithm>
 #include <g3log/time.hpp>
 #include <regex>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <ios>
 #include <fstream>
 #include <iomanip>
 
 
+namespace fs = std::filesystem;
 namespace  LogRotateUtility {
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
@@ -146,13 +147,13 @@ namespace  LogRotateUtility {
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
       std::map<long, std::string> files;
-      boost::filesystem::path dir_path(dir);
+      fs::path dir_path(dir);
 
 
-      boost::filesystem::directory_iterator end_itr;
-      if (!boost::filesystem::exists(dir_path)) return;
+      fs::directory_iterator end_itr;
+      if (!fs::exists(dir_path)) return;
 
-      for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+      for (fs::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
          std::string current_file(itr->path().filename().string());
          long time = 0;
          if (getDateFromFileName(app_name, current_file, time)) {
@@ -178,13 +179,13 @@ namespace  LogRotateUtility {
 
     std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
         std::map<long, std::string> files;
-        boost::filesystem::path dir_path(dir);
+        fs::path dir_path(dir);
   
  
-       boost::filesystem::directory_iterator end_itr;
-       if (!boost::filesystem::exists(dir_path)) return {};
+       fs::directory_iterator end_itr;
+       if (!fs::exists(dir_path)) return {};
  
-       for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
+       for (fs::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
           std::string current_file(itr->path().filename().string());
           long time = 0;
           if (getDateFromFileName(app_name, current_file, time)) {
