@@ -27,6 +27,8 @@
 #include <ctime>
 #include <iostream>
 #include <sstream>
+#include <filesystem>
+
 #include "g3sinks/LogRotateUtility.h"
 
 
@@ -100,8 +102,13 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
       abort();
    }
 
-   auto logfile = changeLogFile(log_directory, log_prefix_backup_);
-   assert((nullptr != outptr_) && "cannot open log file at startup");
+   namespace fs = std::filesystem;
+   fs::path log_dir_path = fs::path(log_directory);
+   if (!fs::exists(log_dir_path)){
+     fs::create_directories(log_dir_path);
+   }
+    auto logfile = changeLogFile(log_directory, log_prefix_backup_);
+    assert((nullptr != outptr_) && "bad directory or file path, cannot open log file at startup");
 }
 
 /**
@@ -209,6 +216,13 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
  */
 bool LogRotateHelper::rotateLog() {
    std::ofstream& is(filestream());
+   namespace fs = std::filesystem;
+   fs::path log_file_path = fs::path(log_file_with_path_);
+   if (!fs::exists(log_file_path)){
+     return false;
+   }
+
+
    if (is.is_open()) {
       is << std::flush;
       std::ostringstream gz_file_name;
