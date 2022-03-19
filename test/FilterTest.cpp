@@ -11,7 +11,7 @@
 #include <iostream>
 #include <cerrno>
 #include <memory>
-
+#include <cstring>
 #include "FilterTest.h"
 #include <g3sinks/LogRotateWithFilter.h>
 #include "RotateTestHelper.h"
