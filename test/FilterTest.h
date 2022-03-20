@@ -10,38 +10,41 @@
 
 #pragma once
 #include <gtest/gtest.h>
-#include <cstring>
-#include <cerrno>
-#include <cstdio>
+#include <filesystem>
+#include "g3sinks/LogRotateUtility.h"
+
+namespace fs = std::filesystem;
 
 class FilterTest : public ::testing::Test {
- public:
+public:
 
    FilterTest() {
    };
- protected:
+protected:
 
    virtual void SetUp() {
       _filename = "g3sink_filter_rotatefile_test";
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-      _directory = "./";
+      _directory = "./g3log_test_directory";
 #else
-      _directory = "/tmp/";
+      _directory = "/tmp/g3log_test_directory";
 #endif
-      _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
    }
 
    virtual void TearDown() {
-      for (auto filename : _filesToRemove) {
-         auto success = std::remove(filename.c_str());
-         if (0 != success) {
-            std::cerr << "error deleting: " << filename << ": " <<  std::strerror(errno) << std::endl;
+      auto allFiles = LogRotateUtility::getFilesInDirectory(_directory);
+      for (auto& filename : allFiles) {
+         std::error_code ec_file;
+         if (false == fs::remove(filename, ec_file)) {
+            ADD_FAILURE() << "UNABLE to remove file: " << filename << " " << ec_file.message() << std::endl;
+         }
+         std::error_code ec_dir;
+         if (fs::exists(_directory) && !fs::remove(_directory, ec_dir)) {
+            ADD_FAILURE() << "UNABLE to remove directory: " << _directory << " " << ec_dir.message() << std::endl;
          }
       }
    }
 
    std::string _filename;
    std::string _directory;
-   std::vector<std::string> _filesToRemove;
-
 };

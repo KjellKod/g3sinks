@@ -14,6 +14,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 #include <chrono>
 #include <memory>
 
@@ -33,13 +34,14 @@ namespace  LogRotateUtility {
    /// illegal characters are removed from @param prefix input
    std::string prefixSanityFix(std::string prefix);
 
-   std::string createPath(std::string path, std::string file_name);
+   std::string sanityFixPath(std::string path);
+   std::string createPathToFile(std::string path, std::string file_name);
 
    /// @return the file header
    std::string header();
 
    /// @return result as time from the file name
-   bool getDateFromFileName(const std::string& app_name, const std::string& file_name, long& result);
+   long getDateFromFileName(const std::string& app_name, const std::string& file_name, std::string& date_string);
 
    /**
     * Loop through the files in the folder
@@ -48,9 +50,16 @@ namespace  LogRotateUtility {
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count);
 
-   /// @return all the found files in the directory that follow the expected log name pattern
+
+   // return any found files in the directory
+   std::vector<std::string> getFilesInDirectory(const std::string& path);
+
+   // return app_name matching log type files in the directory. This can be compressed and plain log files
+   std::vector<std::string> getAllLogFilesInDirectory(const std::string& path, const std::string& app_name);
+
+   /// @return all the compressed files in the directory that follow the expected log name pattern
    /// std::map<long: timestamp, std::string : name>
-   std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name);
+   std::map<long, std::string> getCompressedLogFilesInDirectory(const std::string& dir, const std::string& app_name);
 
    /// just adds the suffix to the log name
    std::string addLogSuffix(const std::string& raw_file_name);

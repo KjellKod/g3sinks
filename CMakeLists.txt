@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.2...3.23)
 
 project(g3sinks)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Release) # Debug for VSCode debugging
 
 # Function definitions that are used in various places
 include(Functions.cmake)
@@ -140,7 +140,7 @@ message(
                 # to just build it and run tests
                 cmake --build . --config Release
                 # Unfortunately locating the DLL is a pain on Windows.
-                # Make sure the PATH to g3log and boost, zlib, etc are set.
+                # Make sure the PATH to g3log and zlib are set.
                 # In the example above the dlls for g3log and zlib exists in c:\\Local\\bin
                 set PATH=c:\\Local\\bin;%PATH%
                 cmake test -V

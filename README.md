@@ -70,14 +70,6 @@ G3sinks requires [g3log](https://github.com/KjellKod/g3log)  to be installed.
 The g3log install location has to be specified during the cmake build step. In the example below the g3log installation location is `/usr/local` with libraries in '/usr/local/lib' and 'headers in '/usr/local/include'
 The given argument for the location would then be : 'cmake -DCMAKE_PREFIX_PATH=/usr/local/'
 
-**boost**<br>
-G3sinks requires [boost](http://www.boost.org/doc/libs/1_63_0/index.html)  to be installed. 
-For installing boost please follow their [instructions](http://www.boost.org/doc/libs/1_63_0/more/getting_started/unix-variants.html). 
-
-The boost install location `BOOST_ROOT` or `Boost_INCLUDE_DIR` has to be specified during the cmake build step.
-In the example below the boost  installation 
-location is `/usr/local`
-
 **ZLIB**<br>
 The ZLIB library must be installed for the logrotate to be able to compress the old log files
 in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see your specific platform for details or go to the [zlib page](http://www.zlib.net/)
@@ -88,7 +80,7 @@ in Ubuntu it can be installed with `sudo apt-get install zlib1g-dev`. Please see
 cd g3sinks
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBOOST_ROOT=/usr/local -DBUILD_TEST=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBUILD_TEST=ON ..
 make -j
 ```
 

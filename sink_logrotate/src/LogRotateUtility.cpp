@@ -1,31 +1,33 @@
 
 /** ==========================================================================
-* 2011 by KjellKod.cc, modified by Vrecan in https://bitbucket.org/vrecan/g2log-dev
-* 2015, adopted by KjellKod for g3log at:https://github.com/KjellKod/g3sinks
-*
-* This code is PUBLIC DOMAIN to use at your own risk and comes
-* with no warranties. This code is yours to share, use and modify with no
-* strings attached and no restrictions or obligations.
-* ============================================================================*
-* PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
-* ********************************************* */
+ * 2011 by KjellKod.cc, modified by Vrecan in https://bitbucket.org/vrecan/g2log-dev
+ * 2015, adopted by KjellKod for g3log at:https://github.com/KjellKod/g3sinks
+ *
+ * This code is PUBLIC DOMAIN to use at your own risk and comes
+ * with no warranties. This code is yours to share, use and modify with no
+ * strings attached and no restrictions or obligations.
+ * ============================================================================*
+ * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
+ * ********************************************* */
 
 #include "g3sinks/LogRotateUtility.h"
-#include <iostream>
-#include <sstream>
+
 #include <algorithm>
-#include <g3log/time.hpp>
-#include <regex>
-#include <boost/filesystem.hpp>
-#include <ios>
+#include <filesystem>
 #include <fstream>
+#include <g3log/time.hpp>
 #include <iomanip>
+#include <ios>
+#include <iostream>
+#include <regex>
+#include <sstream>
+#include <string>
 
-
-namespace  LogRotateUtility {
+namespace fs = std::filesystem;
+namespace LogRotateUtility {
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-   //http://stackoverflow.com/questions/321849/strptime-equivalent-on-windows
+   // http://stackoverflow.com/questions/321849/strptime-equivalent-on-windows
    char* strptime(const char* s, const char* f, struct tm* tm) {
       // Isn't the C++ standard lib nice? std::get_time is defined such that its
       // format parameters are the exact same as strptime. Of course, we have to
@@ -39,18 +41,17 @@ namespace  LogRotateUtility {
       if (input.fail()) {
          return nullptr;
       }
-      return (char*)(s + input.tellg());
+      return (char*) (s + input.tellg());
    }
 #endif
-
-
 
    // check for filename validity -  filename should not be part of PATH
    bool isValidFilename(const std::string& prefix_filename) {
       std::string illegal_characters("/,|<>:#$%{}()[]\'\"^!?+* ");
       size_t pos = prefix_filename.find_first_of(illegal_characters, 0);
       if (pos != std::string::npos) {
-         std::cerr << "Illegal character [" << prefix_filename.at(pos) << "] in logname prefix: " << "[" << prefix_filename << "]" << std::endl;
+         std::cerr << "Illegal character [" << prefix_filename.at(pos) << "] in logname prefix: "
+                   << "[" << prefix_filename << "]" << std::endl;
          return false;
       } else if (prefix_filename.empty()) {
          std::cerr << "Empty filename prefix is not allowed" << std::endl;
@@ -63,9 +64,9 @@ namespace  LogRotateUtility {
    /// illegal characters are removed from @param prefix input
    std::string prefixSanityFix(std::string prefix) {
       prefix.erase(std::remove_if(prefix.begin(), prefix.end(), ::isspace), prefix.end());
-      prefix.erase(std::remove(prefix.begin(), prefix.end(), '/'), prefix.end()); // '/'
-      prefix.erase(std::remove(prefix.begin(), prefix.end(), '\\'), prefix.end()); // '\\'
-      prefix.erase(std::remove(prefix.begin(), prefix.end(), '.'), prefix.end()); // '.'
+      prefix.erase(std::remove(prefix.begin(), prefix.end(), '/'), prefix.end());   // '/'
+      prefix.erase(std::remove(prefix.begin(), prefix.end(), '\\'), prefix.end());  // '\\'
+      prefix.erase(std::remove(prefix.begin(), prefix.end(), '.'), prefix.end());   // '.'
       if (!isValidFilename(prefix)) {
          return "";
       }
@@ -75,52 +76,50 @@ namespace  LogRotateUtility {
    /// @return the file header
    std::string header() {
       std::ostringstream ss_entry;
-      //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y" 
-     //   and formatted output as : Wed Sep 19 08:28:16 2012
-     auto now = std::chrono::system_clock::now();      
-     ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(now, "%a %b %d %H:%M:%S %Y") << "\n";
+      //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y"
+      //   and formatted output as : Wed Sep 19 08:28:16 2012
+      auto now = std::chrono::system_clock::now();
+      ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(now, "%a %b %d %H:%M:%S %Y") << "\n";
       return ss_entry.str();
    }
 
-   /// @return result as time from the file name
-   bool getDateFromFileName(const std::string& app_name, const std::string& file_name, long& result) {
+   /// @return result as time from the file name, return by reference also the complete date string
+   long getDateFromFileName(const std::string& app_name, const std::string& file_name, std::string& r_date_string) {
       if (file_name.find(app_name) != std::string::npos) {
-         std::string suffix = file_name.substr(app_name.size());
-         if (suffix.empty()) {
-            //this is the main log file
-            return false;
-         }
          using namespace std;
-
-         regex date_regex("\\.(\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2})\\.gz");
+         const regex date_regex(".*([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2})+\\.gz");
          smatch date_match;
-         if (regex_match(suffix, date_match, date_regex)) {
+         if (regex_match(file_name, date_match, date_regex)) {
             if (date_match.size() == 2) {
-               std::string date = date_match[1].str();
+               r_date_string = date_match[1].str();
                struct tm tm = {0};
                time_t t;
-               if (strptime(date.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
-                  return false;
+               if (strptime(r_date_string.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
+                  return (long) 0;
                }
                t = mktime(&tm);
                if (t == -1) {
-                  return false;
+                  return (long) 0;
                }
-               result = (long) t;
-               return true;
+               return (long) t;
             }
          }
       }
-      return false;
+      return (long) 0;
    }
 
-   std::string createPath(std::string path, std::string file_name) {
+   std::string sanityFixPath(std::string path) {
       // Unify the delimeters,. maybe sketchy solution but it seems to work
       // on at least win7 + ubuntu. All bets are off for older windows
+      std::string last_character{path.back()};
+      if ("/" != last_character) {
+         path += "/";
+      }
+
       std::replace(path.begin(), path.end(), '\\', '/');
 
       // clean up in case of multiples
-      auto contains_end = [&](std::string & in) -> bool {
+      auto contains_end = [&](std::string& in) -> bool {
          size_t size = in.size();
          if (!size) return false;
          char end = in[size - 1];
@@ -135,66 +134,75 @@ namespace  LogRotateUtility {
          path.insert(path.end(), '/');
       }
 
+      return path;
+   }
+
+   std::string createPathToFile(std::string path, std::string file_name) {
       path.insert(path.size(), file_name);
       return path;
    }
 
    /**
-    * Loop through the files in the folder
+    * Loop through the files in the folder. Delete old compressed files until max_log_count is reached
     * @param dir
     * @param file_name
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
-      std::map<long, std::string> files;
-      boost::filesystem::path dir_path(dir);
-
-
-      boost::filesystem::directory_iterator end_itr;
-      if (!boost::filesystem::exists(dir_path)) return;
-
-      for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
-         std::string current_file(itr->path().filename().string());
-         long time = 0;
-         if (getDateFromFileName(app_name, current_file, time)) {
-            files.insert(std::pair<long, std::string > (time, current_file));
-         }
-      }
-
-      //delete old logs.
-      ptrdiff_t logs_to_delete = files.size() - max_log_count;
-      if (logs_to_delete > 0) {
-
-         for (std::map<long, std::string>::iterator it = files.begin(); it != files.end(); ++it) {
+      auto compressed_files = getCompressedLogFilesInDirectory(dir, app_name);
+      if (compressed_files.size() > max_log_count) {
+         auto logs_to_delete = compressed_files.size() - max_log_count;
+         for (const auto& p : compressed_files) {
             if (logs_to_delete <= 0) {
                break;
             }
-
-            std::string filename_with_path(createPath(dir, it->second));
-            remove(filename_with_path.c_str());
-            --logs_to_delete;
+            --logs_to_delete;  // decrement the number of files to delete, even if the file could not be deleted
+            std::error_code ec_file;
+            auto filename_with_path = p.second;
+            if (false == fs::remove(filename_with_path, ec_file)) {
+               std::cerr << " Unable to delete " << filename_with_path << " " << ec_file.message() << std::endl;
+            }
          }
       }
    }
+   /// return all files in the directory
+   std::vector<std::string> getFilesInDirectory(const std::string& path) {
+      if (!fs::exists(path)) {
+         return {};
+      }
 
-    std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
-        std::map<long, std::string> files;
-        boost::filesystem::path dir_path(dir);
-  
- 
-       boost::filesystem::directory_iterator end_itr;
-       if (!boost::filesystem::exists(dir_path)) return {};
- 
-       for (boost::filesystem::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
-          std::string current_file(itr->path().filename().string());
-          long time = 0;
-          if (getDateFromFileName(app_name, current_file, time)) {
-             files.insert(std::pair<long, std::string > (time, current_file));
-          }
-       }
- 
-       return files;
-    }
+      std::vector<std::string> files;
+      for (const auto& entry : fs::directory_iterator(path)) {
+         files.push_back(entry.path().string());
+      }
+      return files;
+   }
 
+   /// returns both compressed and plain text log files
+   std::vector<std::string> getAllLogFilesInDirectory(const std::string& path, const std::string& app_name) {
+      auto any_files = getFilesInDirectory(path);
+
+      std::vector<std::string> files;
+      for (const auto& current_file : any_files) {
+         if (current_file.find(app_name) != std::string::npos) {
+            files.push_back(current_file);
+         }
+      }
+      return files;
+   }
+
+   std::map<long, std::string> getCompressedLogFilesInDirectory(const std::string& path, const std::string& app_name) {
+      auto log_type_files = getAllLogFilesInDirectory(path, app_name);
+      std::map<long, std::string> files;
+
+      for (const auto& current_file : log_type_files) {
+         std::string r_date_result;
+         auto time = getDateFromFileName(app_name, current_file, r_date_result);
+         if (time > 0) {
+            files.insert(std::pair<long, std::string>(time, current_file));
+         }
+      }
+      return files;
+   }
 
    /// create the file name
    std::string addLogSuffix(const std::string& raw_name) {
@@ -203,11 +211,10 @@ namespace  LogRotateUtility {
       return oss_name.str();
    }
 
-
    /// @return true if @param complete_file_with_path could be opened
    /// @param outstream is the file stream
    bool openLogFile(const std::string& complete_file_with_path, std::ofstream& outstream) {
-      std::ios_base::openmode mode = std::ios_base::out; // for clarity: it's really overkill since it's an ofstream
+      std::ios_base::openmode mode = std::ios_base::out;  // for clarity: it's really overkill since it's an ofstream
       mode |= std::ios_base::app;
       outstream.open(complete_file_with_path, mode);
       if (!outstream.is_open()) {
@@ -231,4 +238,4 @@ namespace  LogRotateUtility {
       }
       return out;
    }
-}
+}  // namespace LogRotateUtility

@@ -23,33 +23,33 @@
 * that are NOT in the filter
 */
 class LogRotateWithFilter {
-    using LogRotateUniquePtr = std::unique_ptr<LogRotate>;
-    using IgnoreLogLevelsFilter = std::vector<LEVELS>;
+   using LogRotateUniquePtr = std::unique_ptr<LogRotate>;
+   using IgnoreLogLevelsFilter = std::vector<LEVELS>;
 
-  public:
+public:
 
-    static std::unique_ptr<LogRotateWithFilter> CreateLogRotateWithFilter(std::string filename, std::string directory, std::vector<LEVELS> filter);
-
-
-    LogRotateWithFilter(LogRotateUniquePtr logToFile, IgnoreLogLevelsFilter ignoreLevels);
-    virtual ~LogRotateWithFilter();
-
-    void save(g3::LogMessageMover logEntry);
-    std::string changeLogFile(const std::string& log_directory);
-    std::string logFileName();
-    void setMaxArchiveLogCount(int max_size);
-    void setMaxLogSize(int max_file_size);
-    void setFlushPolicy(size_t flush_policy); // 0: never (system auto flush), 1 ... N: every n times
-    void flush();
-    void overrideLogDetails(g3::LogMessage::LogDetailsFunc func);
+   static std::unique_ptr<LogRotateWithFilter> CreateLogRotateWithFilter(std::string filename, std::string directory, std::vector<LEVELS> filter);
 
 
+   LogRotateWithFilter(LogRotateUniquePtr logToFile, IgnoreLogLevelsFilter ignoreLevels);
+   virtual ~LogRotateWithFilter();
+
+   void save(g3::LogMessageMover logEntry);
+   std::string changeLogFile(const std::string& log_directory);
+   std::string logFileName();
+   void setMaxArchiveLogCount(int max_size);
+   void setMaxLogSize(int max_file_size);
+   void setFlushPolicy(size_t flush_policy); // 0: never (system auto flush), 1 ... N: every n times
+   void flush();
+   void overrideLogDetails(g3::LogMessage::LogDetailsFunc func);
 
 
-  private:
-    LogRotateUniquePtr _logger;
-    IgnoreLogLevelsFilter _filter;
-    g3::LogMessage::LogDetailsFunc _log_details_func;
+
+
+private:
+   LogRotateUniquePtr _logger;
+   IgnoreLogLevelsFilter _filter;
+   g3::LogMessage::LogDetailsFunc _log_details_func;
 
 
 };

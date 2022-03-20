@@ -18,10 +18,10 @@
 #include <cerrno>
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-#include  <io.h>
-#define F_OK 0
+   #include  <io.h>
+   #define F_OK 0
 #else
-#include <unistd.h>
+   #include <unistd.h>
 #endif
 
 namespace RotateTestHelper {
@@ -31,7 +31,7 @@ namespace RotateTestHelper {
       std::ifstream readIn(filename.c_str(), std::ios::in | std::ios::binary);
       if (readIn) {
          std::shared_ptr<void> raii(nullptr, [&](void*) {
-            readIn.close(); 
+            readIn.close();
          });
 
          std::string contents;
@@ -45,7 +45,16 @@ namespace RotateTestHelper {
    }
 
 
-   std::string ExtractContent(const std::map<long, std::string>& content) {
+   std::string FlattenToString(const std::vector<std::string>& content) {
+      std::string extracted = "\n ";
+      for (const auto& file : content) {
+         extracted += file + ", \n";
+      }
+      extracted += "\n";
+      return extracted;
+   }
+
+   std::string FlattenToString(const std::map<long, std::string>& content) {
       std::string extracted = "\n ";
       for (const auto& pair : content) {
          std::string file = pair.second;
@@ -61,14 +70,4 @@ namespace RotateTestHelper {
       auto found = content.find(expected);
       return found != std::string::npos;
    }
-
-   bool DoesFileEntityExist(const std::string& pathToFile) {
-      int check = access(pathToFile.c_str(), F_OK);
-      bool found = (0 == check);
-      if (!found) {
-         std::cerr << pathToFile << " was not found: " << std::strerror(errno) << std::endl;
-      }
-      return found;
-   }
-
 } // RotateTestHelper
