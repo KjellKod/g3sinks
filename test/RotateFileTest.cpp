@@ -19,6 +19,8 @@
 #include "g3sinks/LogRotateWithFilter.h"
 using namespace RotateTestHelper;
 
+namespace fs = std::filesystem;
+
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
 #define F_OK 0
 #else
@@ -30,7 +32,6 @@ TEST_F(RotateFileTest, CreateObject) {
    {
       LogRotate logrotate(_filename, _directory);
       logfilename = logrotate.logFileName();
-      std::cout << logfilename << std::endl;
       logrotate.save("test");
    }  // RAII flush of log
    auto name = std::string{_directory + _filename + ".log"};
@@ -43,15 +44,13 @@ TEST_F(RotateFileTest, ChangeLogFile) {
    {
       LogRotate logrotate(_filename, _directory);
       logfilename = logrotate.logFileName();
-      std::cout << logfilename << std::endl;
       logrotate.save("test");
       auto name = std::string{_directory + _filename + ".log"};
-      EXPECT_TRUE(DoesFileEntityExist(name));
+      EXPECT_TRUE(fs::exists(name));
       auto expected_newname = std::string{_directory + "some_new_file.log"};
-      EXPECT_FALSE(DoesFileEntityExist(expected_newname));
+      EXPECT_FALSE(fs::exists(expected_newname));
 
       // by default, if name is not given then the default name is kept
-      _filesToRemove.push_back(expected_newname);
       auto newname = logrotate.changeLogFile(_directory);
       EXPECT_NE(expected_newname, newname);
       EXPECT_EQ(logfilename, newname);
@@ -79,14 +78,13 @@ TEST_F(RotateFileTest, setMaxLogSize) {
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
 }
 
-TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
+TEST_F(RotateFileTest, setMaxLogSizeAndRotate) {
    std::string newFileName = "new_sink_name";
    LogRotate logrotate(_filename, _directory);
 
    logrotate.changeLogFile(_directory, newFileName);
    auto logfilename = logrotate.logFileName();
    EXPECT_EQ(_directory + newFileName + ".log", logfilename);
-   _filesToRemove.push_back(logfilename);
 
    std::string gone{"Soon to be missing words"};
    logrotate.save(gone);
@@ -94,49 +92,29 @@ TEST_F(RotateFileTest, setMaxLogSizeAndRotate_ValidNewName) {
 
    std::string first_message_in_new_log = "first message";
    logrotate.save(first_message_in_new_log);
-
+   EXPECT_TRUE(fs::exists(logfilename));
    auto content = ReadContent(logfilename);
    auto exists = Exists(content, gone);
    EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
-
+   EXPECT_TRUE(fs::exists(logfilename));
    exists = Exists(content, first_message_in_new_log);
    EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
-
-   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, newFileName + ".log");
-   EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << newFileName << std::endl;
-   const int kFilePathIndex = 1;
-   for (auto p : allFiles) {
-      std::cout << "to remove: " << _directory + std::get<kFilePathIndex>(p) << std::endl;
-      _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
-   }
+   EXPECT_TRUE(fs::exists(logfilename));
+   auto allFiles = LogRotateUtility::getAllLogFilesInDirectory(_directory, newFileName + ".log");
+   auto allCompressedFiles = LogRotateUtility::getCompressedLogFilesInDirectory(_directory, newFileName + ".log");
+   EXPECT_EQ(allFiles.size(), 2) << FlattenToString(allFiles);
+   EXPECT_EQ(allCompressedFiles.size(), 1) << FlattenToString(allCompressedFiles);
 }
 
-TEST_F(RotateFileTest, setMaxLogSizeAndRotate_EmptyNewName) {
+TEST_F(RotateFileTest, logRotate_setEmptyNewName) {
    LogRotate logrotate(_filename, _directory);
-
    logrotate.changeLogFile(_directory, "");
    auto logfilename = logrotate.logFileName();
    EXPECT_EQ(_directory + _filename + ".log", logfilename);
-
-   std::string gone{"Soon to be missing words"};
-   logrotate.save(gone);
-   logrotate.setMaxLogSize(static_cast<int>(gone.size()));
-
-   std::string first_message_in_new_log = "first message";
-   logrotate.save(first_message_in_new_log);
-
-   auto content = ReadContent(logfilename);
-   auto exists = Exists(content, gone);
-   EXPECT_FALSE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
-
-   exists = Exists(content, first_message_in_new_log);
-   EXPECT_TRUE(exists) << "\n\tcontent:" << content << "\n\tentry: " << gone;
-
-   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, _filename + ".log");
-   EXPECT_EQ(allFiles.size(), 1) << "direc: " << _directory << ", name: " << _filename;
 }
 
 namespace {
+   const size_t kMaxArchiveLogCount = 3;
    void RotateAndExpireOldLogs(std::string filename, std::string directory, bool changeLogFile = false) {
       LogRotate logrotate(filename, directory);
 
@@ -144,9 +122,13 @@ namespace {
          logrotate.changeLogFile(directory, "");
       }
       auto logfilename = logrotate.logFileName();
-      EXPECT_EQ(directory + filename + ".log", logfilename);
+      std::string trailing_directory_character{directory.back()};
+      if (trailing_directory_character != std::string{"/"}) { // for tests where directory lack trailing "/"
+         directory = directory + "/";
+      }
 
-      logrotate.setMaxArchiveLogCount(3);
+      EXPECT_EQ(directory + filename + ".log", logfilename);
+      logrotate.setMaxArchiveLogCount(kMaxArchiveLogCount);
       std::string gone{"Soon to be missing words"};
       logrotate.save(gone);
       logrotate.setMaxLogSize(static_cast<int>(gone.size()));
@@ -160,8 +142,6 @@ namespace {
          exists = Exists(content, first_message_in_new_log);
          EXPECT_TRUE(exists) << "\n\tcontent:" << content << "-\n\tentry: " << gone;
          gone = first_message_in_new_log;
-         logrotate.setMaxLogSize(static_cast<int>(gone.size()));
-
          // force sleep 1 s to trigger new time
          std::this_thread::sleep_for(std::chrono::seconds(1));
       }
@@ -171,24 +151,37 @@ namespace {
 TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    RotateAndExpireOldLogs(_filename, _directory);
    auto app_name = _filename + ".log";
-   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-
-   const int kFilePathIndex = 1;
-   for (auto p : allFiles) {
-      _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
+   auto allFiles = LogRotateUtility::getAllLogFilesInDirectory(_directory, app_name);
+   auto allCompressedFiles = LogRotateUtility::getCompressedLogFilesInDirectory(_directory, app_name);
+   EXPECT_EQ(allFiles.size(), allCompressedFiles.size() +1);
+   EXPECT_EQ(allCompressedFiles.size(), kMaxArchiveLogCount) << " Failure " << FlattenToString(allFiles);
+   for (auto& file : allFiles) {;
+      EXPECT_TRUE(fs::exists(file)) << "It should exist but it doesn't: " << file << std::endl;
    }
-
-   EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
 }
 
+TEST_F(RotateFileTest, getDateFromFileName) {
+   std::string file_name = "g3sink_rotatefile_test.log.2022-03-19-14-41-43.gz";
+   std::string app_name = "g3sink_rotatefile_test";
+   std::string r_date_string;
+   std::string expected_date_string = "2022-03-19-14-41-43";
+   EXPECT_NE((long) 0, LogRotateUtility::getDateFromFileName(app_name, file_name, r_date_string));
+   EXPECT_EQ(r_date_string, expected_date_string);
+}
+
+
 TEST_F(RotateFileTest, rotateAndExpireOldLogsWithoutTrailingSlashForDirectory) {
-   auto filename = _filename.substr(0, _filename.size() - 1);  // remove the trailing '/'
-   RotateAndExpireOldLogs(_filename, _directory);
+   auto directory = _directory; //_directory.substr(0, _directory.size() - 1);  // remove the trailing '/'
+   RotateAndExpireOldLogs(_filename, directory);
    auto app_name = _filename + ".log";
-   std::cout << "FYI testing in directory: " << _directory << std::endl;
-   std::cout << "FYI app name: " << app_name << std::endl;
-   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-   EXPECT_EQ(allFiles.size(), size_t{3}) << " Failure " << ExtractContent(allFiles);
+   auto allFiles = LogRotateUtility::getAllLogFilesInDirectory(directory, app_name);
+   auto allCompressedFiles = LogRotateUtility::getCompressedLogFilesInDirectory(directory, app_name);
+
+   EXPECT_NE(allFiles.size(), allCompressedFiles.size());
+   EXPECT_EQ(allCompressedFiles.size(), kMaxArchiveLogCount) << " Failure " << FlattenToString(allCompressedFiles);
+   for (auto& file : allFiles) {
+      EXPECT_TRUE(fs::exists(file)) << "It should exist but it doesn't: " << file << std::endl;
+   }
 }
 
 TEST_F(RotateFileTest, setFlushPolicy__default__every_time) {
@@ -283,7 +276,6 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
 TEST_F(RotateFileTest, rotateLog) {
    LogRotate logrotate(_filename, _directory);
    std::string logfilename = logrotate.logFileName();
-   std::cout << logfilename << std::endl;
    std::string content;
    auto checkIfExist = [&](std::string expected) -> bool {
       content = ReadContent(logfilename);
@@ -292,7 +284,7 @@ TEST_F(RotateFileTest, rotateLog) {
    };
    logrotate.save("test1");
    ASSERT_TRUE(checkIfExist("test1")) << "\n\tcontent:" << content;
-   EXPECT_TRUE(DoesFileEntityExist(logfilename));
+   EXPECT_TRUE(fs::exists(logfilename));
    logrotate.rotateLog();
    logrotate.save("test2");
    ASSERT_FALSE(checkIfExist("test1")) << "\n\tcontent:" << content;
@@ -300,6 +292,8 @@ TEST_F(RotateFileTest, rotateLog) {
    auto app_name = _filename + ".log";
    logrotate.rotateLog();
    logrotate.save("test3");
-   auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, app_name);
-   EXPECT_EQ(allFiles.size(), size_t{1});
+   auto allFiles = LogRotateUtility::getAllLogFilesInDirectory(_directory, app_name);
+   auto compressedFiles = LogRotateUtility::getCompressedLogFilesInDirectory(_directory, app_name);
+   EXPECT_EQ(allFiles.size(), size_t{2}) << "Failure: " << FlattenToString(allFiles);
+   EXPECT_EQ(compressedFiles.size(), size_t{1}) << "Failure: " << FlattenToString(compressedFiles);
 }

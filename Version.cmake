@@ -12,10 +12,8 @@ if (${VERSION}.x STREQUAL ".x")
       endif()
       execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
    endif() 
-   # TODO: Kjell, remove this after evaluation
-   math(EXPR VERSION-BASE ${GIT_VERSION}/255)
-   math(EXPR VERSION-REMAINDER ${GIT_VERSION}%255)
    SET(BUILD_NUMBER ${VERSION-BASE})
    SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}-${VERSION-REMAINDER})
 endif()
-message("Software Version: ${VERSION}")
+message("Software Version: ${VERSION}") 
+ 

@@ -83,36 +83,29 @@ namespace  LogRotateUtility {
       return ss_entry.str();
    }
 
-   /// @return result as time from the file name
-   bool getDateFromFileName(const std::string& app_name, const std::string& file_name, long& result) {
+   /// @return result as time from the file name, return by reference also the complete date string
+   long getDateFromFileName(const std::string& app_name, const std::string& file_name, std::string& r_date_string) {
       if (file_name.find(app_name) != std::string::npos) {
-         std::string suffix = file_name.substr(app_name.size());
-         if (suffix.empty()) {
-            //this is the main log file
-            return false;
-         }
          using namespace std;
-
-         regex date_regex("\\.(\\d{4}-\\d{2}-\\d{2}-\\d{2}-\\d{2}-\\d{2})\\.gz");
+         const regex date_regex(".*([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2})+\\.gz");
          smatch date_match;
-         if (regex_match(suffix, date_match, date_regex)) {
+         if (regex_match(file_name, date_match, date_regex)) {
             if (date_match.size() == 2) {
-               std::string date = date_match[1].str();
+               r_date_string = date_match[1].str();
                struct tm tm = {0};
                time_t t;
-               if (strptime(date.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
-                  return false;
+               if (strptime(r_date_string.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
+                  return (long) 0;
                }
                t = mktime(&tm);
                if (t == -1) {
-                  return false;
+                  return (long) 0;
                }
-               result = (long) t;
-               return true;
+               return (long) t;
             }
          }
       }
-      return false;
+      return (long) 0;
    }
 
    std::string sanityFixPath(std::string path) {
@@ -145,61 +138,72 @@ namespace  LogRotateUtility {
    }
 
    /**
-    * Loop through the files in the folder
+    * Loop through the files in the folder. Delete old compressed files until max_log_count is reached
     * @param dir
     * @param file_name
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
-      std::map<long, std::string> files;
-      fs::path dir_path(dir);
-
-
-      fs::directory_iterator end_itr;
-      if (!fs::exists(dir_path)) return;
-
-      for (fs::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
-         std::string current_file(itr->path().filename().string());
-         long time = 0;
-         if (getDateFromFileName(app_name, current_file, time)) {
-            files.insert(std::pair<long, std::string > (time, current_file));
-         }
-      }
-
-      //delete old logs.
-      ptrdiff_t logs_to_delete = files.size() - max_log_count;
-      if (logs_to_delete > 0) {
-
-         for (std::map<long, std::string>::iterator it = files.begin(); it != files.end(); ++it) {
+      auto compressed_files = getCompressedLogFilesInDirectory(dir, app_name);
+      if(compressed_files.size() > max_log_count) {
+         auto logs_to_delete = compressed_files.size() - max_log_count;
+         for (const auto& p : compressed_files) {
             if (logs_to_delete <= 0) {
                break;
             }
-
-            auto path = sanityFixPath(dir);
-            std::string filename_with_path(createPathToFile(path, it->second));
-            remove(filename_with_path.c_str());
-            --logs_to_delete;
+            --logs_to_delete; // decrement the number of files to delete, even if the file could not be deleted          
+            std::error_code ec_file;
+            auto filename_with_path  = p.second;
+            if(false == fs::remove(filename_with_path, ec_file)) {
+               std::cerr << " Unable to delete " << filename_with_path << " " << ec_file.message() << std::endl;
+            } 
          }
       }
    }
+   /// return all files in the directory
+   std::vector<std::string> getFilesInDirectory(const std::string& path) {
+      if (!fs::exists(path)) {
+      return {};
+      }
 
-    std::map<long, std::string> getLogFilesInDirectory(const std::string& dir, const std::string& app_name) {
-        std::map<long, std::string> files;
-        fs::path dir_path(dir);
-  
- 
-       fs::directory_iterator end_itr;
-       if (!fs::exists(dir_path)) return {};
- 
-       for (fs::directory_iterator itr(dir_path); itr != end_itr; ++itr) {
-          std::string current_file(itr->path().filename().string());
-          long time = 0;
-          if (getDateFromFileName(app_name, current_file, time)) {
-             files.insert(std::pair<long, std::string > (time, current_file));
-          }
-       }
- 
-       return files;
-    }
+      std::vector<std::string> files;
+      for (const auto & entry : fs::directory_iterator(path)) {
+         files.push_back(entry.path());
+      }
+      return files;
+   }
+
+
+   /// returns both compressed and plain text log files
+   std::vector<std::string> getAllLogFilesInDirectory(const std::string& path, const std::string& app_name) {
+      auto any_files = getFilesInDirectory(path);
+
+
+      std::vector<std::string> files;
+      for (const auto & current_file : any_files) {
+         if(current_file.find(app_name) != std::string::npos) {
+            files.push_back(current_file);
+         }
+      }
+      return files;
+   }
+
+
+
+   std::map<long, std::string> getCompressedLogFilesInDirectory(const std::string& path, const std::string& app_name) {
+      auto log_type_files = getAllLogFilesInDirectory(path, app_name);
+      std::map<long, std::string> files;
+
+      for (const auto & current_file : log_type_files) {
+         std::string r_date_result;
+         auto time = getDateFromFileName(app_name, current_file, r_date_result);
+         if (time > 0) {
+            files.insert(std::pair<long, std::string > (time, current_file));
+         }
+      }
+      return files;
+}
+
+
 
 
    /// create the file name

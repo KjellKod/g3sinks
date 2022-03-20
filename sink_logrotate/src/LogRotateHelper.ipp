@@ -238,8 +238,10 @@ bool LogRotateHelper::rotateLog() {
          return false;
       }
       is.close();
-      if (remove(log_file_with_path_.c_str()) == -1) {
-         fileWriteWithoutRotate("Failed to remove old log!");
+      std::error_code ec_file;
+      if (false == fs::remove(log_file_with_path_, ec_file)) {
+         fileWriteWithoutRotate("Failed to remove old log: " + log_file_with_path_ + ". Error: "
+            + ec_file.message());
       }
       changeLogFile(log_directory_);
       std::ostringstream ss;

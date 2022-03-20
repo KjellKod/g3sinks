@@ -29,41 +29,26 @@ class RotateFileTest : public ::testing::Test {
    virtual void SetUp() {
       _filename = "g3sink_rotatefile_test";
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-      _directory = "./";
+      _directory = "./g3log_test_directory/";
 #else
-      _directory = "/tmp/not_yet_existing_g3log_directory/";
+      _directory = "/tmp/g3log_test_directory/";
 #endif
-                   _filesToRemove.push_back(std::string(_directory + _filename + ".log"));
    }
 
    virtual void TearDown() {
-      auto allFiles = LogRotateUtility::getLogFilesInDirectory(_directory, _filename + ".log");
-      const int kFilePathIndex = 1;
-      for (auto& p : allFiles) {
-         std::string file = std::get<kFilePathIndex>(p);
-         if ((std::find(_filesToRemove.begin(), _filesToRemove.end(), file) == _filesToRemove.end())) {
-            _filesToRemove.push_back(_directory + std::get<kFilePathIndex>(p));
-         }
-      }
-
-
-      const std::error_condition ok;
-      for (auto filename : _filesToRemove) {
+      auto allFiles = LogRotateUtility::getFilesInDirectory(_directory);
+      for (auto& filename : allFiles) {
          std::error_code ec_file;
-         fs::remove(filename, ec_file);
-         if (ok != ec_file) {
-            ADD_FAILURE() << "UNABLE to remove: " << filename << " " << ec_file.message() << std::endl;
-         }
+         if(false == fs::remove(filename, ec_file)) {
+            ADD_FAILURE() << "UNABLE to remove file: " << filename << " " << ec_file.message() << std::endl;
+         } 
       }
       std::error_code ec_dir;
-      fs::remove(_directory, ec_dir);
-      if (ok != ec_dir) {
-            ADD_FAILURE() << "UNABLE to remove: " << _directory << " " << ec_dir.message() << std::endl;
+      if(fs::exists(_directory) && !fs::remove(_directory, ec_dir)) {
+           ADD_FAILURE() << "UNABLE to remove directory: " << _directory << " " << ec_dir.message() << std::endl;
       }
-
    }
 
    std::string _filename;
    std::string _directory;
-   std::vector<std::string> _filesToRemove;
 };
