@@ -167,7 +167,7 @@ namespace  LogRotateUtility {
 
       std::vector<std::string> files;
       for (const auto & entry : fs::directory_iterator(path)) {
-         files.push_back(entry.path());
+         files.push_back(entry.path().string());
       }
       return files;
    }
