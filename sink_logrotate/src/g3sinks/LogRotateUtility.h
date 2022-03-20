@@ -52,7 +52,7 @@ namespace  LogRotateUtility {
 
    // return any found files in the directory
    std::vector<std::string> getFilesInDirectory(const std::string& path);
-   
+
    // return app_name matching log type files in the directory. This can be compressed and plain log files
    std::vector<std::string> getAllLogFilesInDirectory(const std::string& path, const std::string& app_name);
 

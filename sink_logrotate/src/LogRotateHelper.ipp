@@ -101,8 +101,8 @@ LogRotateHelper::LogRotateHelper(const std::string& log_prefix, const std::strin
       std::cerr << "g3log: forced abort due to illegal log prefix [" << log_prefix << "]" << std::endl;
       abort();
    }
-    auto logfile = changeLogFile(log_directory, log_prefix_backup_);
-    assert((nullptr != outptr_) && "bad directory or file path, cannot open log file at startup");
+   auto logfile = changeLogFile(log_directory, log_prefix_backup_);
+   assert((nullptr != outptr_) && "bad directory or file path, cannot open log file at startup");
 }
 
 /**
@@ -187,12 +187,12 @@ std::string LogRotateHelper::changeLogFile(const std::string& directory, const s
 
 
    auto prospect_path = sanityFixPath(directory);
-   auto prospect_log = createPathToFile(prospect_path, file_name); 
-   
+   auto prospect_log = createPathToFile(prospect_path, file_name);
+
    namespace fs = std::filesystem;
    fs::path log_dir_path = fs::path(prospect_path);
-   if (!fs::exists(log_dir_path)){
-     fs::create_directories(log_dir_path);
+   if (!fs::exists(log_dir_path)) {
+      fs::create_directories(log_dir_path);
    }
 
    prospect_log = addLogSuffix(prospect_log);
@@ -221,8 +221,8 @@ bool LogRotateHelper::rotateLog() {
    std::ofstream& is(filestream());
    namespace fs = std::filesystem;
    fs::path log_file_path = fs::path(log_file_with_path_);
-   if (!fs::exists(log_file_path)){
-     return false;
+   if (!fs::exists(log_file_path)) {
+      return false;
    }
 
 
@@ -241,7 +241,7 @@ bool LogRotateHelper::rotateLog() {
       std::error_code ec_file;
       if (false == fs::remove(log_file_with_path_, ec_file)) {
          fileWriteWithoutRotate("Failed to remove old log: " + log_file_with_path_ + ". Error: "
-            + ec_file.message());
+                                + ec_file.message());
       }
       changeLogFile(log_directory_);
       std::ostringstream ss;

@@ -16,11 +16,11 @@
 namespace fs = std::filesystem;
 
 class FilterTest : public ::testing::Test {
- public:
+public:
 
    FilterTest() {
    };
- protected:
+protected:
 
    virtual void SetUp() {
       _filename = "g3sink_filter_rotatefile_test";
@@ -35,12 +35,12 @@ class FilterTest : public ::testing::Test {
       auto allFiles = LogRotateUtility::getFilesInDirectory(_directory);
       for (auto& filename : allFiles) {
          std::error_code ec_file;
-         if(false == fs::remove(filename, ec_file)) {
+         if (false == fs::remove(filename, ec_file)) {
             ADD_FAILURE() << "UNABLE to remove file: " << filename << " " << ec_file.message() << std::endl;
-         } 
+         }
          std::error_code ec_dir;
-         if(fs::exists(_directory) && !fs::remove(_directory, ec_dir)) {
-           ADD_FAILURE() << "UNABLE to remove directory: " << _directory << " " << ec_dir.message() << std::endl;
+         if (fs::exists(_directory) && !fs::remove(_directory, ec_dir)) {
+            ADD_FAILURE() << "UNABLE to remove directory: " << _directory << " " << ec_dir.message() << std::endl;
          }
       }
    }

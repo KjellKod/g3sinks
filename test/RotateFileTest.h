@@ -19,11 +19,11 @@
 namespace fs = std::filesystem;
 
 class RotateFileTest : public ::testing::Test {
- public:
+public:
 
    RotateFileTest() {
    };
- protected:
+protected:
 
 
    virtual void SetUp() {
@@ -39,13 +39,13 @@ class RotateFileTest : public ::testing::Test {
       auto allFiles = LogRotateUtility::getFilesInDirectory(_directory);
       for (auto& filename : allFiles) {
          std::error_code ec_file;
-         if(false == fs::remove(filename, ec_file)) {
+         if (false == fs::remove(filename, ec_file)) {
             ADD_FAILURE() << "UNABLE to remove file: " << filename << " " << ec_file.message() << std::endl;
-         } 
+         }
       }
       std::error_code ec_dir;
-      if(fs::exists(_directory) && !fs::remove(_directory, ec_dir)) {
-           ADD_FAILURE() << "UNABLE to remove directory: " << _directory << " " << ec_dir.message() << std::endl;
+      if (fs::exists(_directory) && !fs::remove(_directory, ec_dir)) {
+         ADD_FAILURE() << "UNABLE to remove directory: " << _directory << " " << ec_dir.message() << std::endl;
       }
    }
 

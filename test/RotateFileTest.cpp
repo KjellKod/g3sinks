@@ -22,9 +22,9 @@ using namespace RotateTestHelper;
 namespace fs = std::filesystem;
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
-#define F_OK 0
+   #define F_OK 0
 #else
-#include <unistd.h>
+   #include <unistd.h>
 #endif
 
 TEST_F(RotateFileTest, CreateObject) {
@@ -153,9 +153,10 @@ TEST_F(RotateFileTest, rotateAndExpireOldLogs) {
    auto app_name = _filename + ".log";
    auto allFiles = LogRotateUtility::getAllLogFilesInDirectory(_directory, app_name);
    auto allCompressedFiles = LogRotateUtility::getCompressedLogFilesInDirectory(_directory, app_name);
-   EXPECT_EQ(allFiles.size(), allCompressedFiles.size() +1);
+   EXPECT_EQ(allFiles.size(), allCompressedFiles.size() + 1);
    EXPECT_EQ(allCompressedFiles.size(), kMaxArchiveLogCount) << " Failure " << FlattenToString(allFiles);
-   for (auto& file : allFiles) {;
+   for (auto& file : allFiles) {
+      ;
       EXPECT_TRUE(fs::exists(file)) << "It should exist but it doesn't: " << file << std::endl;
    }
 }
@@ -271,6 +272,7 @@ TEST_F(RotateFileTest, setFlushPolicy__force_flush) {
    logrotate.flush();
    ASSERT_TRUE(checkIfExist("msg4")) << "\n\tcontent:" << content;  // 3rd write flushes it + previous
 }
+
 
 
 TEST_F(RotateFileTest, rotateLog) {

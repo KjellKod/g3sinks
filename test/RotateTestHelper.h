@@ -8,7 +8,7 @@
 * PUBLIC DOMAIN and Not copywrited. First published at KjellKod.cc
 * ********************************************* */
 
-#pragma once 
+#pragma once
 
 
 #include <string>
@@ -16,8 +16,8 @@
 #include <map>
 
 namespace RotateTestHelper {
-  std::string ReadContent(const std::string filename);
-  std::string FlattenToString(const std::vector<std::string>& content);
-  std::string FlattenToString(const std::map<long, std::string>& content);
-  bool Exists(const std::string content, const std::string expected);
+   std::string ReadContent(const std::string filename);
+   std::string FlattenToString(const std::vector<std::string>& content);
+   std::string FlattenToString(const std::map<long, std::string>& content);
+   bool Exists(const std::string content, const std::string expected);
 }

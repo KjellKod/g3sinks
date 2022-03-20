@@ -76,10 +76,10 @@ namespace  LogRotateUtility {
    /// @return the file header
    std::string header() {
       std::ostringstream ss_entry;
-      //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y" 
-     //   and formatted output as : Wed Sep 19 08:28:16 2012
-     auto now = std::chrono::system_clock::now();      
-     ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(now, "%a %b %d %H:%M:%S %Y") << "\n";
+      //  Day Month Date Time Year: is written as "%a %b %d %H:%M:%S %Y"
+      //   and formatted output as : Wed Sep 19 08:28:16 2012
+      auto now = std::chrono::system_clock::now();
+      ss_entry << "\ng3log: created log file at: " << g3::localtime_formatted(now, "%a %b %d %H:%M:%S %Y") << "\n";
       return ss_entry.str();
    }
 
@@ -144,25 +144,25 @@ namespace  LogRotateUtility {
     */
    void expireArchives(const std::string& dir, const std::string& app_name, unsigned long max_log_count) {
       auto compressed_files = getCompressedLogFilesInDirectory(dir, app_name);
-      if(compressed_files.size() > max_log_count) {
+      if (compressed_files.size() > max_log_count) {
          auto logs_to_delete = compressed_files.size() - max_log_count;
          for (const auto& p : compressed_files) {
             if (logs_to_delete <= 0) {
                break;
             }
-            --logs_to_delete; // decrement the number of files to delete, even if the file could not be deleted          
+            --logs_to_delete; // decrement the number of files to delete, even if the file could not be deleted
             std::error_code ec_file;
             auto filename_with_path  = p.second;
-            if(false == fs::remove(filename_with_path, ec_file)) {
+            if (false == fs::remove(filename_with_path, ec_file)) {
                std::cerr << " Unable to delete " << filename_with_path << " " << ec_file.message() << std::endl;
-            } 
+            }
          }
       }
    }
    /// return all files in the directory
    std::vector<std::string> getFilesInDirectory(const std::string& path) {
       if (!fs::exists(path)) {
-      return {};
+         return {};
       }
 
       std::vector<std::string> files;
@@ -180,7 +180,7 @@ namespace  LogRotateUtility {
 
       std::vector<std::string> files;
       for (const auto & current_file : any_files) {
-         if(current_file.find(app_name) != std::string::npos) {
+         if (current_file.find(app_name) != std::string::npos) {
             files.push_back(current_file);
          }
       }
@@ -201,7 +201,7 @@ namespace  LogRotateUtility {
          }
       }
       return files;
-}
+   }
 
 
 

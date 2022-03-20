@@ -15,8 +15,8 @@
 
 // helper function to create an logging sink with filter
 std::unique_ptr<LogRotateWithFilter> LogRotateWithFilter::CreateLogRotateWithFilter(std::string filename, std::string directory, std::vector<LEVELS> filter) {
-    auto logRotatePtr = std::make_unique<LogRotate>(filename, directory);
-    return std::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filter);
+   auto logRotatePtr = std::make_unique<LogRotate>(filename, directory);
+   return std::make_unique<LogRotateWithFilter>(std::move(logRotatePtr), filter);
 }
 
 
@@ -24,56 +24,55 @@ std::unique_ptr<LogRotateWithFilter> LogRotateWithFilter::CreateLogRotateWithFil
 /// @param logToFile rotate file logging sink
 /// @param removes all log entries with LEVELS in this filter
 LogRotateWithFilter::LogRotateWithFilter(LogRotateUniquePtr logToFile, IgnoreLogLevelsFilter ignoreLevels)
-    : _logger(std::move(logToFile))
-    , _filter(std::move(ignoreLevels))
-    , _log_details_func(&g3::LogMessage::DefaultLogDetailsToString)
-     {}
+   : _logger(std::move(logToFile))
+   , _filter(std::move(ignoreLevels))
+   , _log_details_func(&g3::LogMessage::DefaultLogDetailsToString){}
 
 
 LogRotateWithFilter::~LogRotateWithFilter() {}
 
 /// @param logEntry saves log entry that are not in the filter
 void LogRotateWithFilter::save(g3::LogMessageMover logEntry) {
-    auto level = logEntry.get()._level;
-    bool isNotInFilter_ = (_filter.end() == std::find(_filter.begin(), _filter.end(), level));
+   auto level = logEntry.get()._level;
+   bool isNotInFilter_ = (_filter.end() == std::find(_filter.begin(), _filter.end(), level));
 
-    if(isNotInFilter_) {
+   if (isNotInFilter_) {
       _logger->save(logEntry.get().toString(_log_details_func));
    }
 }
 
 std::string LogRotateWithFilter::changeLogFile(const std::string& log_directory) {
-    return _logger->changeLogFile(log_directory);
+   return _logger->changeLogFile(log_directory);
 }
 
 
 /// @return the current filename
 std::string LogRotateWithFilter::logFileName() {
-    return _logger->logFileName();
+   return _logger->logFileName();
 }
 
 /// @param max_size sets the maximum number of archived logs
 /// when logging and it finally gets out of archived logs to
 /// write to then it will overwrite old compressed logs
 void LogRotateWithFilter::setMaxArchiveLogCount(int max_size) {
-    _logger->setMaxArchiveLogCount(max_size);
+   _logger->setMaxArchiveLogCount(max_size);
 }
 
 /// @param max_file_size sets the max log size in bytes
 void LogRotateWithFilter::setMaxLogSize(int max_file_size) {
-    _logger->setMaxLogSize(max_file_size);
+   _logger->setMaxLogSize(max_file_size);
 }
 
 /**
-* Flush policy: Default is every single time (i.e. policy of 1). 
+* Flush policy: Default is every single time (i.e. policy of 1).
 *
 * If the system logs A LOT then it is likely better to allow for the system to buffer and write
-* all the entries at once. 
-* 
+* all the entries at once.
+*
 * 0: System decides, potentially very long time
-* 1....N: Flush logs every n entry 
+* 1....N: Flush logs every n entry
 */
-void LogRotateWithFilter::setFlushPolicy(size_t flush_policy){
+void LogRotateWithFilter::setFlushPolicy(size_t flush_policy) {
    _logger->setFlushPolicy(flush_policy);
 }
 
@@ -82,13 +81,13 @@ void LogRotateWithFilter::setFlushPolicy(size_t flush_policy){
 * but is great for unit testing and if there are special circumstances where you want to see
 * the logs faster than the flush_policy
 */
-void LogRotateWithFilter::flush(){
+void LogRotateWithFilter::flush() {
    _logger->flush();
 }
 
 
-/** 
-* Override the defualt log formatting. 
+/**
+* Override the defualt log formatting.
 * Please see https://github.com/KjellKod/g3log/API.markdown for more details
 */
 void LogRotateWithFilter::overrideLogDetails(g3::LogMessage::LogDetailsFunc func) {

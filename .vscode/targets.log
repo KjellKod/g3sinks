@@ -1,0 +1,1299 @@
+make all -f /Users/kjell/ws/test/g3sinks/build/Makefile --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+
+# Make data base, printed on Sat Mar 19 20:18:38 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+ 
+?F = $(notdir $?)
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+GRADLE_HOME = /Users/kjell/.sdkman/candidates/gradle/current
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/kjell/ws/test/g3sinks
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 48)
+SHELL = /bin/sh
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 54)
+RM = /usr/local/Cellar/cmake/3.21.4/bin/cmake -E rm -f
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 63)
+CMAKE_BINARY_DIR = /Users/kjell/ws/test/g3sinks/build
+# environment
+MAVEN_HOME = /Users/kjell/.sdkman/candidates/maven/current
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 1)
+MAKEFILE_LIST :=  /Users/kjell/ws/test/g3sinks/build/Makefile
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+__CFBundleIdentifier = com.microsoft.VSCode
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 35)
+MAKESILENT = -s
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/cr/xgy094ns1jzfx9v87dlv87n80000gn/T/vscode-ipc-c3295285-6dad-4392-9f10-de0354855ded.sock
+# environment
+VSCODE_CWD = /
+# environment
+PATH = /Users/kjell/.sdkman/candidates/maven/current/bin:/Users/kjell/.sdkman/candidates/kotlin/current/bin:/Users/kjell/.sdkman/candidates/java/current/bin:/Users/kjell/.sdkman/candidates/gradle/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin
+# environment
+SDKMAN_DIR = /Users/kjell/.sdkman
+# environment
+SDKMAN_CANDIDATES_API = https://api.sdkman.io/2
+# environment
+SDKMAN_PLATFORM = darwinx64
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.eGss7D5boy/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/kjell/ws/test/g3sinks
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+KOTLIN_HOME = /Users/kjell/.sdkman/candidates/kotlin/current
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+HOME = /Users/kjell
+# default
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/kjell/Library/Application Support/Code/CachedData/6cba118ac49a1b88332f312a8f67186f7f3c1643
+# environment
+LOGNAME = kjell
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 57)
+EQUALS = =
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+XPC_FLAGS = 0x0
+# environment
+SDKMAN_VERSION = 5.13.1
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 1
+# environment
+JAVA_HOME = /Users/kjell/.sdkman/candidates/java/current
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = kjell
+# makefile
+.DEFAULT_GOAL := default_target
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 60)
+CMAKE_SOURCE_DIR = /Users/kjell/ws/test/g3sinks
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# default
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/cr/xgy094ns1jzfx9v87dlv87n80000gn/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/kjell/Library/Application Support/Code/1.61.2-main.sock
+# makefile
+MAKEFLAGS = sRrqp
+# environment
+MFLAGS = -sRrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.5724489.5724495
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+__CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x0
+ 
+# environment
+COMMAND_MODE = unix2003
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+SDKMAN_CANDIDATES_DIR = /Users/kjell/.sdkman/candidates
+# environment
+LC_ALL = C
+# makefile (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 51)
+CMAKE_COMMAND = /usr/local/Cellar/cmake/3.21.4/bin/cmake
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+MAKELEVEL := 0
+# environment
+LANG = C
+# environment
+VSCODE_PID = 10786
+# variable set hash-table stats:
+# Load=77/1024=8%, Rehash=0, Collisions=3/109=3%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# SCCS: could not be stat'd.
+# RCS: could not be stat'd.
+
+# No files, no impossibilities in 2 directories.
+
+# Implicit Rules
+
+%: %,v
+
+%: RCS/%
+
+%: RCS/%,v
+
+%: SCCS/s.%
+
+%: s.%
+
+%.hpux_make_needs_suffix_list:
+
+# 6 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+example_logrotate_and_filter: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 693):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_logrotate_and_filter
+	
+
+cmake_force:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+test/fast: test
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+list_install_components:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 94):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+	
+
+NightlyBuild/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 451):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyBuild.dir/build.make CMakeFiles/NightlyBuild.dir/build
+	
+
+Continuous: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 550):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Continuous
+	
+
+ContinuousBuild/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 243):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousBuild.dir/build.make CMakeFiles/ContinuousBuild.dir/build
+	
+
+install/local: preinstall
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 82):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	
+
+edit_cache:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 155):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/local/Cellar/cmake/3.21.4/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	
+
+ExperimentalBuild/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 269):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalBuild.dir/build.make CMakeFiles/ExperimentalBuild.dir/build
+	
+
+all: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Command-line target.
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 165):
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/kjell/ws/test/g3sinks/build/CMakeFiles /Users/kjell/ws/test/g3sinks/build//CMakeFiles/progress.marks
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/kjell/ws/test/g3sinks/build/CMakeFiles 0
+	
+
+ContinuousUpdate/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 308):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousUpdate.dir/build.make CMakeFiles/ContinuousUpdate.dir/build
+	
+
+ContinuousCoverage: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 212):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousCoverage
+	
+
+example_syslog: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 667):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_syslog
+	
+
+NightlyCoverage: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 407):
+ 
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyCoverage
+	
+
+.PHONY: default_target cmake_force install/strip install/strip/fast install/local install/local/fast list_install_components list_install_components/fast rebuild_cache rebuild_cache/fast package_source package_source/fast install install/fast test test/fast package package/fast edit_cache edit_cache/fast all clean clean/fast preinstall preinstall/fast depend clean-cmake clean-cmake/fast ContinuousCoverage ContinuousCoverage/fast ContinuousTest ContinuousTest/fast ContinuousBuild ContinuousBuild/fast ContinuousStart ContinuousStart/fast ExperimentalBuild ExperimentalBuild/fast ExperimentalCoverage ExperimentalCoverage/fast ExperimentalSubmit ExperimentalSubmit/fast ContinuousUpdate ContinuousUpdate/fast ExperimentalUpdate ExperimentalUpdate/fast ExperimentalStart ExperimentalStart/fast ContinuousSubmit ContinuousSubmit/fast ExperimentalTest ExperimentalTest/fast NightlySubmit NightlySubmit/fast NightlyMemCheck NightlyMemCheck/fast ExperimentalConfigure ExperimentalConfigure/fast NightlyCoverage NightlyCoverage/fast NightlyTest NightlyTest/fast ContinuousMemCheck ContinuousMemCheck/fast NightlyBuild NightlyBuild/fast NightlyConfigure NightlyConfigure/fast NightlyUpdate NightlyUpdate/fast NightlyMemoryCheck NightlyMemoryCheck/fast ContinuousConfigure ContinuousConfigure/fast Nightly Nightly/fast NightlyStart NightlyStart/fast ExperimentalMemCheck ExperimentalMemCheck/fast Continuous Continuous/fast Experimental Experimental/fast gmock gmock/fast gmock_main gmock_main/fast gtest_main gtest_main/fast gtest gtest/fast g3logrotate g3logrotate/fast g3syslog g3syslog/fast test_logrotate test_logrotate/fast example_syslog example_syslog/fast example_coloredcout example_coloredcout/fast example_logrotate_and_filter example_logrotate_and_filter/fast example_filedescriptor example_filedescriptor/fast help cmake_check_build_system
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+ExperimentalCoverage: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 277):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalCoverage
+	
+
+example_filedescriptor/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 711):
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_filedescriptor.dir/build.make examples/CMakeFiles/example_filedescriptor.dir/build
+	
+
+g3logrotate/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 633):
+	$(MAKE) $(MAKESILENT) -f sink_logrotate/CMakeFiles/g3logrotate.dir/build.make sink_logrotate/CMakeFiles/g3logrotate.dir/build
+	
+
+example_coloredcout/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 685):
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_coloredcout.dir/build.make examples/CMakeFiles/example_coloredcout.dir/build
+	
+
+NightlyMemoryCheck: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 485):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyMemoryCheck
+	
+
+preinstall/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 186):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	
+
+# Not a target:
+/Users/kjell/ws/test/g3sinks/build/Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-19 20:12:11
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+ContinuousStart: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 251):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousStart
+	
+
+NightlyStart: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 524):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyStart
+	
+
+ExperimentalStart: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 329):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalStart
+	
+
+NightlyUpdate/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 477):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyUpdate.dir/build.make CMakeFiles/NightlyUpdate.dir/build
+	
+
+ExperimentalUpdate: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 316):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalUpdate
+	
+
+.SUFFIXES: .hpux_make_needs_suffix_list
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+package_source:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 113):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cpack --config ./CPackSourceConfig.cmake /Users/kjell/ws/test/g3sinks/build/CPackSourceConfig.cmake
+	
+
+g3logrotate: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 628):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 g3logrotate
+	
+
+clean-cmake/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 204):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/clean-cmake.dir/build.make CMakeFiles/clean-cmake.dir/build
+	
+
+Nightly/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 516):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Nightly.dir/build.make CMakeFiles/Nightly.dir/build
+	
+
+ExperimentalTest/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 360):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalTest.dir/build.make CMakeFiles/ExperimentalTest.dir/build
+	
+
+NightlyBuild: cmake_check_build_system
+ 
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 446):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyBuild
+	
+
+test:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 135):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/local/Cellar/cmake/3.21.4/bin/ctest --force-new-ctest-process $(ARGS)
+	
+
+g3syslog/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 646):
+	$(MAKE) $(MAKESILENT) -f sink_syslog/CMakeFiles/g3syslog.dir/build.make sink_syslog/CMakeFiles/g3syslog.dir/build
+	
+
+package/fast: package
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+.NOTPARALLEL:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+gtest_main/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 607):
+	$(MAKE) $(MAKESILENT) -f googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+	
+
+Continuous/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 555):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Continuous.dir/build.make CMakeFiles/Continuous.dir/build
+	
+
+ContinuousTest/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 230):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousTest.dir/build.make CMakeFiles/ContinuousTest.dir/build
+	
+
+clean/fast: clean
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+ExperimentalBuild: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 264):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalBuild
+	
+
+gmock_main/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 594):
+	$(MAKE) $(MAKESILENT) -f googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
+	
+
+ContinuousMemCheck/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 438):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousMemCheck.dir/build.make CMakeFiles/ContinuousMemCheck.dir/build
+	
+
+test_logrotate/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 659):
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_logrotate.dir/build.make test/CMakeFiles/test_logrotate.dir/build
+	
+
+ContinuousUpdate: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 303):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousUpdate
+	
+
+NightlyTest/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 425):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyTest.dir/build.make CMakeFiles/NightlyTest.dir/build
+	
+
+install/strip/fast: preinstall/fast
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 76):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	
+
+Experimental/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 568):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Experimental.dir/build.make CMakeFiles/Experimental.dir/build
+	
+
+cmake_check_build_system:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: `'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := cmake_check_build_system
+# automatic
+# % := 
+# automatic
+# * := 
+# automatic
+# + := 
+# automatic
+# | := 
+# automatic
+# < := 
+# automatic
+# ^ := 
+# automatic
+# ? := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=3/13=23%
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 780):
+	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	
+
+ContinuousSubmit/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 347):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousSubmit.dir/build.make CMakeFiles/ContinuousSubmit.dir/build
+	
+
+NightlySubmit/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 373):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlySubmit.dir/build.make CMakeFiles/NightlySubmit.dir/build
+	
+
+ExperimentalSubmit/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 295):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalSubmit.dir/build.make CMakeFiles/ExperimentalSubmit.dir/build
+ 
+	
+
+ExperimentalMemCheck/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 542):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalMemCheck.dir/build.make CMakeFiles/ExperimentalMemCheck.dir/build
+	
+
+example_coloredcout: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 680):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_coloredcout
+	
+
+ContinuousConfigure/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 503):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousConfigure.dir/build.make CMakeFiles/ContinuousConfigure.dir/build
+	
+
+preinstall: all
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 181):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	
+
+ExperimentalConfigure/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 399):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalConfigure.dir/build.make CMakeFiles/ExperimentalConfigure.dir/build
+	
+
+help:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 716):
+	@echo "The following are some of the valid targets for this Makefile:"
+	@echo "... all (the default if no target is provided)"
+	@echo "... clean"
+	@echo "... depend"
+	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
+	@echo "... package"
+	@echo "... package_source"
+	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... Continuous"
+	@echo "... ContinuousBuild"
+	@echo "... ContinuousConfigure"
+	@echo "... ContinuousCoverage"
+	@echo "... ContinuousMemCheck"
+	@echo "... ContinuousStart"
+	@echo "... ContinuousSubmit"
+	@echo "... ContinuousTest"
+	@echo "... ContinuousUpdate"
+	@echo "... Experimental"
+	@echo "... ExperimentalBuild"
+	@echo "... ExperimentalConfigure"
+	@echo "... ExperimentalCoverage"
+	@echo "... ExperimentalMemCheck"
+	@echo "... ExperimentalStart"
+	@echo "... ExperimentalSubmit"
+	@echo "... ExperimentalTest"
+	@echo "... ExperimentalUpdate"
+	@echo "... Nightly"
+	@echo "... NightlyBuild"
+	@echo "... NightlyConfigure"
+	@echo "... NightlyCoverage"
+	@echo "... NightlyMemCheck"
+	@echo "... NightlyMemoryCheck"
+	@echo "... NightlyStart"
+	@echo "... NightlySubmit"
+	@echo "... NightlyTest"
+	@echo "... NightlyUpdate"
+	@echo "... clean-cmake"
+	@echo "... example_coloredcout"
+	@echo "... example_filedescriptor"
+	@echo "... example_logrotate_and_filter"
+	@echo "... example_syslog"
+	@echo "... g3logrotate"
+	@echo "... g3syslog"
+	@echo "... gmock"
+	@echo "... gmock_main"
+	@echo "... gtest"
+	@echo "... gtest_main"
+	@echo "... test_logrotate"
+	
+
+.SILENT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+depend:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 191):
+	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	
+
+NightlyUpdate: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 472):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyUpdate
+	
+
+clean-cmake: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 199):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean-cmake
+	
+
+gmock_main: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 589):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock_main
+	
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+default_target: all
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+Nightly: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 511):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Nightly
+	
+
+g3syslog: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 641):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 g3syslog
+	
+
+ExperimentalTest: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 355):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalTest
+	
+
+package: preinstall
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 145):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cpack --config ./CPackConfig.cmake
+	
+
+NightlyMemCheck/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+ 
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 386):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyMemCheck.dir/build.make CMakeFiles/NightlyMemCheck.dir/build
+	
+
+NightlyConfigure/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 464):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyConfigure.dir/build.make CMakeFiles/NightlyConfigure.dir/build
+	
+
+gtest_main: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 602):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
+	
+
+NightlyMemCheck: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 381):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyMemCheck
+	
+
+ContinuousTest: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 225):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousTest
+	
+
+gmock/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 581):
+	$(MAKE) $(MAKESILENT) -f googletest-build/googlemock/CMakeFiles/gmock.dir/build.make googletest-build/googlemock/CMakeFiles/gmock.dir/build
+	
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 172):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	
+
+install/fast: preinstall/fast
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 129):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake -P cmake_install.cmake
+	
+
+test_logrotate: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 654):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_logrotate
+	
+
+ContinuousMemCheck: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 433):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousMemCheck
+	
+
+example_logrotate_and_filter/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 698):
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_logrotate_and_filter.dir/build.make examples/CMakeFiles/example_logrotate_and_filter.dir/build
+	
+
+rebuild_cache/fast: rebuild_cache
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+install/strip: preinstall
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 70):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	
+
+NightlyTest: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 420):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyTest
+	
+
+list_install_components/fast: list_install_components
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+edit_cache/fast: edit_cache
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+Experimental: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 563):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Experimental
+	
+
+example_filedescriptor: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 706):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 example_filedescriptor
+	
+
+ContinuousSubmit: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 342):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousSubmit
+	
+
+install/local/fast: preinstall/fast
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 88):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	
+
+NightlySubmit: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 368):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlySubmit
+	
+
+gtest/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 620):
+	$(MAKE) $(MAKESILENT) -f googletest-build/googletest/CMakeFiles/gtest.dir/build.make googletest-build/googletest/CMakeFiles/gtest.dir/build
+	
+
+ExperimentalSubmit: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 290):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalSubmit
+	
+
+ExperimentalMemCheck: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+ 
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 537):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalMemCheck
+	
+
+ContinuousBuild: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 238):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousBuild
+	
+
+ContinuousConfigure: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 498):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ContinuousConfigure
+	
+
+NightlyConfigure: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 459):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NightlyConfigure
+	
+
+ExperimentalConfigure: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 394):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ExperimentalConfigure
+	
+
+ContinuousCoverage/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 217):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousCoverage.dir/build.make CMakeFiles/ContinuousCoverage.dir/build
+	
+
+example_syslog/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 672):
+	$(MAKE) $(MAKESILENT) -f examples/CMakeFiles/example_syslog.dir/build.make examples/CMakeFiles/example_syslog.dir/build
+	
+
+NightlyCoverage/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 412):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyCoverage.dir/build.make CMakeFiles/NightlyCoverage.dir/build
+	
+
+ExperimentalCoverage/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 282):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalCoverage.dir/build.make CMakeFiles/ExperimentalCoverage.dir/build
+	
+
+# Not a target:
+.hpux_make_needs_suffix_list:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+gtest: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 615):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+	
+
+NightlyMemoryCheck/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 490):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyMemoryCheck.dir/build.make CMakeFiles/NightlyMemoryCheck.dir/build
+	
+
+ContinuousStart/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 256):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ContinuousStart.dir/build.make CMakeFiles/ContinuousStart.dir/build
+	
+
+NightlyStart/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 529):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NightlyStart.dir/build.make CMakeFiles/NightlyStart.dir/build
+	
+
+ExperimentalStart/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 334):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalStart.dir/build.make CMakeFiles/ExperimentalStart.dir/build
+	
+
+ExperimentalUpdate/fast:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 321):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ExperimentalUpdate.dir/build.make CMakeFiles/ExperimentalUpdate.dir/build
+	
+
+gmock: cmake_check_build_system
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 576):
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock
+	
+
+package_source/fast: package_source
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+install: preinstall
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 123):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake -P cmake_install.cmake
+	
+
+rebuild_cache:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `/Users/kjell/ws/test/g3sinks/build/Makefile', line 103):
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/local/Cellar/cmake/3.21.4/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	
+
+# files hash-table stats:
+# Load=115/1024=11%, Rehash=0, Collisions=23/404=6%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+ 
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4052 / max = 4052 / min = 4052 / avg = 4052
+
+# Finished Make data base on Sat Mar 19 20:18:38 2022
+
+ 

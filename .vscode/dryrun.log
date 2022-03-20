@@ -1,0 +1,21 @@
+make -f /Users/kjell/ws/test/g3sinks/build/Makefile --dry-run --keep-going --print-directory
+make: Entering directory `/Users/kjell/ws/test/g3sinks'
+/usr/local/Cellar/cmake/3.21.4/bin/cmake -S/Users/kjell/ws/test/g3sinks -B/Users/kjell/ws/test/g3sinks/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/local/Cellar/cmake/3.21.4/bin/cmake -E cmake_progress_start /Users/kjell/ws/test/g3sinks/build/CMakeFiles /Users/kjell/ws/test/g3sinks/build//CMakeFiles/progress.marks
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -s -f CMakeFiles/Makefile2 all
+ 
+make[1]: Entering directory `/Users/kjell/ws/test/g3sinks'
+ 
+make[1]: CMakeFiles/Makefile2: No such file or directory
+ 
+make[1]: *** No rule to make target `CMakeFiles/Makefile2'.
+make[1]: Failed to remake makefile `CMakeFiles/Makefile2'.
+ 
+make[1]: *** No rule to make target `all'.
+ 
+make[1]: Leaving directory `/Users/kjell/ws/test/g3sinks'
+ 
+make: *** [all] Error 2
+ 
+make: Leaving directory `/Users/kjell/ws/test/g3sinks'
+ 
