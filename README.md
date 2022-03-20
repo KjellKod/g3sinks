@@ -84,18 +84,20 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local/ -DBUILD_TEST=ON
 make -j
 ```
 
-### Executing the unit tests
-```
-./UnitTestRunneer
-```
-
 ### Executing all the unit tests and examples
-From the `build` directory after a successful make
-
 ```
 cd .. // out to g3sinks root directory
-
 ./scripts/buildAndRunTests.sh
+```
+
+From the `build` directory after a successful `cmake & make`
+```
+// any of these should work 
+./test/test_testlogrotate 
+make test 
+ctest 
+ctest -V
+
 ```
 
 ### Installing
