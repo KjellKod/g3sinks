@@ -21,6 +21,7 @@
 #include <iostream>
 #include <regex>
 #include <sstream>
+#include <string>
 
 namespace fs = std::filesystem;
 namespace LogRotateUtility {
@@ -110,6 +111,11 @@ namespace LogRotateUtility {
    std::string sanityFixPath(std::string path) {
       // Unify the delimeters,. maybe sketchy solution but it seems to work
       // on at least win7 + ubuntu. All bets are off for older windows
+      std::string last_character{path.back()};
+      if ("/" != last_character) {
+         path += "/";
+      }
+
       std::replace(path.begin(), path.end(), '\\', '/');
 
       // clean up in case of multiples

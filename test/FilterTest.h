@@ -27,7 +27,7 @@ protected:
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
       _directory = "./g3log_test_directory";
 #else
-      _directory = "/tmp/g3log_test_directory/";
+      _directory = "/tmp/g3log_test_directory";
 #endif
    }
 

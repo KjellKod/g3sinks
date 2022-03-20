@@ -12,9 +12,12 @@
 #include <cerrno>
 #include <memory>
 #include <cstring>
+#include <filesystem>
 #include "FilterTest.h"
 #include <g3sinks/LogRotateWithFilter.h>
 #include "RotateTestHelper.h"
+
+namespace fs = std::filesystem;
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(__MINGW32__)
    #define F_OK 0
@@ -41,12 +44,13 @@ TEST_F(FilterTest, CreateObject) {
    std::string logfilename;
    {
       auto logRotatePtr = std::make_unique<LogRotate>(_filename, _directory);
-
       LogRotateWithFilter logWithFilter(std::move(logRotatePtr), {});
+      logfilename = logWithFilter.logFileName();
    } // RAII flush of log
-   auto name = std::string{_directory + _filename + ".log"};
-   int check = access(name.c_str(), F_OK); // check that the file exists
-   EXPECT_EQ(check, 0) << std::strerror(errno) << " : " << name;
+   
+   auto file = std::string{_directory + "/" + _filename + ".log"};
+   EXPECT_TRUE(fs::exists(file));
+   EXPECT_EQ(logfilename, file);
 }
 
 
@@ -93,26 +97,27 @@ TEST_F(FilterTest, OverrideLogDetails) {
       out.append(std::string(" === ") + msg.level() + (" !!! "));
       return out;
    };
-
+   std::string filename;
    {
       auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
       filterSinkPtr->overrideLogDetails(formatting);
-
       auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
       filterSinkPtr->save(message0);
+      filename = filterSinkPtr->logFileName();
    } // raii
 
-   auto name = std::string{_directory + _filename + ".log"};
-   auto content = ReadContent(name);
+   auto content = ReadContent(filename);
    EXPECT_TRUE(Exists(content, "=== INFO !!! Hello World")) << content;
 }
 
 
 TEST_F(FilterTest, NothingFiltered) {
+   std::string filename;
    {
       auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {});
       auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
       filterSinkPtr->save(message0);
+      filename = filterSinkPtr->logFileName();
 
       auto message1 = CREATE_LOG_ENTRY(G3LOG_DEBUG, "Hello D World");
       filterSinkPtr->save(message1);
@@ -125,8 +130,7 @@ TEST_F(FilterTest, NothingFiltered) {
 
    } // raii
 
-   auto name = std::string{_directory + _filename + ".log"};
-   auto content = ReadContent(name);
+   auto content = ReadContent(filename);
    EXPECT_TRUE(Exists(content, "Hello World")) << content;
    EXPECT_TRUE(Exists(content, "Hello D World")) << content;
    EXPECT_TRUE(Exists(content, "Hello W World")) << content;
@@ -134,6 +138,7 @@ TEST_F(FilterTest, NothingFiltered) {
 }
 
 TEST_F(FilterTest, FilteredAndNotFiltered) {
+   std::string filename;
    {
       auto filterSinkPtr = LogRotateWithFilter::CreateLogRotateWithFilter(_filename, _directory, {G3LOG_DEBUG, INFO, WARNING, FATAL});
       auto message0 = CREATE_LOG_ENTRY(INFO, "Hello World");
@@ -151,11 +156,10 @@ TEST_F(FilterTest, FilteredAndNotFiltered) {
       auto newLevel = LEVELS{123, "MadeUpLevel"};
       auto message4 = CREATE_LOG_ENTRY(newLevel, "Hello New World");
       filterSinkPtr->save(message4);
-
+      filename = filterSinkPtr->logFileName();
    } // raii
 
-   auto name = std::string{_directory + _filename + ".log"};
-   auto content = ReadContent(name);
+   auto content = ReadContent(filename);
    EXPECT_FALSE(Exists(content, "Hello World")) << content;
    EXPECT_FALSE(Exists(content, "Hello D World")) << content;
    EXPECT_FALSE(Exists(content, "Hello W World")) << content;

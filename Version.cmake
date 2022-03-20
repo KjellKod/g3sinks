@@ -12,9 +12,9 @@ if (${VERSION}.x STREQUAL ".x")
       endif()
       execute_process(COMMAND bash "-c" "git rev-list --branches HEAD | wc -l | tr -d ' ' | tr -d '\n'" OUTPUT_VARIABLE GIT_VERSION WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
    endif() 
-   # TODO: Kjell, remove this after evaluation
-   math(EXPR VERSION-BASE ${GIT_VERSION}/255)
-   math(EXPR VERSION-REMAINDER ${GIT_VERSION}%255)
+   MESSAGE("VERSION SO FAR ${GIT_VERSION}")
+   math(EXPR VERSION-BASE ${GIT_VERSION}/255)       # TODO the math lines can just be commented out when debugging in VSCode. 
+   math(EXPR VERSION-REMAINDER ${GIT_VERSION}%255)  # as the GIT_VERSION can not easily be retrieved in VS 
    SET(BUILD_NUMBER ${VERSION-BASE})
    SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}-${VERSION-REMAINDER})
 endif()

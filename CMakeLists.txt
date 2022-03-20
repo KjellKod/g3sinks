@@ -4,7 +4,7 @@ project(g3sinks)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Release) # Debug for VSCode debugging
 
 # Function definitions that are used in various places
 include(Functions.cmake)
