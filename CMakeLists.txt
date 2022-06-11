@@ -46,7 +46,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
                                          ${CMAKE_INSTALL_PREFIX})
 else()
   # APPLE and WIN32 use find_package library"
-  find_package(G3LOG)
+  find_package(g3log)
   message(
     "g3log package:
         found: ${G3LOG_FOUND}
