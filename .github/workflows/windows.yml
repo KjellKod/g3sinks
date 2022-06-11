@@ -29,9 +29,11 @@ jobs:
         cd build
         echo ${{env.BUILD_TYPE}}
         cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DADD_G3LOG_UNIT_TEST=ON -DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON  ..
+        cmake --build . --config ${{env.BUILD_TYPE}}
         mkdir c:\\Libraries
         echo "executing g3log tests"
         ctest -C ${{env.BUILD_TYPE}}
+        
         #echo "install g3log"
         cmake --build . --target INSTALL --config ${{env.BUILD_TYPE}}
         cd .. 
