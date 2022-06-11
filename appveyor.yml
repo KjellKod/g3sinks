@@ -23,11 +23,11 @@ build_script:
 
     cd Zlib 
     
-    curl http://zlib.net/zlib-1.2.11.tar.gz -o zlib.tar.gz
+    curl http://zlib.net/zlib-1.1.12.tar.gz -o zlib.tar.gz
 
     tar xvzf zlib.tar.gz
 
-    cd zlib-1.2.11/
+    cd zlib-1.1.12/
 
     mkdir build
 
