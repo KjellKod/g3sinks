@@ -27,9 +27,9 @@ jobs:
         cd g3log
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Release -DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON  ..
+        cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON  ..
         mkdir c:\\Libraries
-        cmake --build . --target INSTALL --config Release
+        cmake --build . --target INSTALL --config $BUILD_TYPE
         cd .. 
         cd .. 
         mkdir build
@@ -44,23 +44,33 @@ jobs:
         mkdir build
         cd build 
         cmake -DCMAKE_PREFIX_PATH=c:\\Libraries -DCMAKE_INSTALL_PREFIX=c:\\Libraries ..
-        cmake --build . --target INSTALL --config Release
+        cmake --build . --target INSTALL --config $BUILD_TYPE
         echo "C:\Libraries\bin" >> $GITHUB_PATH
 
-    - name: Build g3Sinks and run tests
+    - name: Configure g3sinks 
       # Build your program with the given configuration
       working-directory: ${{github.workspace}}/build
       run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
-          cmake --build . --target INSTALL --config Release
-          tree /A /F c:\g3log
-          cpack -G "NSIS;ZIP"
-          cpack -C Release
-          ctest -V
+          cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCHOICE_BUILD_TESTS=ON -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
 
-    - name: Test
+    - name: Build g3sinks
+      working-directory: ${{github.workspace}}/build
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: cmake --build . --config $BUILD_TYPE
+      
+    - name: Test g3sinks
       working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
+      
+      
+     # - name: Install g3sinks        
+     #     run: |
+     #     cmake --build . --target INSTALL --config $BUILD_TYPE --verbose
+     #     #mkdir c:\\Libraries
+     #     #tree /A /F c:\g3log
+     #     #cpack -G "NSIS;ZIP"
+     #     cpack -C $BUILD_TYPE
+     #     #ctest -V
       
