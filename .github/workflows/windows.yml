@@ -20,62 +20,48 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
- #   - name: install g3log
- #     working-directory: ${{github.workspace}}
- #     run: | 
- #       git clone https://github.com/KjellKod/g3log.git  
- #       cd g3log
- #       mkdir build
- #       cd build
- #       cmake -DCMAKE_BUILD_TYPE=Release -DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON  ..
- #       mkdir c:\\Libraries
- #       cmake --build . --target INSTALL --config Release
- #       cd .. 
- #       cd .. 
- #       mkdir build
- #       mkdir zlib
+    - name: install g3log
+      working-directory: ${{github.workspace}}
+      run: | 
+        git clone https://github.com/KjellKod/g3log.git  
+        cd g3log
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release -DCHANGE_G3LOG_DEBUG_TO_G3LOG_DEBUG=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DADD_FATAL_EXAMPLE=OFF -DCMAKE_INSTALL_PREFIX=c:\Libraries -DG3_SHARED_LIB=OFF -DG3_SHARED_RUNTIME=ON  ..
+        mkdir c:\\Libraries
+        cmake --build . --target INSTALL --config Release
+        cd .. 
+        cd .. 
+        mkdir build
+        mkdir zlib
 
-  #  - name: install zlib
-  #    working-directory: ${{github.workspace}}/zlib
-  #    run: |
-  #      curl http://zlib.net/zlib-1.2.11.tar.gz -o zlib.tar.gz
-  #      tar xvzf zlib.tar.gz
-  #      cd zlib-1.2.11/
-  #      mkdir build
-  #      cd build 
-  #      cmake -DCMAKE_PREFIX_PATH=c:\\Libraries -DCMAKE_INSTALL_PREFIX=c:\\Libraries ..
-  #      cmake --build . --target INSTALL --config Release
-  #      echo "C:\Libraries\bin" >> $GITHUB_PATH
+    - name: install zlib
+      working-directory: ${{github.workspace}}/zlib
+      run: |
+        curl http://zlib.net/zlib-1.2.12.tar.gz -o zlib.tar.gz
+        tar xvzf zlib.tar.gz
+        cd zlib-1.2.12/
+        mkdir build
+        cd build 
+        cmake -DCMAKE_PREFIX_PATH=c:\\Libraries -DCMAKE_INSTALL_PREFIX=c:\\Libraries ..
+        cmake --build . --target INSTALL --config Release
+        echo "C:\Libraries\bin" >> $GITHUB_PATH
 
-    # https://github.com/actions/virtual-environments/issues/2667
-    #- name: install boost
-    #  run: | 
-    #    # Use the boost_1_72_0-msvc-14.1-64.exe for Windows 2016
-    #    $Url = "https://sourceforge.net/projects/boost/files/boost-binaries/1.72.0/boost_1_72_0-msvc-14.2-64.exe"
-    #    (New-Object System.Net.WebClient).DownloadFile($Url, "$env:TEMP\boost.exe")
-    #    #Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SILENT","/SP-","/SUPPRESSMSGBOXES","/DIR=C:\hostedtoolcache\windows\Boost\1.72.0\x86_64"
-    #    Start-Process -Wait -FilePath "$env:TEMP\boost.exe" "/SP-","/SUPPRESSMSGBOXES","/DIR=C:\Libraries\Boost\"
-    #    ls C:\Libraries\Boost\
-        
-        # FAILUR: Installing boost this will takes an extremely long time. The job was aborted after 5 hours. 
-        # This is the BINARY install, it's not even source code. 
-
-
-   # - name: Build g3Sinks and run tests
+    - name: Build g3Sinks and run tests
       # Build your program with the given configuration
-   #   working-directory: ${{github.workspace}}/build
-    #  run: |
-     #     # set PATH=c:\\Libraries\\bin;%PATH%
-      #    cmake -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
-       #   cmake --build . --target INSTALL --config Release
-        #  tree /A /F c:\g3log
-         # cpack -G "NSIS;ZIP"
-          #cpack -C Release
-          #ctest -V
+      working-directory: ${{github.workspace}}/build
+      run: |
+          set PATH=c:\\Libraries\\bin;%PATH%
+          cmake -DCMAKE_BUILD_TYPE=Release -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
+          cmake --build . --target INSTALL --config Release
+          tree /A /F c:\g3log
+          cpack -G "NSIS;ZIP"
+          cpack -C Release
+          ctest -V
 
-    #- name: Test
-    #  working-directory: ${{github.workspace}}/build
-    #  # Execute tests defined by the CMake configuration.  
-    #  # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-    #  run: ctest -C ${{env.BUILD_TYPE}}
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest -C ${{env.BUILD_TYPE}}
       
