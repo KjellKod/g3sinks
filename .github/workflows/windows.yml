@@ -56,8 +56,10 @@ jobs:
     - name: Configure g3sinks 
       # Build your program with the given configuration
       working-directory: ${{github.workspace}}/build
+      # -DTRACELOGGING_SINK_ERROR=ON is set to avoid building this snippet
+      # for unknown reason gitaction/Windows/ does not find the right tracelogging module
       run: |
-          cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCHOICE_BUILD_TESTS=ON -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
+          cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTRACELOGGING_SINK_ERROR=ON -DCHOICE_BUILD_TESTS=ON -DCHOICE_BUILD_STATIC=ON -DCMAKE_PREFIX_PATH=c:\Libraries -DCMAKE_INSTALL_PREFIX=c:\Libraries  ..
 
     - name: Build g3sinks
       working-directory: ${{github.workspace}}/build
