@@ -64,7 +64,8 @@ jobs:
     - name: Build g3sinks
       working-directory: ${{github.workspace}}/build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config ${{env.BUILD_TYPE}}
+      # run: cmake --build . --config ${{env.BUILD_TYPE}}
+      run: msbuild g3log.sln /p:Configuration=Release
       
     - name: Test g3sinks
       working-directory: ${{github.workspace}}/build
