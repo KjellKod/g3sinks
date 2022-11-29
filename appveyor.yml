@@ -65,8 +65,8 @@ build_script:
   
     [ -f example_coloredcout.exe ] && example_coloredcout.exe || true
     
+    [ -f example_logrotate_and_filter.exe ] && example_logrotate_and_filter.exe || true
     
-
 
 # Us this for validation after changes: https://ci.appveyor.com/tools/validate-yaml
 
