@@ -59,11 +59,15 @@ build_script:
     
     ls -a
     
-    cd Release
+    cd examples
     
     ls -a
         
-    [ -f examples/example_coloredcout ] && ./examples/example_coloredcout
+    if exist example_coloredcout (
+       ./example_coloredcout
+    )
+
+    [ -f example_coloredcout ] && ./example_coloredcout
 
 
 # Us this for validation after changes: https://ci.appveyor.com/tools/validate-yaml
