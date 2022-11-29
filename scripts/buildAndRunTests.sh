@@ -62,6 +62,6 @@ ctest -V
 sudo make install
 
 # run one snipped example
-ls
-[ -f example_coloredcout ] && example_coloredcout || true
+cd examples
+[ -f example_coloredcout ] && ./example_coloredcout || true
 
