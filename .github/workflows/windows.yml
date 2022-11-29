@@ -44,9 +44,9 @@ jobs:
     - name: install zlib
       working-directory: ${{github.workspace}}/zlib
       run: |
-        curl http://zlib.net/zlib-1.2.12.tar.gz -o zlib.tar.gz
+        curl http://zlib.net/zlib-1.2.13.tar.gz -o zlib.tar.gz
         tar xvzf zlib.tar.gz
-        cd zlib-1.2.12/
+        cd zlib-1.2.13/
         mkdir build
         cd build 
         cmake -DCMAKE_PREFIX_PATH=c:\\Libraries -DCMAKE_INSTALL_PREFIX=c:\\Libraries ..
