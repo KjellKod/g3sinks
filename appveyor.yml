@@ -62,8 +62,9 @@ build_script:
     cd Release
     
     ls -a
+  
+    [ -f example_coloredcout.exe ] && example_coloredcout.exe || true
     
-    [ -f example_coloredcout ] && ./example_coloredcout || true
     
 
 
