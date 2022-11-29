@@ -56,6 +56,16 @@ build_script:
     cpack -C Release
 
     ctest -V
+    
+    cd Release
+    
+    ls 
+    
+    cd examples
+    
+    ls 
+    
+    ./example_coloredcout
 
 
 # Us this for validation after changes: https://ci.appveyor.com/tools/validate-yaml
