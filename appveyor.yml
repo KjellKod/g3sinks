@@ -57,19 +57,9 @@ build_script:
 
     ctest -V
     
-    ls -a
-    
-    cd examples
-    
-    ls -a
-    
     cd Release
     
     ls -a
-        
-    if exist example_coloredcout (
-       ./example_coloredcout
-    )
 
     [ -f example_coloredcout ] && ./example_coloredcout
 
