@@ -61,7 +61,7 @@ build_script:
     
     ls -a
 
-    # example test run, we want to ignore whether or not it exists as an error condidtion on the CI run
+# example test run, we want to ignore whether or not it exists as an error condidtion on the CI run
     
     [ -f example_coloredcout ] && ./example_coloredcout || true
 
