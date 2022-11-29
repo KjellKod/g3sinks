@@ -62,6 +62,10 @@ build_script:
     cd examples
     
     ls -a
+    
+    cd Release
+    
+    ls -a
         
     if exist example_coloredcout (
        ./example_coloredcout
