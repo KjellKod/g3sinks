@@ -61,7 +61,9 @@ build_script:
     
     ls -a
 
-    [ -f example_coloredcout ] && ./example_coloredcout
+    # example test run, we want to ignore whether or not it exists as an error condidtion on the CI run
+    
+    [ -f example_coloredcout ] && ./example_coloredcout || true
 
 
 # Us this for validation after changes: https://ci.appveyor.com/tools/validate-yaml
