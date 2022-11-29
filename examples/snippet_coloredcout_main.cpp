@@ -18,12 +18,14 @@ int main() {
       LOG(INFO) << "An INFO message in white";
       LOG(WARNING) << "A WARNING message will be in yellow";
 #if 0
-      LOG(FATAL) << "This call will exit the example. A failed CHECK call, \n"
-                 << "a LOG(FATAL) or a fatal crash (seg fault or similar) will show up in RED\n"
-                 << "\n\nThis call will also be DUPLICATED. One FATAL LOG message will be shown through the \n"
-                 << "the crash handler and sent to cout, the LOG call will asynchronously send the LOG output to cout.\n"
-                 << "Depending on when the crash handler sends the cout message the duplicate message will show up in \n"
-                 << "ANY of the defined colors and might be INTERLEAVED with the other messages. Interleaving is to be expected by asynchronously calls"
+      LOG(FATAL)
+          << "This call will exit the example. A failed CHECK call, \n"
+          << "a LOG(FATAL) or a fatal crash (seg fault or similar) will show up in RED\n"
+          << "\n\nThis call will also be DUPLICATED. One FATAL LOG message will be shown through the \n"
+          << "the crash handler and sent to cout, the LOG call will asynchronously send the LOG output to cout.\n"
+          << "Depending on when the crash handler sends the cout message the duplicate message will show up in \n"
+          << "ANY of the defined colors and might be INTERLEAVED with the other messages. Interleaving is to be "
+             "expected by asynchronously calls";
 #endif
    } // at this point all enqueued LOGs will have gone through in FIFO order and the logger is shutdown.
 

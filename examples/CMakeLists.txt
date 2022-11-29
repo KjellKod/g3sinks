@@ -44,19 +44,15 @@ if(CHOICE_SINK_SYSLOG)
 endif()
 
 if(CHOICE_SINK_SNIPPETS)
-
-  # ColoredCout is currently only implemented for UNIX/Linux terminals
-  if(UNIX)
-    # Log with color formatting to std::cout
-    include_directories(${g3sinks_SOURCE_DIR}/sink_snippets/src
-                        ${G3LOG_INCLUDE_DIR})
-    add_executable(example_coloredcout snippet_coloredcout_main.cpp)
-    target_link_libraries(
-      example_coloredcout
-      PRIVATE gtest_main
-      PRIVATE ${G3LOG_LIBRARY})
-    target_compile_options(example_coloredcout PRIVATE)
-  endif()
+  # Log with color formatting to std::cout
+  include_directories(${g3sinks_SOURCE_DIR}/sink_snippets/src
+                      ${G3LOG_INCLUDE_DIR})
+  add_executable(example_coloredcout snippet_coloredcout_main.cpp)
+  target_link_libraries(
+    example_coloredcout
+    PRIVATE gtest_main
+    PRIVATE ${G3LOG_LIBRARY})
+  target_compile_options(example_coloredcout PRIVATE)
 
   # shared memory, file descriptor sink.
   verifyfilelogdependencies(FILE_LOG_SINK_ERROR)
