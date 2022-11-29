@@ -57,7 +57,7 @@ build_script:
 
     ctest -V
     
-    cd Release
+    cd examples
     
     ls -a
 
