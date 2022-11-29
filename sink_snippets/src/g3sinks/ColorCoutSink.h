@@ -54,7 +54,7 @@ struct ColorCoutSink {
       auto str = logEntry.get().toString();
       SetConsoleTextAttribute(hHandle_, (WORD)color);
       DWORD written;
-      WriteConsoleA(hHandle_, str.c_str(), str.size(), &written, nullptr);
+      WriteConsoleA(hHandle_, str.c_str(), (DWORD)str.size(), &written, nullptr);
 #else
       std::ostringstream oss;
       oss << "\033[" << color << "m"
