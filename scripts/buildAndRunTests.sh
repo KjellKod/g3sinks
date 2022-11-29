@@ -64,4 +64,5 @@ sudo make install
 # run one snipped example
 cd examples
 [ -f example_coloredcout ] && ./example_coloredcout || true
+[ -f example_logrotate_and_filter ] && ./example_logrotate_and_filter || true
 
