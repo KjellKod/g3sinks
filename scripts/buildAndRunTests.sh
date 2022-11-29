@@ -61,5 +61,8 @@ cmake --build .
 ctest -V 
 sudo make install
 
-# TODO KjellKod:  run all examples
+# run one snipped example
+cd examples
+[ -f example_coloredcout ] && ./example_coloredcout || true
+[ -f example_logrotate_and_filter ] && ./example_logrotate_and_filter || true
 
