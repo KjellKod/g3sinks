@@ -57,5 +57,3 @@ jobs:
         echo github.event.action: ${{ github.event.action }}
         echo github.event_name: ${{ github.event_name }}  
         ./scripts/buildAndRunTests.sh
-        cd build
-        [ -f example_coloredcout ] && example_coloredcout || true
