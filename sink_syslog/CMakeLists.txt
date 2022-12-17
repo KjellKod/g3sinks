@@ -44,32 +44,34 @@ target_include_directories(g3syslog
         $<INSTALL_INTERFACE:include>    
     )
 
-# INSTALLATION 
-# ===================================================
-install(TARGETS 
-           g3syslog
-	      EXPORT 
-            g3syslogTargets
-	      ARCHIVE DESTINATION lib
-	      LIBRARY DESTINATION lib
-	      INCLUDES DESTINATION include)
+if ( CHOICE_INSTALL_G3SINKS )
+    # INSTALLATION 
+    # ===================================================
+    install(TARGETS 
+               g3syslog
+    	      EXPORT 
+                g3syslogTargets
+    	      ARCHIVE DESTINATION lib
+    	      LIBRARY DESTINATION lib
+    	      INCLUDES DESTINATION include)
+    
+    install(EXPORT g3syslogTargets
+    	NAMESPACE G3::
+    	DESTINATION lib/cmake/g3sinks
+    	)
+    
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks"
+    	DESTINATION include
+    	FILES_MATCHING
+    	PATTERN *.h*
+    	)
 
-install(EXPORT g3syslogTargets
-	NAMESPACE G3::
-	DESTINATION lib/cmake/g3sinks
-	)
-
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks"
-	DESTINATION include
-	FILES_MATCHING
-	PATTERN *.h*
-	)
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file("g3syslogVersion.cmake"
-	VERSION ${VERSION}
-	COMPATIBILITY AnyNewerVersion
-	)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/g3syslogVersion.cmake"
-	DESTINATION lib/cmake/g3sinks
-	)
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file("g3syslogVersion.cmake"
+    	VERSION ${VERSION}
+    	COMPATIBILITY AnyNewerVersion
+    	)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/g3syslogVersion.cmake"
+    	DESTINATION lib/cmake/g3sinks
+    	)
+endif()
