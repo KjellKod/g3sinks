@@ -22,3 +22,5 @@ option(CHOICE_SINK_SNIPPETS "Build the syslog sink" ON)
 if(CHOICE_BUILD_TESTS)
   enable_testing()
 endif()
+
+option(CHOICE_INSTALL_G3SINKS "Enable installation of g3sinks. (Projects embedding g3sinks may want to turn this OFF.)" ON)

@@ -102,14 +102,14 @@ endif()
 message(
   STATUS
     "\n
-  =====================CLEAN IT ============================
+  ===================== CLEAN IT ============================
   ===========================================================
-  Please use 'make clean-cmake' before next cmake generation.
-  It is a good idea to purge your build directory of CMake
-  generated cache files
+  Please use 'make g3sinks-clean-cmake' before next cmake
+  generation. It is a good idea to purge your build directory
+  of CMake generated cache files
   ===========================================================
        ")
-add_custom_target(clean-cmake COMMAND ${CMAKE_COMMAND} -P
+add_custom_target(g3sinks-clean-cmake COMMAND ${CMAKE_COMMAND} -P
                                       ${g3sinks_SOURCE_DIR}/CleanAll.cmake)
 
 # print all CHOIC options. Ref Options.cmake

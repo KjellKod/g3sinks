@@ -19,22 +19,24 @@ if(TRACELOGGING_SINK_ERROR)
 endif()
 
 
-# HEADER ONLY INSTALLATION
-# ===================================================
-install(
-  DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks"
-  DESTINATION include
-  FILES_MATCHING
-  PATTERN *.h
-  PATTERN "${FILELOG_EXCLUDE_FILE}" EXCLUDE
-  PATTERN "${TRACELOGGING_EXCLUDE_FILE}" EXCLUDE
-  PATTERN "${COLOREDCOUT_EXCLUDE_FILE}" EXCLUDE
-  )
+if ( CHOICE_INSTALL_G3SINKS )
+    # HEADER ONLY INSTALLATION
+    # ===================================================
+    install(
+      DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/g3sinks"
+      DESTINATION include
+      FILES_MATCHING
+      PATTERN *.h
+      PATTERN "${FILELOG_EXCLUDE_FILE}" EXCLUDE
+      PATTERN "${TRACELOGGING_EXCLUDE_FILE}" EXCLUDE
+      PATTERN "${COLOREDCOUT_EXCLUDE_FILE}" EXCLUDE
+      )
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  "g3snippetsVersion.cmake"
-  VERSION ${VERSION}
-  COMPATIBILITY AnyNewerVersion)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/g3snippetsVersion.cmake"
-        DESTINATION lib/cmake/g3sinks)
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(
+      "g3snippetsVersion.cmake"
+      VERSION ${VERSION}
+      COMPATIBILITY AnyNewerVersion)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/g3snippetsVersion.cmake"
+            DESTINATION lib/cmake/g3sinks)
+endif()
