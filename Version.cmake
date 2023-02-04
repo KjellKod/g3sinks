@@ -1,5 +1,5 @@
 set( MAJOR_VERSION 2)
-SET(MINOR_VERSION 1)
+SET(MINOR_VERSION 2)
 if (${VERSION}.x STREQUAL ".x")
    if (MSVC)
       message("windows: Extracting git software version")
