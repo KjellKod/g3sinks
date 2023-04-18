@@ -92,7 +92,7 @@ namespace LogRotateUtility {
          if (regex_match(file_name, date_match, date_regex)) {
             if (date_match.size() == 2) {
                r_date_string = date_match[1].str();
-               struct tm tm = {0};
+               struct tm tm{};
                time_t t;
                if (strptime(r_date_string.c_str(), "%Y-%m-%d-%H-%M-%S", &tm) == nullptr) {
                   return (long) 0;
