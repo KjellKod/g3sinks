@@ -9,7 +9,7 @@ on:
 # if you have to do a quick fix and the CI is already running your new commit will kill already 
 # going processes before starting new ones
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
   cancel-in-progress: true
   
 jobs:
@@ -21,39 +21,58 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
+    - name: Run Mac Build
+      if: matrix.os == 'macos-latest'
+      uses: maxim-lobanov/setup-xcode@v1.6.0
+      with:
+        fetch-depth: 0
 
     - name: Run Mac Build
       if: matrix.os == 'macos-latest'
-      uses: maxim-lobanov/setup-xcode@v1.4.1
-      with:
-        xcode-version: latest
-
-  
-    - name: macos Bootstrap 
-      if: matrix.os == 'macos-latest'
-      run: | 
-        echo "MacOS Latest" 
-        brew update 
-
+      run: brew update && echo "MacOS Latest" > release_macos
 
 
     - name: Linux Bootstrap 
       if: matrix.os == 'ubuntu-latest'
       run: |
         echo "Ubuntu Latest" 
-        gcc --version
-        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install ninja-build cmake gcc-9 g++-9
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
+        sudo apt-get install ninja-build  cmake
         sudo apt-get install -y unzip zlib1g-dev libc6-dev
         echo gcc version after
         gcc --version        
         cmake --version
+
+    - name: Run Linux Build
+      if: matrix.os == 'ubuntu-latest'
+      run: echo "Ubuntu Latest" > release_ubuntu
+      
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    # - name: Configure Linux/OSX CMake
+    #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+    #   shell: bash
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DADD_G3LOG_UNIT_TEST=ON 
+      
+    # - name: Build Linux/OSX CMake
+    #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+    #   shell: bash
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cmake --build $GITHUB_WORKSPACE --config Release 
+      
+    # - name: Install Linux/OSX CMake
+    #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+    #   shell: bash
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cmake install
+
         
     - name: build, and run ctest
       shell: bash
       run: |
+        echo "Running buildAndRunTests.sh"
         echo github.event.action: ${{ github.event.action }}
         echo github.event_name: ${{ github.event_name }}  
         ./scripts/buildAndRunTests.sh
