@@ -9,7 +9,7 @@ on:
 # if you have to do a quick fix and the CI is already running your new commit will kill already 
 # going processes before starting new ones
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
   cancel-in-progress: true
   
 jobs:
@@ -29,8 +29,8 @@ jobs:
 
     - name: Run Mac Build
       if: matrix.os == 'macos-latest'
-      run: | 
-        run: brew update && echo "MacOS Latest" > release_ubuntu
+      run: brew update && echo "MacOS Latest" > release_macos
+
 
     - name: Linux Bootstrap 
       if: matrix.os == 'ubuntu-latest'
