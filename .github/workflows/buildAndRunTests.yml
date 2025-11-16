@@ -32,19 +32,6 @@ jobs:
       run: | 
         run: brew update && echo "MacOS Latest" > release_ubuntu
 
-    - name: Run Linux Build
-      if: matrix.os == 'ubuntu-latest'
-      run: echo "Ubuntu Latest" > release_ubuntu
-      
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{github.workspace}}/build
-
-    - name: Configure Linux/OSX CMake
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DADD_G3LOG_UNIT_TEST=ON && make install
-
     - name: Linux Bootstrap 
       if: matrix.os == 'ubuntu-latest'
       run: |
@@ -58,10 +45,37 @@ jobs:
         echo gcc version after
         gcc --version        
         cmake --version
+
+    - name: Run Linux Build
+      if: matrix.os == 'ubuntu-latest'
+      run: echo "Ubuntu Latest" > release_ubuntu
+      
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure Linux/OSX CMake
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DADD_G3LOG_UNIT_TEST=ON 
+      
+    - name: Build Linux/OSX CMake
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: cmake --build $GITHUB_WORKSPACE --config Release 
+      
+    - name: Install Linux/OSX CMake
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: cmake install
+
         
     - name: build, and run ctest
       shell: bash
       run: |
+        echo "Running buildAndRunTests.sh"
         echo github.event.action: ${{ github.event.action }}
         echo github.event_name: ${{ github.event_name }}  
         ./scripts/buildAndRunTests.sh
