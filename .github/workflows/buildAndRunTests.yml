@@ -33,7 +33,7 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: | 
         echo "MacOS Latest" 
-        brew update --preinstall
+        brew update 
 
 
 
