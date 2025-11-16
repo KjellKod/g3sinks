@@ -53,23 +53,23 @@ jobs:
     - name: Create Build Environment
       run: cmake -E make_directory ${{github.workspace}}/build
 
-    - name: Configure Linux/OSX CMake
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DADD_G3LOG_UNIT_TEST=ON 
+    # - name: Configure Linux/OSX CMake
+    #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+    #   shell: bash
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DADD_G3LOG_UNIT_TEST=ON 
       
-    - name: Build Linux/OSX CMake
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      run: cmake --build $GITHUB_WORKSPACE --config Release 
+    # - name: Build Linux/OSX CMake
+    #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+    #   shell: bash
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cmake --build $GITHUB_WORKSPACE --config Release 
       
-    - name: Install Linux/OSX CMake
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      run: cmake install
+    # - name: Install Linux/OSX CMake
+    #   if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+    #   shell: bash
+    #   working-directory: ${{github.workspace}}/build
+    #   run: cmake install
 
         
     - name: build, and run ctest
